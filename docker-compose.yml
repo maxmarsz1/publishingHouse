@@ -10,6 +10,8 @@ services:
     environment:
       - NODE_ENV=development
       - WATCHPACK_POLLING=true
+      - CHOKIDAR_USEPOLLING=true
+      - WDS_SOCKET_HOST=127.0.0.1
     stdin_open: true
     tty: true
     command: npm run dev
