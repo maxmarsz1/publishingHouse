@@ -1,0 +1,29 @@
+.publishersContainer{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 32px;
+}
+
+.joinBtn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    font-size: 20px !important;
+    text-transform: none !important;
+    border-radius: 10px !important;
+    height: 200px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.25) !important;
+    text-shadow: 0 4px 10px rgba(0,0,0,0.25);
+}
+
+@media (max-width: 991px){
+    .publishersContainer{
+        grid-template-columns: 1fr 1fr;
+    }
+}
+@media (max-width: 600px){
+    .publishersContainer{
+        grid-template-columns: 1fr;
+    }
+}

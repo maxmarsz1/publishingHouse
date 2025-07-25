@@ -6,6 +6,9 @@ import theme from '../theme';
 import "./globals.css";
 
 
+import { config } from '@fortawesome/fontawesome-svg-core'
+import '@fortawesome/fontawesome-svg-core/styles.css'
+config.autoAddCss = false
 
 const roboto = Roboto({
   weight: ['300', '400', '500', '700'],
@@ -24,6 +27,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
     <html lang="en" className={roboto.variable}>
       <body>
