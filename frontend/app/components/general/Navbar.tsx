@@ -2,12 +2,14 @@ import Link from 'next/link'
 import React from 'react'
 import styles from "./Navbar.module.css"
 import { Container } from '@mui/material'
+import Image from 'next/image'
 
 const Navbar = () => {
   return (
     <nav className={styles.navbar}>
       <Container className={styles.navbarContainer}>
         <div className={styles.leftLinks}>
+          <Image alt='logo' src="/logo.webp" width={128} height={44} className={styles.logo}/>
           <Link href="/myspace/publishers">Wydawnictwa</Link>
           <Link href="/myspace/articles">Raporty</Link>
           <Link href="/myspace/account">Konto</Link>

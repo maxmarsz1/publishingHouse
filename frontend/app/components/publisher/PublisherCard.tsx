@@ -1,7 +1,10 @@
 import React from 'react'
 import Link from 'next/link'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons'
+
 import styles from './PublisherCard.module.css'
-import { Publisher } from '../types/types'
+import { Publisher } from '../../types/types'
 import { Button } from '@mui/material'
 
 const PublisherCard: React.FC< {publisher: Publisher} > = ({publisher}) => {
@@ -11,7 +14,7 @@ const PublisherCard: React.FC< {publisher: Publisher} > = ({publisher}) => {
         <h2>{publisher.name}</h2>
         <p>{publisher.description}</p>
       </div>
-      <Button variant='contained' component={Link} href={`/myspace/publishers/${publisher.id}`}>Zobacz raporty</Button>
+      <Button variant='contained' component={Link} href={`/myspace/publishers/${publisher.id}`}>Zobacz raporty <FontAwesomeIcon icon={faArrowRight}/></Button>
     </div>
   )
 }

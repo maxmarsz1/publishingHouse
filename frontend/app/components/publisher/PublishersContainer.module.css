@@ -1,0 +1,16 @@
+.publishersContainer{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 32px;
+}
+
+@media (max-width: 991px){
+    .publishersContainer{
+        grid-template-columns: 1fr 1fr;
+    }
+}
+@media (max-width: 600px){
+    .publishersContainer{
+        grid-template-columns: 1fr;
+    }
+}

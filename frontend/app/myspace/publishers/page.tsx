@@ -1,5 +1,5 @@
 import React from 'react'
-import PublishersContainer from "./../../components/PublishersContainer"
+import PublishersContainer from "../../components/publisher/PublishersContainer"
 import { Publisher } from '@/app/types/types'
 
 

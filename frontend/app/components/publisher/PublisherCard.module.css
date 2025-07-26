@@ -15,6 +15,7 @@
 
 .publisherCard a{
     align-self: end;
+    gap: 8px;
 }
 
 .publisherCard h2{

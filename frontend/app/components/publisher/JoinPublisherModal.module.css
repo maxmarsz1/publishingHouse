@@ -1,0 +1,27 @@
+.modal{
+    position: fixed;
+    background-color: var(--background);
+    border-radius: 10px;
+    padding: 16px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 20;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+
+}
+.modal h2{
+    margin-bottom: 16px;
+}
+.input{
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 16px;
+}
+.buttons{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 32px;
+}
