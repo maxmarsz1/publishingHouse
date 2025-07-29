@@ -1,0 +1,16 @@
+.halfWidth{
+    width: 50%;
+    padding-right: 5px !important;
+}
+.halfWidth + .halfWidth{
+    padding-right: 0 !important;
+    padding-left: 5px !important;
+}
+.inputField{
+    margin-bottom: 1rem !important;
+}
+.submitButton{
+    font-size: 18px !important;
+    text-transform: none !important;
+    padding: 6px 32px !important;
+}

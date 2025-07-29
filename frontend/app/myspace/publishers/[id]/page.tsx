@@ -1,77 +1,21 @@
 import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
-import { Publisher } from '@/app/types/types'
-import RaportsTable from '@/app/components/publisher/RaportsTable'
-import { Raport, Status } from '@/app/types/types'
-import { Button } from '@mui/material';
+import { Button } from '@mui/material'
 import Link from 'next/link'
+
+import RaportsTable from '@/app/components/raports/RaportsTable'
+import { getUserRaports, getRaportsToReview } from '@/app/utils/raports-helper'
+import { getPublisherData } from '@/app/utils/publisher-helper'
 
 
 interface Props {
   params: { id: string };
 }
 
-function getPublisherData(id: number): Publisher{
-  // mocking data fetching from backend
-  return {
-    id: id,
-    name: "Dump publisher",
-    description: "Lorem ipsum longer description of publisher here continue with the lorem ipsum text and then again with more text"
-  }
-}
-
-function getRaportsToReview(): Raport[]{
-  const raports: Raport[] = [
-    {
-      id: 1,
-      title: "Raport 1",
-      status: Status.Pending,
-      grade: 0
-    },
-    {
-      id: 2,
-      title: "Raport 2",
-      status: Status.Published,
-      grade: 5
-    },
-    {
-      id: 3,
-      title: "Raport 3",
-      status: Status.Rejected,
-      grade: 0
-    }
-  ]
-  return raports;
-}
-
-function getUserRaports(): Raport[]{
-  const raports: Raport[] = [
-    {
-      id: 1,
-      title: "Raport 1",
-      status: Status.Pending,
-      grade: 0
-    },
-    {
-      id: 2,
-      title: "Raport 2",
-      status: Status.Published,
-      grade: 5
-    },
-    {
-      id: 3,
-      title: "Raport 3",
-      status: Status.Rejected,
-      grade: 0
-    }
-  ]
-  return raports;
-}
-
 const PublisherView = async ({ params }: Props) => {
-  const { id } = await params;
-
+  const { id } = params;
+  console.log("Publisher ID:", id);
   const publisher = getPublisherData(+id);
 
   return (
@@ -85,8 +29,8 @@ const PublisherView = async ({ params }: Props) => {
         </Button>
       </div>
 
-      <RaportsTable title={"Twoje raporty"} raports={getUserRaports()}></RaportsTable>
-      <RaportsTable title={"Raporty do recenzji"} raports={getRaportsToReview()}></RaportsTable>
+      <RaportsTable title={"Twoje raporty"} raports={getUserRaports(publisher)}></RaportsTable>
+      <RaportsTable title={"Raporty do recenzji"} raports={getRaportsToReview(publisher)}></RaportsTable>
     </div>
   )
 }

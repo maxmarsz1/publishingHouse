@@ -23,11 +23,14 @@
 .id{
     width: 10%;
 }
-.tittle{
-    width: 50%;
+.title{
+    width: 40%;
 }
 .status{
     width: 25%;
+}
+.publisher{
+    width: 20%;
 }
 .grade{
     width: 15%;

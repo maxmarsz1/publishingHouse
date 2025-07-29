@@ -1,0 +1,24 @@
+.formatingContainer{
+    background-color: var(--background1);
+    border-radius: 10px;
+    width: 100%;
+    padding: 12px 32px;
+    margin-bottom: 16px;
+}
+
+.formatingTitle{
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+.formatingDescription{
+    margin-top: 1rem;
+    font-size: 14px;
+    color: var(--textSecondary);
+    margin-bottom: 8px;
+}
+.formatingDescription ul{
+    margin-left: 1rem;
+}

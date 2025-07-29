@@ -8,7 +8,7 @@ const theme = createTheme({
     }
   },
   typography: {
-    fontFamily: 'var(--font-roboto)',
+    fontFamily: 'var(--font-poppins)',
   },
   cssVariables: true,
   components: {
