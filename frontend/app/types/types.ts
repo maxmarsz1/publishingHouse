@@ -15,7 +15,7 @@ export interface Raport {
 export enum Status{
     Sent = 1,
     Pending,
-    Reviewed,
+    Approved,
     Published,
     Rejected
 }
@@ -36,7 +36,7 @@ export enum RaportType {
     Other = "Inny"
 }
 
-export enum ITArticleCategory {
+export enum ITRaportCategory {
     ArtificialIntelligence = "Sztuczna Inteligencja (AI)",
     MachineLearning = "Uczenie Maszynowe (ML)",
     DataScience = "Data Science / Analiza Danych",

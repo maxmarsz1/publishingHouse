@@ -4,7 +4,7 @@ import React from "react";
 import { useState } from "react";
 import { Button, MenuItem, TextField } from "@mui/material";
 
-import { RaportType, ITArticleCategory, Publisher } from "@/app/types/types";
+import { RaportType, ITRaportCategory, Publisher } from "@/app/types/types";
 import styles from "./NewRaport.module.css";
 
 const raportTypeOptions = Object.values(RaportType).map((type) => ({
@@ -12,7 +12,7 @@ const raportTypeOptions = Object.values(RaportType).map((type) => ({
   label: type,
 }));
 
-const articleCategoryOptions = Object.values(ITArticleCategory).map((type) => ({
+const articleCategoryOptions = Object.values(ITRaportCategory).map((type) => ({
   value: type,
   label: type,
 }));
@@ -27,8 +27,8 @@ const NewRaport = ({ publisher }: NewRaportProps) => {
   const [raportType, setRaportType] = useState<RaportType>(
     RaportType.OriginalResearch
   );
-  const [articleCategory, setArticleCategory] = useState<ITArticleCategory>(
-    ITArticleCategory.MachineLearning
+  const [raportCategory, setRaportCategory] = useState<ITRaportCategory>(
+    ITRaportCategory.MachineLearning
   );
   const [comment, setComment] = useState("");
 
@@ -74,9 +74,9 @@ const NewRaport = ({ publisher }: NewRaportProps) => {
         id="category"
         select
         label="Wybierz kategorie artykułu"
-        value={articleCategory}
+        value={raportCategory}
         onChange={(e) =>
-          setArticleCategory(e.target.value as ITArticleCategory)
+          setRaportCategory(e.target.value as ITRaportCategory)
         }
         className={`${styles.halfWidth} ${styles.inputField}`}
       >
@@ -108,7 +108,7 @@ const NewRaport = ({ publisher }: NewRaportProps) => {
             title,
             abstract,
             raportType,
-            articleCategory,
+            raportCategory,
             comment,
           });
         }}

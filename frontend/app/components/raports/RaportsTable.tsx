@@ -6,8 +6,8 @@ import { getStatusDisplayText } from '../../utils/status-helper'
 interface RaportsTableProps {
     title: string,
     raports: Raport[],
-    showPublisher: boolean,
-    showID: boolean
+    showPublisher?: boolean,
+    showID?: boolean
 }
 
 const RaportsTable = ({ title, raports, showPublisher = false, showID = false }: RaportsTableProps) => {
