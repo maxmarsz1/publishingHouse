@@ -1,8 +1,15 @@
 import React from 'react'
 
+import AuthContainer from '@/app/components/auth/AuthContainer'
+import LeftPanel from '@/app/components/auth/LeftPanel'
+import RegisterPanel from '@/app/components/auth/RegisterPanel'
+
 const RegisterPage = () => {
   return (
-    <div>RegisterPage</div>
+    <AuthContainer>
+      <LeftPanel/>
+      <RegisterPanel/>
+    </AuthContainer>
   )
 }
 

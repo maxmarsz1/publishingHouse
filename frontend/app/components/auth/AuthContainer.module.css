@@ -1,0 +1,10 @@
+.container{
+    min-height: 100vh;
+    display: flex;
+}
+
+@media (max-width: 991px){
+    .container{
+        flex-direction: column;
+    }
+}

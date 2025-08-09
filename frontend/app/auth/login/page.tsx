@@ -1,9 +1,16 @@
 import React from 'react'
 
-const AuthPage = () => {
+import AuthContainer from '@/app/components/auth/AuthContainer'
+import LeftPanel from '@/app/components/auth/LeftPanel'
+import LoginPanel from '@/app/components/auth/LoginPanel'
+
+const LoginPage = () => {
   return (
-    <div>AuthPage</div>
+    <AuthContainer>
+      <LeftPanel/>
+      <LoginPanel/>
+    </AuthContainer>
   )
 }
 
-export default AuthPage
+export default LoginPage

@@ -1,0 +1,12 @@
+.line{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.line span{
+    width: 70px;
+}
+
+.input input{
+    padding: 10px;
+}
