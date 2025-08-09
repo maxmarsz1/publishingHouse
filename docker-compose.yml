@@ -51,6 +51,8 @@ services:
       DATABASE_PORT: ${DATABASE_PORT}
     env_file:
       - .env
+    # stdin_open: true
+    # tty: true
     command: >
       sh -c "python manage.py makemigrations &&
              python manage.py migrate &&

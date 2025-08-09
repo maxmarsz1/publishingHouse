@@ -55,7 +55,7 @@ class Raport(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='authored_raports')
     reviewers = models.ManyToManyField(
         User,
-        through='RaportReviewers',
+        through='RaportReview',
         related_name='reviewed_raports',
         blank=True
     )
@@ -90,7 +90,7 @@ class Raport(models.Model):
         ordering = ['-created_at']
 
 
-class RaportReviewers(models.Model):
+class RaportReview(models.Model):
     class RaportReviewStatus(models.TextChoices):
         PENDING = 'pending', 'Pending Review'
         SUBMITTED = 'submitted', 'Submitted'
@@ -101,7 +101,7 @@ class RaportReviewers(models.Model):
     raport = models.ForeignKey(Raport, on_delete=models.CASCADE, related_name='raport_reviews')
     reviewer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_reviews')
     review_date = models.DateTimeField(null=True, blank=True)
-    comments = models.TextField(blank=True, null=True)
+    comment = models.TextField(blank=True, null=True)
     status = models.CharField(
         max_length=10,
         choices=RaportReviewStatus.choices,
@@ -110,8 +110,8 @@ class RaportReviewers(models.Model):
 
     class Meta:
         unique_together = ('raport', 'reviewer')
-        verbose_name = 'Raport Reviewer'
-        verbose_name_plural = 'Raport Reviewers'
+        verbose_name = 'Raport Review'
+        verbose_name_plural = 'Raport Reviews'
 
     def __str__(self):
         return f"{self.reviewer.username} reviewing {self.raport.title} ({self.get_status_display()})"
