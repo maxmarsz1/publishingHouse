@@ -4,19 +4,19 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { Button } from '@mui/material'
 import Link from 'next/link'
 
-import RaportsTable from '@/app/components/raports/RaportsTable'
-import { getUserRaports, getRaportsToReview } from '@/app/utils/raports-helper'
+import ArticleTable from '@/app/components/article/ArticleTable'
+import { getUserArticles, getArticlesToReview } from '@/app/utils/article-helper'
 import { getPublisherData } from '@/app/utils/publisher-helper'
 
 
 interface Props {
-  params: { id: string };
+  params: { publisher_id: string };
 }
 
 const PublisherView = async ({ params }: Props) => {
-  const { id } = params;
-  console.log("Publisher ID:", id);
-  const publisher = getPublisherData(+id);
+  const { publisher_id } = await params;
+  console.log("Publisher ID:", publisher_id);
+  const publisher = getPublisherData(+publisher_id);
 
   return (
     <div>
@@ -29,8 +29,8 @@ const PublisherView = async ({ params }: Props) => {
         </Button>
       </div>
 
-      <RaportsTable title={"Twoje raporty"} raports={getUserRaports(publisher)}></RaportsTable>
-      <RaportsTable title={"Raporty do recenzji"} raports={getRaportsToReview(publisher)}></RaportsTable>
+      <ArticleTable title={"Twoje raporty"} articles={getUserArticles(publisher)}></ArticleTable>
+      <ArticleTable title={"Raporty do recenzji"} articles={getArticlesToReview(publisher)}></ArticleTable>
     </div>
   )
 }

@@ -2,13 +2,13 @@ import React from 'react'
 
 import AuthContainer from '@/app/components/auth/AuthContainer'
 import LeftPanel from '@/app/components/auth/LeftPanel'
-import RegisterPanel from '@/app/components/auth/RegisterPanel'
+import AuthPanel from '@/app/components/auth/AuthPanel'
 
 const RegisterPage = () => {
   return (
     <AuthContainer>
       <LeftPanel/>
-      <RegisterPanel/>
+      <AuthPanel mode='register'/>
     </AuthContainer>
   )
 }

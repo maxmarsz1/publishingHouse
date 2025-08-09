@@ -4,15 +4,15 @@ import React from "react";
 import { useState } from "react";
 import { Button, MenuItem, TextField } from "@mui/material";
 
-import { RaportType, ITRaportCategory, Publisher } from "@/app/types/types";
-import styles from "./NewRaport.module.css";
+import { ArticleType, ITArticleCategory, Publisher } from "@/app/types/types";
+import styles from "./NewArticle.module.css";
 
-const raportTypeOptions = Object.values(RaportType).map((type) => ({
+const raportTypeOptions = Object.values(ArticleType).map((type) => ({
   value: type,
   label: type,
 }));
 
-const articleCategoryOptions = Object.values(ITRaportCategory).map((type) => ({
+const articleCategoryOptions = Object.values(ITArticleCategory).map((type) => ({
   value: type,
   label: type,
 }));
@@ -21,14 +21,14 @@ interface NewRaportProps {
   publisher: Publisher;
 }
 
-const NewRaport = ({ publisher }: NewRaportProps) => {
+const NewArticle = ({ publisher }: NewRaportProps) => {
   const [title, setTitle] = useState("");
   const [abstract, setAbstract] = useState("");
-  const [raportType, setRaportType] = useState<RaportType>(
-    RaportType.OriginalResearch
+  const [articleType, setArticleType] = useState<ArticleType>(
+    ArticleType.OriginalResearch
   );
-  const [raportCategory, setRaportCategory] = useState<ITRaportCategory>(
-    ITRaportCategory.MachineLearning
+  const [articleCategory, setArticleCategory] = useState<ITArticleCategory>(
+    ITArticleCategory.MachineLearning
   );
   const [comment, setComment] = useState("");
 
@@ -59,8 +59,8 @@ const NewRaport = ({ publisher }: NewRaportProps) => {
         id="abstract"
         select
         label="Wybierz typ artykułu"
-        value={raportType}
-        onChange={(e) => setRaportType(e.target.value as RaportType)}
+        value={articleType}
+        onChange={(e) => setArticleType(e.target.value as ArticleType)}
         className={`${styles.halfWidth} ${styles.inputField}`}
       >
         {raportTypeOptions.map((option) => (
@@ -74,9 +74,9 @@ const NewRaport = ({ publisher }: NewRaportProps) => {
         id="category"
         select
         label="Wybierz kategorie artykułu"
-        value={raportCategory}
+        value={articleCategory}
         onChange={(e) =>
-          setRaportCategory(e.target.value as ITRaportCategory)
+          setArticleCategory(e.target.value as ITArticleCategory)
         }
         className={`${styles.halfWidth} ${styles.inputField}`}
       >
@@ -107,8 +107,8 @@ const NewRaport = ({ publisher }: NewRaportProps) => {
           console.log({
             title,
             abstract,
-            raportType,
-            raportCategory,
+            raportType: articleType,
+            raportCategory: articleCategory,
             comment,
           });
         }}
@@ -119,4 +119,4 @@ const NewRaport = ({ publisher }: NewRaportProps) => {
   );
 };
 
-export default NewRaport;
+export default NewArticle;

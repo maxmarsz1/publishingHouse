@@ -1,0 +1,13 @@
+.infoLine{
+    font-size: 18px;
+    /* border-bottom: 1px solid var(--text); */
+    padding: 4px 0;
+}
+.infoLine strong{
+    font-weight: 700;
+    color: var(--primary);
+    margin-right: .5rem;
+}
+.downloadBtn{
+    margin: 1rem 0 !important;
+}

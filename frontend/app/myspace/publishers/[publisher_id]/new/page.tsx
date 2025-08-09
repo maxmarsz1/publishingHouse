@@ -1,8 +1,8 @@
 import React from "react";
 
 import { getPublisherData } from "@/app/utils/publisher-helper";
-import NewRaport from "@/app/components/raports/NewRaport";
-import RaportFormating from "@/app/components/raports/RaportFormating";
+import NewArticle from "@/app/components/article/NewArticle";
+import ArticleFormatting from "@/app/components/article/ArticleFormating";
 
 interface Props {
   params: { publisherID: string };
@@ -21,9 +21,9 @@ const page = async ({ params }: Props) => {
     <div>
       <div>
         <h1 style={{marginBottom: "16px", fontWeight: 400}}>{publisher.name} - Nowy raport</h1>
-        <RaportFormating />
+        <ArticleFormatting />
       </div>
-      <NewRaport publisher={publisher}/>
+      <NewArticle publisher={publisher}/>
     </div>
   );
 };

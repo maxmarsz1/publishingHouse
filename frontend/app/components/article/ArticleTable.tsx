@@ -1,16 +1,17 @@
 import React from 'react'
-import { Raport } from '../../types/types'
-import styles from './RaportsTable.module.css'
+import { Article } from '../../types/types'
+import styles from './ArticleTable.module.css'
 import { getStatusDisplayText } from '../../utils/status-helper'
+import Link from 'next/link'
 
-interface RaportsTableProps {
+interface ArticlesTableProps {
     title: string,
-    raports: Raport[],
+    articles: Article[],
     showPublisher?: boolean,
     showID?: boolean
 }
 
-const RaportsTable = ({ title, raports, showPublisher = false, showID = false }: RaportsTableProps) => {
+const ArticleTable = ({ title, articles, showPublisher = false, showID = false }: ArticlesTableProps) => {
   return (
     <div className={styles.tableWrapper}>
         <h2>{title}</h2>
@@ -29,17 +30,19 @@ const RaportsTable = ({ title, raports, showPublisher = false, showID = false }:
                 </tr>
             </thead>
             <tbody>
-                {raports.map((raport, index) => (
+                {articles.map((article, index) => (
                     <tr key={index}>
                         {showID &&
-                            <td className={styles.id}>{raport.id}</td>
+                            <td className={styles.id}>{article.id}</td>
                         }
-                        <td className={styles.title}>{raport.title}</td>
+                        <td className={styles.title}>
+                            <Link href={`/myspace/articles/${article.id}`}>{article.title}</Link>
+                        </td>
                         {showPublisher &&
-                            <td className={styles.publisher}>{raport.publisher.name}</td>
+                            <td className={styles.publisher}>{article.publisher.name}</td>
                         }
-                        <td className={styles.status}>{getStatusDisplayText(raport.status)}</td>
-                        <td className={styles.grade}>{(raport.grade == 0 ? "-" : raport.grade)}</td>
+                        <td className={styles.status}>{getStatusDisplayText(article.status)}</td>
+                        <td className={styles.grade}>{(article.grade == 0 ? "-" : article.grade)}</td>
                     </tr>
                 ))}
             </tbody>
@@ -48,4 +51,4 @@ const RaportsTable = ({ title, raports, showPublisher = false, showID = false }:
   )
 }
 
-export default RaportsTable
+export default ArticleTable

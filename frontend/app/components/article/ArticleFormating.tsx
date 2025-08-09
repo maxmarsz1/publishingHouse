@@ -4,9 +4,9 @@ import React, { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleQuestion } from '@fortawesome/free-solid-svg-icons'
 
-import styles from './RaportFormating.module.css'
+import styles from './ArticleFormating.module.css'
 
-const RaportFormating = () => {
+const ArticleFormatting = () => {
     const [showInfo, setShowInfo] = useState(false);
 
   return (
@@ -34,4 +34,4 @@ const RaportFormating = () => {
   )
 }
 
-export default RaportFormating
+export default ArticleFormatting

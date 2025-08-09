@@ -10,3 +10,9 @@
 .input input{
     padding: 10px;
 }
+
+@media (max-width: 991px){
+    .input{
+        width: calc(100% - 70px);
+    }
+}

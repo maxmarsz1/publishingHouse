@@ -4,12 +4,27 @@ export interface Publisher {
     description: string;
 }
 
-export interface Raport {
+export interface User {
+    id: number,
+    username: string,
+    firstName: string,
+    lastName: string,
+    articles?: Article[],
+    articlesToReview?: Article[]
+}
+
+export interface Article {
     id: number,
     title: string,
+    abstract: string,
+    articleType: ArticleType,
+    articleCategory: ITArticleCategory,
+    author: User,
     status: Status,
     grade: number,
-    publisher: Publisher
+    publisher: Publisher,
+    filePath?: string,   // Optional for now
+    reviewers?: User[]
 }
 
 export enum Status{
@@ -20,7 +35,7 @@ export enum Status{
     Rejected
 }
 
-export enum RaportType {
+export enum ArticleType {
     OriginalResearch = "Artykuł oryginalny",
     ReviewArticle = "Artykuł przeglądowy",
     SystematicReview = "Przegląd systematyczny",
@@ -36,7 +51,7 @@ export enum RaportType {
     Other = "Inny"
 }
 
-export enum ITRaportCategory {
+export enum ITArticleCategory {
     ArtificialIntelligence = "Sztuczna Inteligencja (AI)",
     MachineLearning = "Uczenie Maszynowe (ML)",
     DataScience = "Data Science / Analiza Danych",

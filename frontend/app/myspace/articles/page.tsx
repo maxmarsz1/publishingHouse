@@ -1,7 +1,7 @@
 import React from 'react'
 
-import RaportsTable from '@/app/components/raports/RaportsTable'
-import { getUserRaports, getRaportsToReview } from '@/app/utils/raports-helper'
+import ArticleTable from '@/app/components/article/ArticleTable'
+import { getUserArticles, getArticlesToReview } from '@/app/utils/article-helper'
 
 const Articles = () => {
   return (
@@ -10,8 +10,8 @@ const Articles = () => {
         <h1 style={{marginBottom: "8px"}}>Twoje raporty</h1>
       </div>
 
-      <RaportsTable title={"Wysłane raporty"} showPublisher={true} raports={getUserRaports()}></RaportsTable>
-      <RaportsTable title={"Raporty do recenzji"} showPublisher={true} raports={getRaportsToReview()}></RaportsTable>
+      <ArticleTable title={"Wysłane raporty"} showPublisher={true} articles={getUserArticles()}></ArticleTable>
+      <ArticleTable title={"Raporty do recenzji"} showPublisher={true} articles={getArticlesToReview()}></ArticleTable>
     </div>
   )
 }
