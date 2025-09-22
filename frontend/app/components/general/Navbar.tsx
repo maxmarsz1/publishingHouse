@@ -9,7 +9,9 @@ const Navbar = () => {
     <nav className={styles.navbar}>
       <Container className={styles.navbarContainer}>
         <div className={styles.leftLinks}>
-          <Image alt='logo' src="/logo.webp" width={128} height={44} className={styles.logo}/>
+          <Link href='/myspace/'>
+            <Image alt='logo' src="/logo.webp" width={128} height={44} className={styles.logo}/>
+          </Link>
           <Link href="/myspace/publishers">Wydawnictwa</Link>
           <Link href="/myspace/articles">Raporty</Link>
           <Link href="/myspace/account">Konto</Link>

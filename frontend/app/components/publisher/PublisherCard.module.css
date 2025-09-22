@@ -4,7 +4,7 @@
     color: var(--background1);
     border-radius: 10px;
     /* aspect-ratio: 2 / 1; */
-    height: 200px;
+    height: 230px;
     max-height: fit-content;
     display: flex;
     justify-content: space-between;
@@ -24,8 +24,8 @@
 
 .publisherCard p{
     display: -webkit-box;
-    /* -webkit-line-clamp: 5;
-    line-clamp: 5; */
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;

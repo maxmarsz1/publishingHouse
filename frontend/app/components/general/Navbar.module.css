@@ -20,5 +20,6 @@
 .logo{
     height: 100%;
     width: auto;
+    display: block;
     border-radius: 10px;
 }
