@@ -3,14 +3,14 @@ from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import(
  TokenObtainPairView, TokenRefreshView, TokenVerifyView)
 
-from .views import RaportViewSet, RaportReviewViewSet, UserViewSet, PublisherViewSet, PublisherMembershipViewSet, UserRegistrationView, UserProfileView, UserRaportsView, UserReviewRaportsView, UserPublishersView, PublisherRaportsView
+from .views import AdminViews, UserRegistrationView, UserProfileView, UserRaportsView, UserReviewRaportsView, UserPublishersView, PublisherRaportsView
 
 router = DefaultRouter()
-router.register(r'raports', RaportViewSet)
-router.register(r'raportreviews', RaportReviewViewSet)
-router.register(r'users', UserViewSet)
-router.register(r'publishers', PublisherViewSet)
-router.register(r'publishermemberships', PublisherMembershipViewSet)
+router.register(r'raports', AdminViews.RaportViewSet)
+router.register(r'raportreviews', AdminViews.RaportReviewViewSet)
+router.register(r'users', AdminViews.UserViewSet)
+router.register(r'publishers', AdminViews.PublisherViewSet)
+router.register(r'publishermemberships', AdminViews.PublisherMembershipViewSet)
 
 urlpatterns = [
     path("", include(router.urls)),

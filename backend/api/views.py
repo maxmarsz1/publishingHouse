@@ -13,31 +13,32 @@ from users.serializers import UserSerializer, UserRegistrationSerializer
 from publishers.serializers import PublisherSerializer, PublisherMembershipSerializer
 
 
-class RaportViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAdminUser]
-    queryset = Raport.objects.all()
-    serializer_class = RaportSerializer
-    
-class RaportReviewViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAdminUser]
-    queryset = RaportReview.objects.all()
-    serializer_class = RaportReviewSerializer
-    
-class UserViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAdminUser]
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-    
-class PublisherViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAdminUser]
-    queryset = Publisher.objects.all()
-    serializer_class = PublisherSerializer
-    
-class PublisherMembershipViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAdminUser]
-    queryset = PublisherMembership.objects.all()
-    serializer_class = PublisherMembershipSerializer
-    
+class AdminViews:
+    class RaportViewSet(viewsets.ModelViewSet):
+        permission_classes = [IsAdminUser]
+        queryset = Raport.objects.all()
+        serializer_class = RaportSerializer
+        
+    class RaportReviewViewSet(viewsets.ModelViewSet):
+        permission_classes = [IsAdminUser]
+        queryset = RaportReview.objects.all()
+        serializer_class = RaportReviewSerializer
+        
+    class UserViewSet(viewsets.ModelViewSet):
+        permission_classes = [IsAdminUser]
+        queryset = User.objects.all()
+        serializer_class = UserSerializer
+        
+    class PublisherViewSet(viewsets.ModelViewSet):
+        permission_classes = [IsAdminUser]
+        queryset = Publisher.objects.all()
+        serializer_class = PublisherSerializer
+        
+    class PublisherMembershipViewSet(viewsets.ModelViewSet):
+        permission_classes = [IsAdminUser]
+        queryset = PublisherMembership.objects.all()
+        serializer_class = PublisherMembershipSerializer
+        
     
 class UserAuthoredRaportsView(generics.ListAPIView):
     serializer_class = RaportSerializer

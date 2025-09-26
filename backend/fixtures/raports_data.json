@@ -1,0 +1,60 @@
+[
+  {
+    "model": "raports.raport",
+    "pk": 1,
+    "fields": {
+      "title": "AI in Cybersecurity",
+      "author": 4,
+      "reviewers": [],
+      "publisher": 1,
+      "status": "published",
+      "raport_type": "original_research",
+      "category": "artificial_intelligence",
+      "abstract": "A comprehensive study on the role of Artificial Intelligence in network defense systems, covering intrusion detection and threat modeling.",
+      "file": "raports/files/report_ai_cybersecurity.pdf",
+      "keywords": "AI, cybersecurity, deep learning, network defense",
+      "created_at": "2025-01-10T15:00:00Z",
+      "comment": null
+    }
+  },
+  {
+    "model": "raports.raport",
+    "pk": 2,
+    "fields": {
+      "title": "Optimizing Multi-Cloud Deployment Patterns",
+      "author": 2,
+      "reviewers": [],
+      "publisher": 2,
+      "status": "pending",
+      "raport_type": "technical_report",
+      "category": "cloud_computing",
+      "abstract": "Review of current best practices for deploying applications across heterogeneous cloud environments (AWS, Azure, GCP).",
+      "file": "raports/files/report_multi_cloud.pdf",
+      "keywords": "AWS, Azure, multi-cloud, DevOps, scalability",
+      "created_at": "2025-01-15T16:00:00Z",
+      "comment": null
+    }
+  },
+  {
+    "model": "raports.raportreview",
+    "pk": 1,
+    "fields": {
+      "raport": 1,
+      "reviewer": 3,
+      "review_date": "2025-01-12T10:30:00Z",
+      "comment": "Excellent work, minor edits needed for the conclusion section. The methodology is sound.",
+      "status": "approved"
+    }
+  },
+  {
+    "model": "raports.raportreview",
+    "pk": 2,
+    "fields": {
+      "raport": 2,
+      "reviewer": 3,
+      "review_date": null,
+      "comment": null,
+      "status": "pending"
+    }
+  }
+]

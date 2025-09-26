@@ -1,0 +1,74 @@
+[
+  {
+    "model": "users.user",
+    "pk": 1,
+    "fields": {
+      "username": "admin123",
+      "email": "admin123@example.com",
+      "first_name": "Super",
+      "last_name": "User",
+      "password": "pbkdf2_sha256$260000$P3r9I2c4K7s2d1t1m2t1r7s7b1s9s2y5$y4k4d1j5y5g6s4j4g2k4n3x1b2q1v3s3k2p7x6e4o3j2g2e4k3g2g1t2q7s2r4s7",
+      "is_superuser": true,
+      "date_joined": "2025-01-01T10:00:00Z",
+      "is_active": true,
+      "is_staff": true,
+      "last_login": null,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 2,
+    "fields": {
+      "username": "johnsmith",
+      "email": "john.smith@example.com",
+      "first_name": "John",
+      "last_name": "Smith",
+      "password": "pbkdf2_sha256$260000$P3r9I2c4K7s2d1t1m2t1r7s7b1s9s2y5$y4k4d1j5y5g6s4j4g2k4n3x1b2q1v3s3k2p7x6e4o3j2g2e4k3g2g1t2q7s2r4s7",
+      "is_superuser": false,
+      "date_joined": "2025-01-01T10:05:00Z",
+      "is_active": true,
+      "is_staff": false,
+      "last_login": null,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 3,
+    "fields": {
+      "username": "annareviewer",
+      "email": "anna.reviewer@example.com",
+      "first_name": "Anna",
+      "last_name": "Reviewer",
+      "password": "pbkdf2_sha256$260000$P3r9I2c4K7s2d1t1m2t1r7s7b1s9s2y5$y4k4d1j5y5g6s4j4g2k4n3x1b2q1v3s3k2p7x6e4o3j2g2e4k3g2g1t2q7s2r4s7",
+      "is_superuser": false,
+      "date_joined": "2025-01-02T11:00:00Z",
+      "is_active": true,
+      "is_staff": false,
+      "last_login": null,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 4,
+    "fields": {
+      "username": "benauthor",
+      "email": "ben.author@example.com",
+      "first_name": "Ben",
+      "last_name": "Author",
+      "password": "pbkdf2_sha256$260000$P3r9I2c4K7s2d1t1m2t1r7s7b1s9s2y5$y4k4d1j5y5g6s4j4g2k4n3x1b2q1v3s3k2p7x6e4o3j2g2e4k3g2g1t2q7s2r4s7",
+      "is_superuser": false,
+      "date_joined": "2025-01-03T12:00:00Z",
+      "is_active": true,
+      "is_staff": false,
+      "last_login": null,
+      "groups": [],
+      "user_permissions": []
+    }
+  }
+]
