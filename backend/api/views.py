@@ -2,6 +2,7 @@ from rest_framework import viewsets, status, generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
+from django.core.exceptions import ObjectDoesNotExist
 
 
 from raports.models import Raport, RaportReview
@@ -38,93 +39,158 @@ class AdminViews:
         permission_classes = [IsAdminUser]
         queryset = PublisherMembership.objects.all()
         serializer_class = PublisherMembershipSerializer
-        
-    
-class UserAuthoredRaportsView(generics.ListAPIView):
-    serializer_class = RaportSerializer
-    permission_classes = [IsAuthenticated]
 
-    def get_queryset(self):
-        user = self.request.user
-        return Raport.objects.filter(author=user)
-    
-class UserReviewRaportsView(generics.ListAPIView):
-    serializer_class = RaportSerializer
-    permission_classes = [IsAuthenticated]
+    class DeleteMemberView(APIView):
+        permission_classes = [IsAuthenticated]
 
-    def get_queryset(self):
-        user = self.request.user
-        return Raport.objects.filter(reviewers=user)
-    
-class UserRaportsView(APIView):
-    serializer_class = RaportSerializer
-    permission_classes = [IsAuthenticated]
+        def post(self, request, *args, **kwargs):
+            publisher_id = self.kwargs['pk']
 
-    def get(self, request):
-        user = self.request.user
-        authored_raports = Raport.objects.filter(author=user)
-        review_raports = Raport.objects.filter(reviewers=user)
-        
-        authored_serializer = self.serializer_class(authored_raports, many=True)
-        review_serializer = self.serializer_class(review_raports, many=True)
-        
-        user_raports = {
-            "authored_raports": authored_serializer.data,
-            "review_raports": review_serializer.data
-        }
-        return Response(user_raports, status=status.HTTP_200_OK)
-    
-    
-class UserRegistrationView(APIView):
-    permission_classes = [AllowAny]
-    
-    def post(self, request):
-        serializer = UserRegistrationSerializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.save()
-            if user:
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            try:
+                user_id = request.data['user_id']
+                user_id = int(user_id)
+                user = User.objects.get(id=user_id)
+                membership = PublisherMembership.objects.get(user_id=user_id, publisher_id=publisher_id)
+                membership.delete()
+            except KeyError:
+                return Response(
+                    {"error": "user_id must be provided"},
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                    )
+            except ValueError:
+                return Response(
+                    {"error": "user_id must be an integer"},
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                    )
+            except ObjectDoesNotExist as e:
+                return Response({"error": str(e)}, status=status.HTTP_404_NOT_FOUND)
+            except Exception as e:
+                return Response(
+                    {"error": str(e)},
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                    )
+
+            return Response({"message": "Member deleted"})
+
+    class ListMembersView(APIView):
+        serializer_class = UserSerializer
+        permission_classes = [IsAuthenticated]
+
+        def get(self, request, *args, **kwargs):
+            publisher_id = self.kwargs['pk']
+
+            try:
+                memberships = PublisherMembership.objects.filter(publisher_id=publisher_id)
+                user_ids = memberships.values_list('user_id', flat=True)
+                members = User.objects.filter(id__in=user_ids)
+                members_serializer = self.serializer_class(members, many=True)
+            except Exception as e:
+                return Response(
+                    {"error": "Could not retrieve members."}, 
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                )
+            
+            return Response(members_serializer.data, status=status.HTTP_200_OK)
 
 
-class UserProfileView(APIView):
-    permission_classes = [IsAuthenticated]
+class UserViews:
+    class UserRaportsView(APIView):
+        serializer_class = RaportSerializer
+        permission_classes = [IsAuthenticated]
 
-    def get(self, request):
-        serializer = UserSerializer(request.user)
-        return Response(serializer.data)
-    
-    
-class PublisherRaportsView(APIView):
-    serializer_class = RaportSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request, *args, **kwargs):
-        publisher_id = self.kwargs['pk']
-        user = self.request.user
-
-        if user.is_staff:
-            raports = Raport.objects.filter(publisher__id=publisher_id)
-            serializer = self.serializer_class(raports, many=True)
-            return Response({"all_raports": serializer.data})
-        else:
-            authored_raports = Raport.objects.filter(publisher__id=publisher_id, author=user)
-
-            review_raports = Raport.objects.filter(publisher__id=publisher_id, reviewers=user)
-
+        def get(self, request):
+            user = self.request.user
+            authored_raports = Raport.objects.filter(author=user)
+            review_raports = Raport.objects.filter(reviewers=user)
+            
             authored_serializer = self.serializer_class(authored_raports, many=True)
             review_serializer = self.serializer_class(review_raports, many=True)
-
-            return Response({
+            
+            user_raports = {
                 "authored_raports": authored_serializer.data,
                 "review_raports": review_serializer.data
-            })
+            }
+            return Response(user_raports, status=status.HTTP_200_OK)
     
-    
-class UserPublishersView(generics.ListAPIView):
-    serializer_class = PublisherSerializer
-    permission_classes = [IsAuthenticated]
+    class UserRegistrationView(APIView):
+        permission_classes = [AllowAny]
+        
+        def post(self, request):
+            serializer = UserRegistrationSerializer(data=request.data)
+            if serializer.is_valid():
+                user = serializer.save()
+                if user:
+                    return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def get_queryset(self):
-        user = self.request.user
-        return Publisher.objects.filter(members=user)
+    class UserProfileView(APIView):
+        permission_classes = [IsAuthenticated]
+
+        def get(self, request):
+            serializer = UserSerializer(request.user)
+            return Response(serializer.data)
+    
+    class PublisherRaportsView(APIView):
+        serializer_class = RaportSerializer
+        permission_classes = [IsAuthenticated]
+
+        def get(self, request, *args, **kwargs):
+            publisher_id = self.kwargs['pk']
+            user = self.request.user
+
+            if user.is_staff:
+                raports = Raport.objects.filter(publisher__id=publisher_id)
+                serializer = self.serializer_class(raports, many=True)
+                return Response({"all_raports": serializer.data})
+            else:
+                authored_raports = Raport.objects.filter(publisher__id=publisher_id, author=user)
+
+                review_raports = Raport.objects.filter(publisher__id=publisher_id, reviewers=user)
+
+                authored_serializer = self.serializer_class(authored_raports, many=True)
+                review_serializer = self.serializer_class(review_raports, many=True)
+
+                return Response({
+                    "authored_raports": authored_serializer.data,
+                    "review_raports": review_serializer.data
+                })
+    
+    class UserPublishersView(generics.ListAPIView):
+        serializer_class = PublisherSerializer
+        permission_classes = [IsAuthenticated]
+
+        def get_queryset(self):
+            user = self.request.user
+            return Publisher.objects.filter(members=user)
+
+    class JoinPublisherView(APIView):
+        permission_classes = [IsAuthenticated]
+
+        def post(self, request):
+            user = request.user
+
+            try:
+                join_code = request.data['join_code']
+                publisher = Publisher.objects.get(join_code=join_code)
+                membership = PublisherMembership(user_id=user.id, publisher_id=publisher.id)
+                membership.save()
+
+            except KeyError as e:
+                return Response(
+                    {"error": f"join_code must be provided ({str(e)})"},
+                    status.HTTP_500_INTERNAL_SERVER_ERROR
+                    )
+            except ObjectDoesNotExist:
+                return Response(
+                    {"error": "Invalid join code"},
+                    status.HTTP_404_NOT_FOUND
+                    )
+            except Exception as e:
+                return Response(
+                    {"error": str(e)},
+                    status.HTTP_500_INTERNAL_SERVER_ERROR
+                    )
+
+            return Response(
+                {"message": "Joined publisher"}
+            )

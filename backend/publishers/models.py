@@ -1,10 +1,20 @@
 from django.db import models
+import random, string
+
 from users.models import User
 
+
+def generate_unique_join_code(length=10):
+    characters = string.ascii_uppercase + string.digits
+    while True:
+        code = ''.join(random.choice(characters) for _ in range(length))
+        if not Publisher.objects.filter(join_code=code).exists():
+            return code
 
 class Publisher(models.Model):
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField(blank=True, null=True)
+    join_code = models.CharField(max_length=10, unique=True, blank=True, null=True) 
     members = models.ManyToManyField(
         User,
         through='PublisherMembership',
@@ -14,6 +24,13 @@ class Publisher(models.Model):
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            if not self.join_code:
+                self.join_code = generate_unique_join_code(length=8)
+        
+        super().save(*args, **kwargs)
 
 
 class PublisherMembership(models.Model):
