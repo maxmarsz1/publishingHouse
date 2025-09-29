@@ -194,3 +194,41 @@ class UserViews:
             return Response(
                 {"message": "Joined publisher"}
             )
+            
+    class ChangeUserPassword(APIView):
+        permission_classes = [IsAuthenticated]
+
+        def post(self, request):
+            user = request.user
+
+            try:
+                current_password = request.data['current_password']
+                new_password = request.data['new_password']
+                new_password_repeat = request.data['new_password_repeat']
+
+                if not user.check_password(current_password):
+                    return Response(
+                        {"error": "Current password is incorrect"},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+                if new_password != new_password_repeat:
+                    return Response(
+                        {"error": "New passwords do not match"},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+
+                user.set_password(new_password)
+                user.save()
+
+            except KeyError as e:
+                return Response(
+                    {"error": f"{str(e)} must be provided"},
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                    )
+            except Exception as e:
+                return Response(
+                    {"error": str(e)},
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                    )
+
+            return Response({"message": "Password changed successfully"})

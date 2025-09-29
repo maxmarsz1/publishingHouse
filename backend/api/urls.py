@@ -21,6 +21,7 @@ urlpatterns = [
     path('publisher/<int:pk>/raports/', UserViews.PublisherRaportsView.as_view(), name='publisher-raports'),
     path('user/publishers/', UserViews.UserPublishersView.as_view(), name='user-publishers'),
     path('user/raports/', UserViews.UserRaportsView.as_view(), name='user-raports'),
+    path('user/change-password/', UserViews.ChangeUserPassword.as_view(), name='change-password'),
     path('profile/', UserViews.UserProfileView.as_view(), name='profile'),
     path('register/', UserViews.UserRegistrationView.as_view(), name='register'),
     path('login/', TokenObtainPairView.as_view(), name='login'),

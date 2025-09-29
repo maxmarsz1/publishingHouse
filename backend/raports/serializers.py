@@ -10,5 +10,5 @@ class RaportSerializer(serializers.ModelSerializer):
 class RaportReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = RaportReview
-        fields = ['id', 'raport', 'reviewer', 'comment', 'status', 'review_date']
+        fields = ['id', 'raport', 'reviewer', 'comment', 'status', 'review_date', 'grade']
         

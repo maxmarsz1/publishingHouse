@@ -102,6 +102,7 @@ class RaportReview(models.Model):
     reviewer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_reviews')
     review_date = models.DateTimeField(null=True, blank=True)
     comment = models.TextField(blank=True, null=True)
+    grade = models.IntegerField(null=True, blank=True)
     status = models.CharField(
         max_length=10,
         choices=RaportReviewStatus.choices,

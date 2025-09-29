@@ -16,7 +16,6 @@ echo "Creating initial users..."
 # Create Superuser (admin)
 python manage.py setup_users
 
-
 # Load fixtures
 echo "Loading boilerplate data fixtures..."
 python manage.py loaddata fixtures/users_data.json
