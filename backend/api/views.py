@@ -9,7 +9,7 @@ from raports.models import Raport, RaportReview
 from users.models import User
 from publishers.models import Publisher, PublisherMembership
 
-from raports.serializers import RaportSerializer, RaportReviewSerializer
+from raports.serializers import RaportSerializer, RaportReviewSerializer, RaportListSerializer
 from users.serializers import UserSerializer, UserRegistrationSerializer
 from publishers.serializers import PublisherSerializer, PublisherMembershipSerializer
 
@@ -95,7 +95,7 @@ class AdminViews:
 
 class UserViews:
     class UserRaportsView(APIView):
-        serializer_class = RaportSerializer
+        serializer_class = RaportListSerializer
         permission_classes = [IsAuthenticated]
 
         def get(self, request):

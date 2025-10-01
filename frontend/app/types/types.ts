@@ -4,6 +4,11 @@ export interface Publisher {
     description: string;
 }
 
+export interface UserArticles {
+    authored_articles: Article[],
+    articles_to_review: Article[]
+}
+
 export interface User {
     id: number,
     username: string,
