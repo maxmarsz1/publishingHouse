@@ -5,9 +5,8 @@ import { Button } from '@mui/material'
 import Link from 'next/link'
 
 import ArticleTable from '@/app/components/article/ArticleTable'
-import { getAdminPublisherArticles, getUserPublisherArticles } from '@/app/utils/article-helper'
+import { getAdminPublisherArticles, getUserArticles } from '@/app/utils/article-helper'
 import { getPublisherData } from '@/app/utils/publisher-helper'
-import { Article, UserArticles } from '@/app/types/types'
 
 
 interface Props {
@@ -17,37 +16,32 @@ interface Props {
 const PublisherView = async ({ params }: Props) => {
   const { publisher_id } = await params;
   const is_staff = false;
-  let publisherArticles: Article[] = [];
-  let userArticles: UserArticles = { authored_articles: [], articles_to_review: [] };
   
   const publisher = getPublisherData(+publisher_id);
-  if (is_staff){
-    publisherArticles = getAdminPublisherArticles(publisher);
-  } else {
-    userArticles = getUserPublisherArticles(publisher);
-  }
+  const adminArticles = is_staff ? getAdminPublisherArticles(publisher) : null;
+  const regularUserArticles = !is_staff ? getUserArticles(publisher) : null;
 
   return (
-    <div>
+    <>
       <div>
         <h1 style={{marginBottom: "8px"}}>Wydawnictwo "{publisher.name}" ({publisher.id})</h1>
         <p style={{marginBottom: "32px"}}>{publisher.description}</p>
-        <Button style={{gap: "8px"}} variant='contained' href={`/myspace/publishers/${publisher.id}/new`} component={Link}>
+        <Button style={{gap: "8px"}} variant='contained' href={`/myspace/publishers/${publisher.id}/new-article`} component={Link}>
           Przeslij raport
           <FontAwesomeIcon icon={faPlus}/>
         </Button>
       </div>
 
-      {is_staff && 
-        <ArticleTable title={"Wszystkie raporty"} articles={publisherArticles} admin={true}></ArticleTable>
+      {adminArticles && 
+        <ArticleTable title={"Wszystkie raporty"} articles={adminArticles} admin={true}></ArticleTable>
       }
-      {!is_staff && 
+      {regularUserArticles && 
         <>
-          <ArticleTable title={"Twoje raporty"} articles={userArticles.authored_articles}></ArticleTable>
-          <ArticleTable title={"Raporty do recenzji"} articles={userArticles.articles_to_review}></ArticleTable>
+          <ArticleTable title={"Twoje raporty"} articles={regularUserArticles.authored_articles}></ArticleTable>
+          <ArticleTable title={"Raporty do recenzji"} articles={regularUserArticles.articles_to_review}></ArticleTable>
         </>
       }
-    </div>
+    </>
   )
 }
 

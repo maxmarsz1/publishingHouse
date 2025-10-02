@@ -3,7 +3,7 @@ import { getPublisherData } from "./publisher-helper";
 
 
 
-export function getAdminPublisherArticles(publisher?: Publisher): Article[]{
+export function getAdminPublisherArticles(publisher: Publisher): Article[]{
   // mocking data fetching from backend
   if(publisher === undefined){
     publisher = getPublisherData(0);
@@ -54,7 +54,7 @@ export function getAdminPublisherArticles(publisher?: Publisher): Article[]{
   return publisherArticles;
 }
 
-export function getUserPublisherArticles(publisher?: Publisher): UserArticles{
+export function getUserArticles(publisher?: Publisher): UserArticles{
   if(publisher === undefined){
     publisher = getPublisherData(0);
   }
@@ -129,6 +129,7 @@ export function getArticleData(articleId: number): Article{
     articleType: ArticleType.CaseReport,
     articleCategory: ITArticleCategory.ArtificialIntelligence,
     author: sampleAuthor,
+    toReview: true,
     filePath: `/articles/${articleId}.pdf` // Example file path
   };
 }

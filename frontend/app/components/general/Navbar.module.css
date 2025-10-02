@@ -23,3 +23,9 @@
     display: block;
     border-radius: 10px;
 }
+
+@media (max-width: 991px){
+    .desktopLink, .logoutLink{
+        display: none;
+    }
+}

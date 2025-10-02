@@ -1,0 +1,43 @@
+.wrapper{
+    display: none;
+}
+
+@media (max-width: 991px){
+    .wrapper{
+        display: block;
+    }
+    .hamburger svg{
+        height: 25px;
+        cursor: pointer;
+    }
+    .menu{
+        position: fixed;
+        height: 100vh;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        transform: translateY(-100%);
+        background-color: rgba(0,0,0,0.8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 2rem;
+        z-index: 10;
+        transition: .3s all ease;
+        /* display: none; */
+    }
+    .menu.open{
+        transform: translateY(0);
+    }
+    .mobileLink{
+        font-size: 1.5rem;
+    }
+    .closeIcon{
+        margin-top: 2rem;
+        background: var(--background);
+        padding: 1rem;
+        border-radius: 50px;
+        cursor: pointer;
+    }
+}

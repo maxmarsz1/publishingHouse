@@ -10,4 +10,9 @@
 }
 .downloadBtn{
     margin: 1rem 0 !important;
+    box-shadow: unset !important;
+}
+.reviewBtn{
+    margin-left: 1rem !important;
+    box-shadow: unset !important;
 }

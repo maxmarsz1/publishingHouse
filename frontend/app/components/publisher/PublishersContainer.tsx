@@ -11,7 +11,7 @@ const PublishersContainer: React.FC<{publishers: Publisher[]}> = ({publishers}) 
 
   return (
     <>
-      <h1 style={{marginBottom: "16px"}}>Twoje wydawnictwa</h1>
+      <h1>Twoje wydawnictwa</h1>
       <div className={styles.publishersContainer}>
         <JoinPublisherBtn />
         

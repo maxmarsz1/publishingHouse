@@ -93,9 +93,7 @@ class Raport(models.Model):
 class RaportReview(models.Model):
     class RaportReviewStatus(models.TextChoices):
         PENDING = 'pending', 'Pending Review'
-        SUBMITTED = 'submitted', 'Submitted'
-        APPROVED = 'approved', 'Approved'
-        REJECTED = 'rejected', 'Rejected'
+        SUBMITTED = 'submitted', 'Submitted Review'
 
 
     raport = models.ForeignKey(Raport, on_delete=models.CASCADE, related_name='raport_reviews')

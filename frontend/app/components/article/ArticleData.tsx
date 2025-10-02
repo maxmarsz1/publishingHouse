@@ -21,6 +21,9 @@ const ArticleData = ({ article }: Props) => {
         {article.filePath && 
           <Button className={styles.downloadBtn} variant='contained' component={Link} href={article.filePath}>Pobierz artykuł</Button>
         }
+        {article.toReview &&
+          <Button className={styles.reviewBtn} variant='outlined' component={Link} href={`/myspace/articles/${article.id}/review`}>Recenzuj</Button>
+        }
     </>
   )
 }

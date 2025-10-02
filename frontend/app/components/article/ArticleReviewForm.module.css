@@ -1,0 +1,11 @@
+.form{
+    display: flex;
+    flex-direction: column;
+}
+.submitBtn{
+    align-self: flex-end;
+    margin-top: 1rem !important;
+}
+.inputField{
+    margin-bottom: 1rem !important;
+}

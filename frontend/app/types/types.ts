@@ -28,6 +28,7 @@ export interface Article {
     status: Status,
     grade: number,
     publisher: Publisher,
+    toReview?: boolean,
     filePath?: string,   // Optional for now
     reviewers?: User[]
 }

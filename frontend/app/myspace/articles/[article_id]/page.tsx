@@ -18,15 +18,11 @@ const ArticleView = async ({params}: Props) => {
   const article: Article = getArticleData(+article_id);
   
   return (
-    <div>
-      <div>
-        <h1 className={styles.title}>Przegląd artykułu</h1>
-      </div>
+    <>
+      <h1 className={styles.title}>Przegląd artykułu</h1>
 
       <ArticleData article={article}/>
-
-
-    </div>
+    </>
   )
 }
 

@@ -1,7 +1,7 @@
 import React from "react";
 
 import { getPublisherData } from "@/app/utils/publisher-helper";
-import NewArticle from "@/app/components/article/NewArticle";
+import NewArticleForm from "@/app/components/article/NewArticleForm";
 import ArticleFormatting from "@/app/components/article/ArticleFormating";
 
 interface Props {
@@ -23,7 +23,7 @@ const page = async ({ params }: Props) => {
         <h1 style={{marginBottom: "16px", fontWeight: 400}}>{publisher.name} - Nowy raport</h1>
         <ArticleFormatting />
       </div>
-      <NewArticle publisher={publisher}/>
+      <NewArticleForm publisher={publisher}/>
     </div>
   );
 };

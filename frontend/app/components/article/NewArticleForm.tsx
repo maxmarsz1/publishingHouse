@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Button, MenuItem, TextField } from "@mui/material";
 
 import { ArticleType, ITArticleCategory, Publisher } from "@/app/types/types";
-import styles from "./NewArticle.module.css";
+import styles from "./NewArticleForm.module.css";
 
 const raportTypeOptions = Object.values(ArticleType).map((type) => ({
   value: type,
