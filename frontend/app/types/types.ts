@@ -2,6 +2,7 @@ export interface Publisher {
     id: number;
     name: string;
     description: string;
+    dueDate?: string;
 }
 
 export interface UserArticles {

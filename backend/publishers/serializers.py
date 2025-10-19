@@ -4,7 +4,7 @@ from .models import Publisher, PublisherMembership
 class PublisherSerializer(serializers.ModelSerializer):
     class Meta:
         model = Publisher
-        fields = ['id', 'name', 'description', 'members']
+        fields = ['id', 'name', 'description', 'members', 'due_date']
         
 
 class PublisherMembershipSerializer(serializers.ModelSerializer):

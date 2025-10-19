@@ -15,6 +15,7 @@ class Publisher(models.Model):
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField(blank=True, null=True)
     join_code = models.CharField(max_length=10, unique=True, blank=True, null=True) 
+    due_date = models.DateTimeField(blank=True, null=True)
     members = models.ManyToManyField(
         User,
         through='PublisherMembership',

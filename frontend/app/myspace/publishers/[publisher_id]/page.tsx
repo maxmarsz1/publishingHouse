@@ -18,6 +18,13 @@ const PublisherView = async ({ params }: Props) => {
   const is_staff = false;
   
   const publisher = getPublisherData(+publisher_id);
+  let dueDate = null;
+  if(!is_staff && publisher.dueDate){
+    dueDate = new Date(publisher.dueDate);
+  }
+  const pastDue = dueDate ? (new Date() > dueDate) : false;
+
+
   const adminArticles = is_staff ? getAdminPublisherArticles(publisher) : null;
   const regularUserArticles = !is_staff ? getUserArticles(publisher) : null;
 
@@ -26,10 +33,13 @@ const PublisherView = async ({ params }: Props) => {
       <div>
         <h1 style={{marginBottom: "8px"}}>Wydawnictwo "{publisher.name}" ({publisher.id})</h1>
         <p style={{marginBottom: "32px"}}>{publisher.description}</p>
-        <Button style={{gap: "8px"}} variant='contained' href={`/myspace/publishers/${publisher.id}/new-article`} component={Link}>
-          Przeslij raport
-          <FontAwesomeIcon icon={faPlus}/>
-        </Button>
+
+        {!pastDue &&
+          <Button style={{gap: "8px"}} variant='contained' href={`/myspace/publishers/${publisher.id}/new-article`} component={Link}>
+            Przeslij raport
+            <FontAwesomeIcon icon={faPlus}/>
+          </Button>
+        }
       </div>
 
       {adminArticles && 

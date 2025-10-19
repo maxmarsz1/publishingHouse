@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils import timezone
 
 
 from raports.models import Raport, RaportReview
@@ -94,7 +95,7 @@ class AdminViews:
 
 
 class UserViews:
-    class UserRaportsView(APIView):
+    class RaportsView(APIView):
         serializer_class = RaportListSerializer
         permission_classes = [IsAuthenticated]
 
@@ -112,7 +113,7 @@ class UserViews:
             }
             return Response(user_raports, status=status.HTTP_200_OK)
     
-    class UserRegistrationView(APIView):
+    class RegistrationView(APIView):
         permission_classes = [AllowAny]
         
         def post(self, request):
@@ -123,7 +124,7 @@ class UserViews:
                     return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    class UserProfileView(APIView):
+    class ProfileView(APIView):
         permission_classes = [IsAuthenticated]
 
         def get(self, request):
@@ -155,13 +156,37 @@ class UserViews:
                     "review_raports": review_serializer.data
                 })
     
-    class UserPublishersView(generics.ListAPIView):
+    class PublishersView(generics.ListAPIView):
         serializer_class = PublisherSerializer
         permission_classes = [IsAuthenticated]
 
         def get_queryset(self):
             user = self.request.user
             return Publisher.objects.filter(members=user)
+        
+    class PublisherDetailView(APIView):
+        permission_classes = [IsAuthenticated]
+
+        def get(self, request, pk):
+            user = request.user
+
+            try:
+                membership = PublisherMembership.objects.get(user_id=user.id, publisher_id=pk)
+                publisher = Publisher.objects.get(id=membership.publisher_id)
+                publisher_serializer = PublisherSerializer(publisher)
+
+            except ObjectDoesNotExist:
+                return Response(
+                    {"error": "you are not a member of this publisher"},
+                    status.HTTP_404_NOT_FOUND
+                    )
+            except Exception as e:
+                return Response(
+                    {"error": str(e)},
+                    status.HTTP_500_INTERNAL_SERVER_ERROR
+                    )
+
+            return Response(publisher_serializer.data)
 
     class JoinPublisherView(APIView):
         permission_classes = [IsAuthenticated]
@@ -182,7 +207,7 @@ class UserViews:
                     )
             except ObjectDoesNotExist:
                 return Response(
-                    {"error": "Invalid join code"},
+                    {"error": "invalid join code"},
                     status.HTTP_404_NOT_FOUND
                     )
             except Exception as e:
@@ -195,7 +220,61 @@ class UserViews:
                 {"message": "Joined publisher"}
             )
             
-    class ChangeUserPassword(APIView):
+    class CreateReview(APIView):
+        permission_classes = [IsAuthenticated]
+
+        def post(self, request):
+            user = request.user
+
+            try:
+                raport_id = request.data['raport_id']
+                comment = request.data['comment']
+                grade = request.data['grade']
+
+                raport = Raport.objects.get(id=raport_id)
+
+                if user not in raport.reviewers.all():
+                    return Response(
+                        {"error": "User is not a reviewer for this raport"},
+                        status=status.HTTP_403_FORBIDDEN
+                    )
+
+                if not comment or not grade:
+                    return Response(
+                        {"error": "Both comment and grade must be provided"},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+
+                review = RaportReview.objects.get(raport=raport, reviewer=user)
+                review.comment = comment
+                review.grade = grade
+                review.review_date = timezone.now()
+                review.status = "submitted"
+                review.save()
+
+            except KeyError as e:
+                return Response(
+                    {"error": f"{str(e)} must be provided"},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            except ObjectDoesNotExist:
+                return Response(
+                    {"error": "Raport does not exist"},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+            except Exception as e:
+                return Response(
+                    {"error": str(e)},
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                )
+
+            return Response(
+                {"message": "Review created successfully"},
+                status=status.HTTP_201_CREATED
+            )
+    
+    
+    class ChangePassword(APIView):
         permission_classes = [IsAuthenticated]
 
         def post(self, request):
