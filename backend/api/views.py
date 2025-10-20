@@ -10,7 +10,7 @@ from raports.models import Raport, RaportReview
 from users.models import User
 from publishers.models import Publisher, PublisherMembership
 
-from raports.serializers import RaportSerializer, RaportReviewSerializer, RaportListSerializer
+from raports.serializers import RaportSerializer, RaportReviewSerializer, RaportListSerializer, AuthorRaportSerializer, ReviewerRaportSerializer, AdminRaportSerializer, CreateReviewSerializer
 from users.serializers import UserSerializer, UserRegistrationSerializer
 from publishers.serializers import PublisherSerializer, PublisherMembershipSerializer
 
@@ -220,43 +220,50 @@ class UserViews:
                 {"message": "Joined publisher"}
             )
             
-    class CreateReview(APIView):
+    class CreateReviewView(APIView):
         permission_classes = [IsAuthenticated]
 
-        def post(self, request):
+        def post(self, request, pk):
             user = request.user
 
             try:
-                raport_id = request.data['raport_id']
-                comment = request.data['comment']
-                grade = request.data['grade']
+                data = request.data.copy()
+                data['raport_id'] = pk
 
-                raport = Raport.objects.get(id=raport_id)
+                serializer = CreateReviewSerializer(data=data, context={'request': request})
+                if serializer.is_valid():
+                    serializer.save(reviewer=user)
+                    return Response({"message": "Review created successfully"}, status=status.HTTP_201_CREATED)
+                else:
+                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-                if user not in raport.reviewers.all():
+            except Exception as e:
+                return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+            
+    class RaportView(APIView):
+        permission_classes = [IsAuthenticated]
+
+        def get(self, request, pk):
+            user = request.user
+
+            try:
+                raport = Raport.objects.get(id=pk)
+
+                if user.is_staff:
+                    serializer = AdminRaportSerializer(raport)
+                elif user == raport.author:
+                    serializer = AuthorRaportSerializer(raport)
+                elif user in raport.reviewers.all():
+                    serializer = ReviewerRaportSerializer(raport, context={'request': request})
+                else:
                     return Response(
-                        {"error": "User is not a reviewer for this raport"},
+                        {"error": "You do not have permission to view this raport"},
                         status=status.HTTP_403_FORBIDDEN
                     )
 
-                if not comment or not grade:
-                    return Response(
-                        {"error": "Both comment and grade must be provided"},
-                        status=status.HTTP_400_BAD_REQUEST
-                    )
+                return Response(serializer.data)
 
-                review = RaportReview.objects.get(raport=raport, reviewer=user)
-                review.comment = comment
-                review.grade = grade
-                review.review_date = timezone.now()
-                review.status = "submitted"
-                review.save()
-
-            except KeyError as e:
-                return Response(
-                    {"error": f"{str(e)} must be provided"},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
             except ObjectDoesNotExist:
                 return Response(
                     {"error": "Raport does not exist"},
@@ -267,14 +274,39 @@ class UserViews:
                     {"error": str(e)},
                     status=status.HTTP_500_INTERNAL_SERVER_ERROR
                 )
+                
+    class CreateRaportView(APIView):
+        permission_classes = [IsAuthenticated]
 
-            return Response(
-                {"message": "Review created successfully"},
-                status=status.HTTP_201_CREATED
-            )
+        def post(self, request):
+            user = request.user
+
+            try:
+                publisher_id = request.data.get('publisher')
+                if not publisher_id:
+                    return Response({"error": "Publisher ID must be provided."}, status=status.HTTP_400_BAD_REQUEST)
+
+                if not PublisherMembership.objects.filter(publisher_id=publisher_id, user=user).exists():
+                    return Response({"error": "You must be a member of the publisher to create a raport."}, status=status.HTTP_403_FORBIDDEN)
+
+                if Raport.objects.filter(publisher_id=publisher_id, author=user).exists():
+                    return Response({"error": "You can only publish one raport for each publisher."}, status=status.HTTP_400_BAD_REQUEST)
+
+                serializer = RaportSerializer(data=request.data)
+                if serializer.is_valid():
+                    raport = serializer.save(author=user)
+                    return Response(RaportSerializer(raport).data, status=status.HTTP_201_CREATED)
+                else:
+                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+            except Exception as e:
+                return Response(
+                    {"error": str(e)},
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                )
     
     
-    class ChangePassword(APIView):
+    class ChangePasswordView(APIView):
         permission_classes = [IsAuthenticated]
 
         def post(self, request):
