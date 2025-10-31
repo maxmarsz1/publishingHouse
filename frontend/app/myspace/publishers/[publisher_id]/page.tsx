@@ -7,6 +7,7 @@ import Link from 'next/link'
 import ArticleTable from '@/app/components/article/ArticleTable'
 import { getAdminPublisherArticles, getUserArticles } from '@/app/utils/article-helper'
 import { getPublisherData } from '@/app/utils/publisher-helper'
+import { getSecureUserClaims } from '@/app/utils/auth-server-helper'
 
 
 interface Props {
@@ -15,7 +16,13 @@ interface Props {
 
 const PublisherView = async ({ params }: Props) => {
   const { publisher_id } = await params;
-  const is_staff = false;
+
+  const userClaims = await getSecureUserClaims();
+  
+  // If the token is valid, use the is_staff claim; otherwise, assume false.
+  const is_staff = userClaims ? userClaims.is_staff : false;
+  console.log(is_staff)
+  // const is_staff = false;
   
   const publisher = getPublisherData(+publisher_id);
   let dueDate = null;

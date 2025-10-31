@@ -28,7 +28,9 @@ urlpatterns = [
     path('raport/<int:pk>/', UserViews.RaportView.as_view(), name='raport-view'),
     path('raport/<int:pk>/create-review/', UserViews.CreateReviewView.as_view(), name='create-review'),
     path('profile/', UserViews.ProfileView.as_view(), name='profile'),
+
     path('register/', UserViews.RegistrationView.as_view(), name='register'),
-    path('login/', TokenObtainPairView.as_view(), name='login'),
+    path('login/', UserViews.CustomTokenObtainPairView.as_view(), name='login'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('logout/', UserViews.LogoutView.as_view(), name='logout'),
 ]

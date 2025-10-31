@@ -2,8 +2,15 @@ from rest_framework import viewsets, status, generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
+from rest_framework import exceptions
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
+from rest_framework_simplejwt.views import TokenObtainPairView
+from django.conf import settings
+from datetime import datetime, timedelta
+from rest_framework_simplejwt.exceptions import TokenError
+from rest_framework_simplejwt.tokens import RefreshToken
+import pytz
 
 
 from raports.models import Raport, RaportReview
@@ -11,7 +18,7 @@ from users.models import User
 from publishers.models import Publisher, PublisherMembership
 
 from raports.serializers import RaportSerializer, RaportReviewSerializer, RaportListSerializer, AuthorRaportSerializer, ReviewerRaportSerializer, AdminRaportSerializer, CreateReviewSerializer
-from users.serializers import UserSerializer, UserRegistrationSerializer
+from users.serializers import UserSerializer, UserRegistrationSerializer, CustomTokenObtainPairSerializer
 from publishers.serializers import PublisherSerializer, PublisherMembershipSerializer
 
 
@@ -343,3 +350,64 @@ class UserViews:
                     )
 
             return Response({"message": "Password changed successfully"})
+
+    class CustomTokenObtainPairView(TokenObtainPairView):
+        serializer_class = CustomTokenObtainPairSerializer
+        def post(self, request, *args, **kwargs):
+            response = super().post(request, *args, **kwargs)
+
+            if response.status_code == 200:
+                access_token = response.data.get('access')
+                refresh_token = response.data.get('refresh')
+
+                access_lifetime = settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME']
+                refresh_lifetime = settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME']
+                
+                response.set_cookie(
+                    key='accessToken',
+                    value=access_token,
+                    expires=datetime.now(pytz.utc) + access_lifetime,
+                    secure=settings.SECURE_PROXY_SSL_HEADER is not None,
+                    httponly=True,
+                    samesite='Lax'
+                )
+
+                response.set_cookie(
+                    key='refreshToken',
+                    value=refresh_token,
+                    expires=datetime.now(pytz.utc) + refresh_lifetime,
+                    secure=settings.SECURE_PROXY_SSL_HEADER is not None,
+                    httponly=True,
+                    samesite='Lax'
+                )
+                del response.data['access']
+                del response.data['refresh']
+
+            return response
+
+    
+
+    class LogoutView(APIView):
+        permission_classes = [IsAuthenticated]
+
+        def post(self, request):
+            refresh_token = request.COOKIES.get('refreshToken')
+        
+            if not refresh_token:
+                return Response({"detail": "Refresh token not found in cookies."}, status=status.HTTP_400_BAD_REQUEST)
+                
+            try:
+                token = RefreshToken(refresh_token)
+                token.blacklist()
+                
+                response = Response({"detail": "Successfully logged out."}, status=status.HTTP_200_OK)
+                response.delete_cookie('accessToken')
+                response.delete_cookie('refreshToken')
+
+                return response
+                
+            except TokenError:
+                return Response(
+                    {"detail": "Token is invalid or expired."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )

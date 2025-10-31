@@ -4,10 +4,7 @@ RUN mkdir /app
  
 WORKDIR /app
  
-# Set environment variables 
-# Prevents Python from writing pyc files to disk
 ENV PYTHONDONTWRITEBYTECODE=1
-# Prevents Python from buffering stdout and stderr
 ENV PYTHONUNBUFFERED=1 
  
 RUN pip install --upgrade pip 
