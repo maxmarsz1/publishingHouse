@@ -1,6 +1,6 @@
 import React from 'react'
 
-import styles from './JoinPublisherModal.module.css'
+import styles from './Modal.module.css'
 import Backdrop from '../general/Backdrop'
 import { Button, TextField } from '@mui/material'
 
@@ -22,7 +22,7 @@ const JoinPublisherModal = ({setShowModal}: {setShowModal: React.Dispatch<React.
         </div>
         <div className={styles.buttons}>
           <Button variant='outlined' onClick={cancel}>Anuluj</Button>
-          <Button variant='contained'>Dolacz</Button>
+          <Button variant='contained'>Dołącz</Button>
         </div>
       </div>
     </>

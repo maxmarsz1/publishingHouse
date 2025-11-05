@@ -2,18 +2,18 @@ import React from 'react'
 import { Publisher } from '../../types/types'
 import PublisherCard from './PublisherCard'
 import styles from './PublishersContainer.module.css'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
-import { Button } from '@mui/material'
 import JoinPublisherBtn from './JoinPublisherBtn'
+import NewPublisherBtn from './NewPublisherBtn'
+import { isUserStaff } from '@/app/utils/auth-server-helper'
 
-const PublishersContainer: React.FC<{publishers: Publisher[]}> = ({publishers}) => {
-
+const PublishersContainer: React.FC<{publishers: Publisher[]}> = async ({publishers}) => {
+  const isStaff = await isUserStaff();
+  const headerText = isStaff ? "Wszystkie wydawnictwa" : "Twoje wydawnictwa"
   return (
     <>
-      <h1>Twoje wydawnictwa</h1>
+      <h1>{headerText}</h1>
       <div className={styles.publishersContainer}>
-        <JoinPublisherBtn />
+        {isStaff ? <NewPublisherBtn /> : <JoinPublisherBtn />}
         
         {publishers.map((publisher) => (
           <PublisherCard key={publisher.id} publisher={publisher}/>

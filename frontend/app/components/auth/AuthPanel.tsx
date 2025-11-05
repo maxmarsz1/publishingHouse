@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import api from '@/app/utils/api-client'
+import apiClient from '@/app/utils/api-client'
 import InputLine from './InputLine'
 import styles from './AuthPanel.module.css'
 import { Button } from '@mui/material'
@@ -50,7 +50,7 @@ const AuthPanel = ({ mode }: Props) => {
     }
 
     try {
-      const response = await api.post(endpointPath, data); 
+      const response = await apiClient.post(endpointPath, data); 
       console.log(`${isLogin ? 'Login' : 'Registration'} successful!`, response.data);
 
       if (isLogin) {

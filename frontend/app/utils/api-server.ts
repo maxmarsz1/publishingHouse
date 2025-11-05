@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { InternalAxiosRequestConfig } from 'axios';
 import { cookies } from 'next/headers';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -8,7 +8,7 @@ if (!API_BASE_URL) {
   throw new Error("API Base URL not configured.");
 }
 
-const api = axios.create({
+const apiServer = axios.create({
   baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
@@ -17,7 +17,7 @@ const api = axios.create({
 });
 
 
-api.interceptors.response.use(
+apiServer.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response && error.response.status === 401) {
@@ -28,5 +28,33 @@ api.interceptors.response.use(
   }
 );
 
+apiServer.interceptors.request.use(async (config: InternalAxiosRequestConfig) => {
+  try {
+    const cookieStore = await cookies();
+    const accessToken = cookieStore.get('accessToken')?.value;
 
-export default api;
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`;
+    } else {
+      console.warn("Attempting to access protected API without an accessToken cookie.");
+    }
+  } catch (e) {
+    console.error("Failed to read cookies in API server request interceptor:", e);
+  }
+  
+  return config;
+});
+
+apiServer.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      console.warn("Unauthorized request (401). Token might be expired or missing.");
+      
+    }
+    
+    return Promise.reject(error);
+  }
+);
+
+export default apiServer;

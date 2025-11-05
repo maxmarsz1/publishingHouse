@@ -4,8 +4,8 @@ import ArticleTable from '@/app/components/article/ArticleTable'
 import { getUserArticles } from '@/app/utils/article-helper'
 import { UserArticles } from '@/app/types/types'
 
-const Articles = () => {
-  const userArticles: UserArticles = getUserArticles();
+const Articles = async () => {
+  const userArticles: UserArticles = await getUserArticles();
 
   return (
     <>

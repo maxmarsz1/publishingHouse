@@ -19,6 +19,18 @@
     align-items: center;
     margin-bottom: 32px;
 }
+.datetimeInput fieldset{
+    border-color: white !important;
+}
+.datetimeInput > div > div:first-child{
+    color: white !important;
+}
+.datetimeInput{
+    width: 100%;
+}
+.datetimeInput svg{
+    fill: white
+}
 .buttons{
     display: flex;
     justify-content: space-between;

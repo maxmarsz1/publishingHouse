@@ -5,9 +5,10 @@ import { Button } from '@mui/material'
 import Link from 'next/link'
 
 import ArticleTable from '@/app/components/article/ArticleTable'
-import { getAdminPublisherArticles, getUserArticles } from '@/app/utils/article-helper'
+import { getAdminPublisherArticles, getUserPublisherArticles } from '@/app/utils/article-helper'
 import { getPublisherData } from '@/app/utils/publisher-helper'
-import { getSecureUserClaims } from '@/app/utils/auth-server-helper'
+import { isUserStaff } from '@/app/utils/auth-server-helper'
+import NewDueDate from '@/app/components/publisher/NewDueDate'
 
 
 interface Props {
@@ -17,23 +18,18 @@ interface Props {
 const PublisherView = async ({ params }: Props) => {
   const { publisher_id } = await params;
 
-  const userClaims = await getSecureUserClaims();
+  const isStaff = await isUserStaff();
   
-  // If the token is valid, use the is_staff claim; otherwise, assume false.
-  const is_staff = userClaims ? userClaims.is_staff : false;
-  console.log(is_staff)
-  // const is_staff = false;
-  
-  const publisher = getPublisherData(+publisher_id);
+  const publisher = await getPublisherData(+publisher_id);
   let dueDate = null;
-  if(!is_staff && publisher.dueDate){
+  if(!isStaff && publisher.dueDate){
     dueDate = new Date(publisher.dueDate);
   }
   const pastDue = dueDate ? (new Date() > dueDate) : false;
 
 
-  const adminArticles = is_staff ? getAdminPublisherArticles(publisher) : null;
-  const regularUserArticles = !is_staff ? getUserArticles(publisher) : null;
+  const adminArticles = isStaff ? await getAdminPublisherArticles(publisher.id) : null;
+  const regularUserArticles = !isStaff ? await getUserPublisherArticles(publisher.id) : null;
 
   return (
     <>
@@ -41,12 +37,16 @@ const PublisherView = async ({ params }: Props) => {
         <h1 style={{marginBottom: "8px"}}>Wydawnictwo "{publisher.name}" ({publisher.id})</h1>
         <p style={{marginBottom: "32px"}}>{publisher.description}</p>
 
-        {!pastDue &&
+        {!pastDue && !isStaff &&
           <Button style={{gap: "8px"}} variant='contained' href={`/myspace/publishers/${publisher.id}/new-article`} component={Link}>
             Przeslij raport
             <FontAwesomeIcon icon={faPlus}/>
           </Button>
         }
+        {isStaff && <>
+          <NewDueDate/>
+          {/* <div>Generuj nowy kod dołączenia</div> */}
+        </>}
       </div>
 
       {adminArticles && 

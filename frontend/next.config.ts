@@ -9,6 +9,15 @@ const nextConfig: NextConfig = {
 module.exports = {
   // ... rest of the configuration.
   output: "standalone",
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/myspace',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

@@ -116,7 +116,7 @@ class UserViews:
             
             user_raports = {
                 "authored_raports": authored_serializer.data,
-                "review_raports": review_serializer.data
+                "articles_to_review": review_serializer.data
             }
             return Response(user_raports, status=status.HTTP_200_OK)
     
@@ -160,7 +160,7 @@ class UserViews:
 
                 return Response({
                     "authored_raports": authored_serializer.data,
-                    "review_raports": review_serializer.data
+                    "articles_to_review": review_serializer.data
                 })
     
     class PublishersView(generics.ListAPIView):
@@ -169,6 +169,8 @@ class UserViews:
 
         def get_queryset(self):
             user = self.request.user
+            if user.is_staff:
+                return Publisher.objects.all()
             return Publisher.objects.filter(members=user)
         
     class PublisherDetailView(APIView):
@@ -178,13 +180,16 @@ class UserViews:
             user = request.user
 
             try:
-                membership = PublisherMembership.objects.get(user_id=user.id, publisher_id=pk)
-                publisher = Publisher.objects.get(id=membership.publisher_id)
+                if user.is_staff:
+                    publisher = Publisher.objects.get(id=pk)
+                else:
+                    membership = PublisherMembership.objects.get(user_id=user.id, publisher_id=pk)
+                    publisher = Publisher.objects.get(id=membership.publisher_id)
                 publisher_serializer = PublisherSerializer(publisher)
 
             except ObjectDoesNotExist:
                 return Response(
-                    {"error": "you are not a member of this publisher"},
+                    {"error": "Publisher doesn't exist or you're not a member"},
                     status.HTTP_404_NOT_FOUND
                     )
             except Exception as e:

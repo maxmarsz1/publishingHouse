@@ -13,8 +13,8 @@ export interface UserArticles {
 export interface User {
     id: number,
     username: string,
-    firstName: string,
-    lastName: string,
+    first_name: string,
+    last_name: string,
     articles?: Article[],
     articlesToReview?: Article[]
 }
@@ -27,8 +27,8 @@ export interface Article {
     articleCategory: ITArticleCategory,
     author: User,
     status: Status,
-    grade: number,
-    publisher: Publisher,
+    grade?: number,
+    publisher: String,
     toReview?: boolean,
     filePath?: string,   // Optional for now
     reviewers?: User[]

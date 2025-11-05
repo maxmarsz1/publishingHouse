@@ -1,135 +1,54 @@
 import { Publisher, Article, Status, ArticleType, ITArticleCategory, User, UserArticles } from "../types/types";
 import { getPublisherData } from "./publisher-helper";
+import apiServer from "./api-server";
 
 
-
-export function getAdminPublisherArticles(publisher: Publisher): Article[]{
-  // mocking data fetching from backend
-  if(publisher === undefined){
-    publisher = getPublisherData(0);
-  }
-
-  const sampleAuthor: User = {
-    id: 1,
-    username: "janedoe",
-    firstName: "Jane",
-    lastName: "Doe"
-  };
-
-  const publisherArticles: Article[] = [
-    {
-      id: 1,
-      title: "Raport 1",
-      status: Status.Pending,
-      grade: 0,
-      publisher: publisher,
-      abstract: "To jest przykładowy abstrakt raportu 1. Zawiera streszczenie głównych punktów i wyników badania.",
-      articleType: ArticleType.CaseReport,
-      articleCategory: ITArticleCategory.ArtificialIntelligence,
-      author: sampleAuthor
-    },
-    {
-      id: 2,
-      title: "Raport 2",
-      status: Status.Published,
-      grade: 5,
-      publisher: publisher,
-      abstract: "To jest przykładowy abstrakt raportu 1. Zawiera streszczenie głównych punktów i wyników badania.",
-      articleType: ArticleType.CaseReport,
-      articleCategory: ITArticleCategory.ArtificialIntelligence,
-      author: sampleAuthor
-    },
-    {
-      id: 3,
-      title: "Raport 3",
-      status: Status.Rejected,
-      grade: 0,
-      publisher: publisher,
-      abstract: "To jest przykładowy abstrakt raportu 1. Zawiera streszczenie głównych punktów i wyników badania.",
-      articleType: ArticleType.CaseReport,
-      articleCategory: ITArticleCategory.ArtificialIntelligence,
-      author: sampleAuthor
-    }
-  ]
-  return publisherArticles;
-}
-
-export function getUserArticles(publisher?: Publisher): UserArticles{
-  if(publisher === undefined){
-    publisher = getPublisherData(0);
-  }
-
-  const sampleAuthor: User = {
-    id: 1,
-    username: "janedoe",
-    firstName: "Jane",
-    lastName: "Doe"
-  };
-
-  const authored_articles: Article[] = [
-    {
-      id: 1,
-      title: "Raport 1",
-      status: Status.Pending,
-      grade: 0,
-      publisher: publisher,
-      abstract: "To jest przykładowy abstrakt raportu 1. Zawiera streszczenie głównych punktów i wyników badania.",
-      articleType: ArticleType.CaseReport,
-      articleCategory: ITArticleCategory.ArtificialIntelligence,
-      author: sampleAuthor
-    },
-    {
-      id: 2,
-      title: "Raport 2",
-      status: Status.Published,
-      grade: 5,
-      publisher: publisher,
-      abstract: "To jest przykładowy abstrakt raportu 1. Zawiera streszczenie głównych punktów i wyników badania.",
-      articleType: ArticleType.CaseReport,
-      articleCategory: ITArticleCategory.ArtificialIntelligence,
-      author: sampleAuthor
-    },
-    {
-      id: 3,
-      title: "Raport 3",
-      status: Status.Rejected,
-      grade: 0,
-      publisher: publisher,
-      abstract: "To jest przykładowy abstrakt raportu 1. Zawiera streszczenie głównych punktów i wyników badania.",
-      articleType: ArticleType.CaseReport,
-      articleCategory: ITArticleCategory.ArtificialIntelligence,
-      author: sampleAuthor
-    }
-  ]
-  const articles_to_review = authored_articles;
-  return {
-    authored_articles,
-    articles_to_review
+export async function getAdminPublisherArticles(id: number): Promise<Article[]> {
+  try {
+    const response = await apiServer.get(`/publisher/${id}/raports/`);
+    console.log("Fetched articles data:", response.data.all_raports);
+    return response.data.all_raports as Article[];
+  } catch (error) {
+    console.error("Error fetching articles:", error);
+    return [];
   }
 }
 
-export function getArticleData(articleId: number): Article{
-  // mocking data fetching from backend
-  const publisher = getPublisherData(1);
+export async function getUserPublisherArticles(id: number): Promise<UserArticles>{
+  try {
+    const response = await apiServer.get(`/publisher/${id}/raports/`);
+    console.log("Fetched articles data:", response.data);
+    return response.data as UserArticles;
+  } catch (error) {
+    console.error("Error fetching articles:", error);
+    return {
+      authored_articles: [],
+      articles_to_review: []
+    };
+  }
+}
 
-  const sampleAuthor: User = {
-    id: 1,
-    username: "janedoe",
-    firstName: "Jane",
-    lastName: "Doe"
-  };
-  
-  return {
-    id: articleId,
-    title: `Raport ${articleId}`,
-    status: Status.Pending,
-    grade: 0,
-    publisher: publisher,
-    abstract: "To jest przykładowy abstrakt raportu 1. Zawiera streszczenie głównych punktów i wyników badania.",
-    articleType: ArticleType.CaseReport,
-    articleCategory: ITArticleCategory.ArtificialIntelligence,
-    author: sampleAuthor,
-    toReview: true,
-    filePath: `/articles/${articleId}.pdf` // Example file path
-  };
+export async function getUserArticles(): Promise<UserArticles>{
+  try {
+    const response = await apiServer.get(`/user/raports/`);
+    console.log("Fetched articles data:", response.data);
+    return response.data as UserArticles;
+  } catch (error) {
+    console.error("Error fetching articles:", error);
+    return {
+      authored_articles: [],
+      articles_to_review: []
+    };
+  }
+}
+
+export async function getArticleData(id: number): Promise<Article>{
+  try {
+    const response = await apiServer.get(`/raport/${id}/`);
+    console.log("Fetched articles data:", response.data);
+    return response.data as Article;
+  } catch (error) {
+    console.error("Error fetching articles:", error);
+    throw new Error("Failed to fetch article data");
+  }
 }

@@ -40,19 +40,24 @@ class RaportReviewSerializer(serializers.ModelSerializer):
 class AuthorRaportSerializer(serializers.ModelSerializer):
     '''Used for author RaportView'''
     reviews = AnonymizedReviewSerializer(source='raport_reviews', many=True)
+    publisher = serializers.SerializerMethodField()
 
     class Meta:
         model = Raport
-        fields = ['id', 'title', 'abstract', 'status', 'created_at', 'category', 'raport_type', 'keywords', 'file', 'reviews']
+        fields = ['id', 'title', 'abstract', 'status', 'created_at', 'category', 'raport_type', 'keywords', 'file', 'reviews', 'publisher']
+
+    def get_publisher(self, obj):
+        return obj.publisher.name if obj.publisher else None
 
 
 class ReviewerRaportSerializer(serializers.ModelSerializer):
     '''Used for reviewer RaportView'''
     to_review = serializers.SerializerMethodField()
+    publisher = serializers.SerializerMethodField()
 
     class Meta:
         model = Raport
-        fields = ['id', 'title', 'abstract', 'status', 'created_at', 'category', 'raport_type', 'keywords', 'file', 'to_review']
+        fields = ['id', 'title', 'abstract', 'status', 'created_at', 'category', 'raport_type', 'keywords', 'file', 'to_review', 'publisher']
     
     def get_to_review(self, obj):
         # Logic to determine if the raport is "to review" for the current user
@@ -61,17 +66,23 @@ class ReviewerRaportSerializer(serializers.ModelSerializer):
             return True
         return False
 
+    def get_publisher(self, obj):
+        return obj.publisher.name if obj.publisher else None
 
 
 class AdminRaportSerializer(serializers.ModelSerializer):
     '''Used for admin RaportView'''
     reviews = RaportReviewSerializer(source='raport_reviews', many=True)
     author = UserSerializer()
+    publisher = serializers.SerializerMethodField()
 
     class Meta:
         model = Raport
-        fields = ['id', 'title', 'author', 'abstract', 'status', 'created_at', 'category', 'raport_type', 'keywords', 'file', 'reviews']
+        fields = ['id', 'title', 'author', 'abstract', 'status', 'created_at', 'category', 'raport_type', 'keywords', 'file', 'reviews', 'publisher']
 
+    def get_publisher(self, obj):
+        return obj.publisher.name if obj.publisher else None
+    
 
 class CreateReviewSerializer(serializers.ModelSerializer):
     raport_id = serializers.IntegerField(write_only=True)

@@ -14,8 +14,13 @@ interface Props{
 
 const ArticleView = async ({params}: Props) => {
   const { article_id } = await params;
+  const idAsNumber = +article_id; 
+  if (isNaN(idAsNumber) || !idAsNumber) {
+    // ✅ FIX 2: Handle invalid or missing IDs gracefully
+    console.error(`Invalid article_id provided: ${article_id}`);
+  }
 
-  const article: Article = getArticleData(+article_id);
+  const article: Article = await getArticleData(idAsNumber);
   const hasReviewers = article.reviewers && article.reviewers.length > 0;
   
   return (
