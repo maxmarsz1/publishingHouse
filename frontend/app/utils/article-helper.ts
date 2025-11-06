@@ -6,6 +6,7 @@ import apiServer from "./api-server";
 export async function getAdminPublisherArticles(id: number): Promise<Article[]> {
   try {
     const response = await apiServer.get(`/publisher/${id}/raports/`);
+
     console.log("Fetched articles data:", response.data.all_raports);
     return response.data.all_raports as Article[];
   } catch (error) {
@@ -45,8 +46,13 @@ export async function getUserArticles(): Promise<UserArticles>{
 export async function getArticleData(id: number): Promise<Article>{
   try {
     const response = await apiServer.get(`/raport/${id}/`);
-    console.log("Fetched articles data:", response.data);
-    return response.data as Article;
+    const transformedArticle = {
+      ...response.data,
+      articleType: response.data.raport_type,
+      articleCategory: response.data.category,
+    };
+    console.log("Fetched articles data:", transformedArticle);
+    return transformedArticle as Article;
   } catch (error) {
     console.error("Error fetching articles:", error);
     throw new Error("Failed to fetch article data");

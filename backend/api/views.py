@@ -119,24 +119,70 @@ class UserViews:
                 "articles_to_review": review_serializer.data
             }
             return Response(user_raports, status=status.HTTP_200_OK)
-    
-    class RegistrationView(APIView):
-        permission_classes = [AllowAny]
         
-        def post(self, request):
-            serializer = UserRegistrationSerializer(data=request.data)
-            if serializer.is_valid():
-                user = serializer.save()
-                if user:
-                    return Response(serializer.data, status=status.HTTP_201_CREATED)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    class ProfileView(APIView):
+    class RaportView(APIView):
         permission_classes = [IsAuthenticated]
 
-        def get(self, request):
-            serializer = UserSerializer(request.user)
-            return Response(serializer.data)
+        def get(self, request, pk):
+            user = request.user
+
+            try:
+                raport = Raport.objects.get(id=pk)
+
+                if user.is_staff:
+                    serializer = AdminRaportSerializer(raport)
+                elif user == raport.author:
+                    serializer = AuthorRaportSerializer(raport)
+                elif user in raport.reviewers.all():
+                    serializer = ReviewerRaportSerializer(raport, context={'request': request})
+                else:
+                    return Response(
+                        {"error": "You do not have permission to view this raport"},
+                        status=status.HTTP_403_FORBIDDEN
+                    )
+
+                return Response(serializer.data)
+
+            except ObjectDoesNotExist:
+                return Response(
+                    {"error": "Raport does not exist"},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+            except Exception as e:
+                return Response(
+                    {"error": str(e)},
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                )
+                
+    class CreateRaportView(APIView):
+        permission_classes = [IsAuthenticated]
+
+        def post(self, request):
+            user = request.user
+
+            try:
+                publisher_id = request.data.get('publisher')
+                if not publisher_id:
+                    return Response({"error": "Publisher ID must be provided."}, status=status.HTTP_400_BAD_REQUEST)
+
+                if not PublisherMembership.objects.filter(publisher_id=publisher_id, user=user).exists():
+                    return Response({"error": "You must be a member of the publisher to create a raport."}, status=status.HTTP_403_FORBIDDEN)
+
+                if Raport.objects.filter(publisher_id=publisher_id, author=user).exists():
+                    return Response({"error": "You can only publish one raport for each publisher."}, status=status.HTTP_400_BAD_REQUEST)
+
+                serializer = RaportSerializer(data=request.data)
+                if serializer.is_valid():
+                    raport = serializer.save(author=user)
+                    return Response(RaportSerializer(raport).data, status=status.HTTP_201_CREATED)
+                else:
+                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+            except Exception as e:
+                return Response(
+                    {"error": str(e)},
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                )
     
     class PublisherRaportsView(APIView):
         serializer_class = RaportSerializer
@@ -148,7 +194,7 @@ class UserViews:
 
             if user.is_staff:
                 raports = Raport.objects.filter(publisher__id=publisher_id)
-                serializer = self.serializer_class(raports, many=True)
+                serializer = AdminRaportSerializer(raports, many=True)
                 return Response({"all_raports": serializer.data})
             else:
                 authored_raports = Raport.objects.filter(publisher__id=publisher_id, author=user)
@@ -252,71 +298,24 @@ class UserViews:
             except Exception as e:
                 return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-            
-    class RaportView(APIView):
-        permission_classes = [IsAuthenticated]
-
-        def get(self, request, pk):
-            user = request.user
-
-            try:
-                raport = Raport.objects.get(id=pk)
-
-                if user.is_staff:
-                    serializer = AdminRaportSerializer(raport)
-                elif user == raport.author:
-                    serializer = AuthorRaportSerializer(raport)
-                elif user in raport.reviewers.all():
-                    serializer = ReviewerRaportSerializer(raport, context={'request': request})
-                else:
-                    return Response(
-                        {"error": "You do not have permission to view this raport"},
-                        status=status.HTTP_403_FORBIDDEN
-                    )
-
-                return Response(serializer.data)
-
-            except ObjectDoesNotExist:
-                return Response(
-                    {"error": "Raport does not exist"},
-                    status=status.HTTP_404_NOT_FOUND
-                )
-            except Exception as e:
-                return Response(
-                    {"error": str(e)},
-                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
-                )
-                
-    class CreateRaportView(APIView):
-        permission_classes = [IsAuthenticated]
-
-        def post(self, request):
-            user = request.user
-
-            try:
-                publisher_id = request.data.get('publisher')
-                if not publisher_id:
-                    return Response({"error": "Publisher ID must be provided."}, status=status.HTTP_400_BAD_REQUEST)
-
-                if not PublisherMembership.objects.filter(publisher_id=publisher_id, user=user).exists():
-                    return Response({"error": "You must be a member of the publisher to create a raport."}, status=status.HTTP_403_FORBIDDEN)
-
-                if Raport.objects.filter(publisher_id=publisher_id, author=user).exists():
-                    return Response({"error": "You can only publish one raport for each publisher."}, status=status.HTTP_400_BAD_REQUEST)
-
-                serializer = RaportSerializer(data=request.data)
-                if serializer.is_valid():
-                    raport = serializer.save(author=user)
-                    return Response(RaportSerializer(raport).data, status=status.HTTP_201_CREATED)
-                else:
-                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-            except Exception as e:
-                return Response(
-                    {"error": str(e)},
-                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
-                )
     
+    class RegistrationView(APIView):
+        permission_classes = [AllowAny]
+        
+        def post(self, request):
+            serializer = UserRegistrationSerializer(data=request.data)
+            if serializer.is_valid():
+                user = serializer.save()
+                if user:
+                    return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    class ProfileView(APIView):
+        permission_classes = [IsAuthenticated]
+
+        def get(self, request):
+            serializer = UserSerializer(request.user)
+            return Response(serializer.data)
     
     class ChangePasswordView(APIView):
         permission_classes = [IsAuthenticated]

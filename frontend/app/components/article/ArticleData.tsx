@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button } from '@mui/material'
 
-import { Article } from '@/app/types/types'
+import { Article, ArticleType, ArticleTypeDisplay, ITArticleCategory, ITArticleCategoryDisplay } from '@/app/types/types'
 import styles from './ArticleData.module.css'
 import Link from 'next/link'
 
@@ -16,8 +16,8 @@ const ArticleData = ({ article }: Props) => {
         <div className={styles.infoLine}><strong>Autor: </strong>{article.author.first_name} {article.author.last_name}</div>
         <div className={styles.infoLine}><strong>Wydawnictwo: </strong>{article.publisher}</div>
         <div className={styles.infoLine}><strong>Abstract: </strong>{article.abstract}</div>
-        <div className={styles.infoLine}><strong>Typ artykułu: </strong>{article.articleType}</div>
-        <div className={styles.infoLine}><strong>Kategoria artykułu: </strong>{article.articleCategory}</div>
+        <div className={styles.infoLine}><strong>Typ artykułu: </strong>{ArticleTypeDisplay[article.articleType]}</div>
+        <div className={styles.infoLine}><strong>Kategoria artykułu: </strong>{ITArticleCategoryDisplay[article.articleCategory]}</div>
         {article.filePath && 
           <Button className={styles.downloadBtn} variant='contained' component={Link} href={article.filePath}>Pobierz artykuł</Button>
         }

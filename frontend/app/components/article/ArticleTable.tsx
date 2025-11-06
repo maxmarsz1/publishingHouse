@@ -36,10 +36,10 @@ const ArticleTable = ({ title, articles, showPublisher = false, admin = false }:
                             <Link href={`/myspace/articles/${article.id}`}>{article.title}</Link>
                         </td>
                         {showPublisher &&
-                            <td className={styles.publisher}>{article.publisher.name}</td>
+                            <td className={styles.publisher}>{article.publisher}</td>
                         }
                         {admin &&
-                            <td className={styles.user}>{article.author.firstName} {article.author.lastName} ({article.author.username})</td>
+                            <td className={styles.user}>{article.author.first_name} {article.author.last_name} ({article.author.username})</td>
                         }
                         <td className={styles.status}>{getStatusDisplayText(article.status)}</td>
                         <td className={styles.grade}>{(article.grade == 0 ? "-" : article.grade)}</td>

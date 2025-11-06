@@ -3,6 +3,7 @@ from django.utils import timezone
 from rest_framework import serializers
 from .models import Raport, RaportReview
 from users.serializers import UserSerializer
+from users.models import User
 
 
 class RaportSerializer(serializers.ModelSerializer):
@@ -29,8 +30,13 @@ class AnonymizedReviewSerializer(serializers.ModelSerializer):
         model = RaportReview
         fields = ['id', 'grade', 'review_date', 'status']
         
+class ReviewerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User  
+        fields = ['id', 'username', 'first_name', 'last_name'] 
+
 class RaportReviewSerializer(serializers.ModelSerializer):
-    reviewer = UserSerializer()
+    reviewer = ReviewerSerializer()
     
     class Meta:
         model = RaportReview
