@@ -12,13 +12,17 @@ interface Props{
 
 const ArticleReviewPage = async ({params}: Props) => {
     const { article_id } = await params;
-    const article: Article = getArticleData(+article_id);
+    const idAsNumber = +article_id; 
+    if (isNaN(idAsNumber) || !idAsNumber) {
+      console.error(`Invalid article_id provided: ${article_id}`);
+    }
+    const article: Article = await getArticleData(idAsNumber);
   return (
     <>
         <h1 style={{marginBottom: "8px"}}>Recenzja artykułu - {article.title}</h1>
         <p style={{marginBottom: "32px"}}>{article.abstract}</p>
 
-        <ArticleReviewForm />
+        <ArticleReviewForm articleId={idAsNumber} />
     </>
   )
 }

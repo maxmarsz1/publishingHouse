@@ -27,10 +27,13 @@ export interface Article {
     articleCategory: ITArticleCategory,
     author: User,
     status: Status,
+    keywords: string,
+    createdAt: string,
     grade?: number,
     publisher: String,
     toReview?: boolean,
-    filePath?: string,   // Optional for now
+    isAuthor?: boolean,
+    file?: string,   // Optional for now
     reviews?: Review[],
     reviewers?: User[]
 }

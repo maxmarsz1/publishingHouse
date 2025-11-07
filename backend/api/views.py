@@ -116,7 +116,7 @@ class UserViews:
             
             user_raports = {
                 "authored_raports": authored_serializer.data,
-                "articles_to_review": review_serializer.data
+                "raports_to_review": review_serializer.data
             }
             return Response(user_raports, status=status.HTTP_200_OK)
         
@@ -133,6 +133,9 @@ class UserViews:
                     serializer = AdminRaportSerializer(raport)
                 elif user == raport.author:
                     serializer = AuthorRaportSerializer(raport)
+                    data = serializer.data
+                    data['is_author'] = True
+                    return Response(data)
                 elif user in raport.reviewers.all():
                     serializer = ReviewerRaportSerializer(raport, context={'request': request})
                 else:
@@ -206,7 +209,7 @@ class UserViews:
 
                 return Response({
                     "authored_raports": authored_serializer.data,
-                    "articles_to_review": review_serializer.data
+                    "raports_to_review": review_serializer.data
                 })
     
     class PublishersView(generics.ListAPIView):

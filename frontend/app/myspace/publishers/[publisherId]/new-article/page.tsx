@@ -5,13 +5,18 @@ import NewArticleForm from "@/app/components/article/NewArticleForm";
 import ArticleFormatting from "@/app/components/article/ArticleFormating";
 
 interface Props {
-  params: { publisherID: string };
+  params: { publisherId: string };
 }
 
 
 const page = async ({ params }: Props) => {
-  const { publisherID } = await params;
-  const publisher = getPublisherData(+publisherID);
+  const { publisherId } = await params;
+  
+  const idAsNumber = +publisherId; 
+  if (isNaN(idAsNumber) || !idAsNumber) {
+    console.error(`Invalid publisherId provided: ${publisherId}`);
+  }
+  const publisher = await getPublisherData(idAsNumber);
 
   if (!publisher) {
     return <div>Wydawnictwo nie zostało znalezione.</div>;

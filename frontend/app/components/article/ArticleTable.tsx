@@ -45,6 +45,19 @@ const ArticleTable = ({ title, articles, showPublisher = false, admin = false }:
                         <td className={styles.grade}>{(article.grade == 0 ? "-" : article.grade)}</td>
                     </tr>
                 ))}
+                {articles.length == 0 &&
+                <tr>
+                    <td>Brak raportów</td>
+                    <td></td>
+                    <td></td>
+                    {showPublisher &&
+                           <td></td>
+                    }
+                    {admin &&
+                           <td></td>
+                    }
+                </tr>
+                }
             </tbody>
         </table>
     </div>

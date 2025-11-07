@@ -1,6 +1,7 @@
 import { Publisher, Article, Status, ArticleType, ITArticleCategory, User, UserArticles } from "../types/types";
 import { getPublisherData } from "./publisher-helper";
 import apiServer from "./api-server";
+import apiClient from "./api-client";
 
 
 export async function getAdminPublisherArticles(id: number): Promise<Article[]> {
@@ -19,7 +20,10 @@ export async function getUserPublisherArticles(id: number): Promise<UserArticles
   try {
     const response = await apiServer.get(`/publisher/${id}/raports/`);
     console.log("Fetched articles data:", response.data);
-    return response.data as UserArticles;
+    return {
+      authored_articles: response.data.authored_raports,
+      articles_to_review: response.data.raports_to_review
+    } as UserArticles;
   } catch (error) {
     console.error("Error fetching articles:", error);
     return {
@@ -32,8 +36,13 @@ export async function getUserPublisherArticles(id: number): Promise<UserArticles
 export async function getUserArticles(): Promise<UserArticles>{
   try {
     const response = await apiServer.get(`/user/raports/`);
-    console.log("Fetched articles data:", response.data);
-    return response.data as UserArticles;
+    console.log(response.data)
+    const transformedArticle = {
+      authored_articles: response.data.authored_raports,
+      articles_to_review: response.data.raports_to_review
+    }
+    console.log("Fetched articles data:", transformedArticle);
+    return transformedArticle as UserArticles;
   } catch (error) {
     console.error("Error fetching articles:", error);
     return {
@@ -50,6 +59,9 @@ export async function getArticleData(id: number): Promise<Article>{
       ...response.data,
       articleType: response.data.raport_type,
       articleCategory: response.data.category,
+      toReview: response.data.to_review,
+      createdAt: response.data.created_at,
+      isAuthor: response.data.is_author
     };
     console.log("Fetched articles data:", transformedArticle);
     return transformedArticle as Article;

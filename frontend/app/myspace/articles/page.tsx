@@ -6,6 +6,7 @@ import { UserArticles } from '@/app/types/types'
 
 const Articles = async () => {
   const userArticles: UserArticles = await getUserArticles();
+  console.log(userArticles)
 
   return (
     <>

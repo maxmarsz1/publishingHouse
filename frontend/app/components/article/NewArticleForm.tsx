@@ -4,7 +4,7 @@ import React from "react";
 import { useState } from "react";
 import { Button, MenuItem, TextField } from "@mui/material";
 
-import { ArticleType, ITArticleCategory, Publisher } from "@/app/types/types";
+import { ArticleType, ArticleTypeDisplay, ITArticleCategory, ITArticleCategoryDisplay, Publisher } from "@/app/types/types";
 import styles from "./NewArticleForm.module.css";
 
 const raportTypeOptions = Object.values(ArticleType).map((type) => ({
@@ -65,7 +65,7 @@ const NewArticle = ({ publisher }: NewRaportProps) => {
       >
         {raportTypeOptions.map((option) => (
           <MenuItem key={option.value} value={option.value}>
-            {option.label}
+            {ArticleTypeDisplay[option.label]}
           </MenuItem>
         ))}
       </TextField>
@@ -82,7 +82,7 @@ const NewArticle = ({ publisher }: NewRaportProps) => {
       >
         {articleCategoryOptions.map((option) => (
           <MenuItem key={option.value} value={option.value}>
-            {option.label}
+            {ITArticleCategoryDisplay[option.label]}
           </MenuItem>
         ))}
       </TextField>
