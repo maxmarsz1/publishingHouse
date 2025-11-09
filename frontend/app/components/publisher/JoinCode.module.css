@@ -1,0 +1,18 @@
+.container{
+    display: flex;
+    border-radius: 15px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 7px 5px 10px;
+    background-color: var(--background1);
+    gap: 30px;
+}
+.refreshBtn{
+    background-color: var(--background) !important;
+    border-radius: 50px !important;
+    width: min-content !important;
+    min-width: unset !important;
+}
+.joinCode{
+    color: var(--primary);
+}

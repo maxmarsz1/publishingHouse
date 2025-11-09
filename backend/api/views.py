@@ -99,6 +99,33 @@ class AdminViews:
                 )
             
             return Response(members_serializer.data, status=status.HTTP_200_OK)
+        
+    class GeneratePublisherJoinCode(APIView):
+        permission_classes = [IsAuthenticated]
+
+        def post(self, request, *args, **kwargs):
+            publisher_id = self.kwargs['pk']
+
+            try:
+                publisher = Publisher.objects.get(id=publisher_id)
+                new_join_code = Publisher.generate_join_code()
+                publisher.join_code = new_join_code
+                publisher.save()
+            except ObjectDoesNotExist:
+                return Response(
+                    {"error": "Publisher does not exist."}, 
+                    status=status.HTTP_404_NOT_FOUND
+                )
+            except Exception as e:
+                return Response(
+                    {"error": str(e)}, 
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                )
+
+            return Response(
+                {"join_code": new_join_code}, 
+                status=status.HTTP_200_OK
+            )
 
 
 class UserViews:

@@ -12,7 +12,11 @@ const PublisherCard: React.FC< {publisher: Publisher} > = ({publisher}) => {
     <div className={styles.publisherCard}>
       <div>
         <h2>{publisher.name}</h2>
-        <p>{publisher.description}</p>
+        <p>
+            {publisher.description && publisher.description !== "" 
+            ? publisher.description 
+            : "Brak opisu"}
+        </p>
       </div>
       <Button variant='contained' component={Link} href={`/myspace/publishers/${publisher.id}`}>Zobacz raporty <FontAwesomeIcon icon={faArrowRight}/></Button>
     </div>

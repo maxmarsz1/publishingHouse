@@ -4,12 +4,12 @@ import random, string
 from users.models import User
 
 
-def generate_unique_join_code(length=10):
-    characters = string.ascii_uppercase + string.digits
-    while True:
-        code = ''.join(random.choice(characters) for _ in range(length))
-        if not Publisher.objects.filter(join_code=code).exists():
-            return code
+# def generate_unique_join_code(length=10):
+#     characters = string.ascii_uppercase + string.digits
+#     while True:
+#         code = ''.join(random.choice(characters) for _ in range(length))
+#         if not Publisher.objects.filter(join_code=code).exists():
+#             return code
 
 class Publisher(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -29,9 +29,17 @@ class Publisher(models.Model):
     def save(self, *args, **kwargs):
         if not self.pk:
             if not self.join_code:
-                self.join_code = generate_unique_join_code(length=8)
+                self.join_code = generate_join_code(length=8)
         
         super().save(*args, **kwargs)
+        
+    @staticmethod
+    def generate_join_code(length=8):
+        characters = string.ascii_uppercase + string.digits
+        while True:
+            code = ''.join(random.choice(characters) for _ in range(length))
+            if not Publisher.objects.filter(join_code=code).exists():
+                return code
 
 
 class PublisherMembership(models.Model):

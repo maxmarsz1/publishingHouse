@@ -1,8 +1,10 @@
 export interface Publisher {
-    id: number;
+    id?: number;
     name: string;
-    description: string;
+    description?: string;
     dueDate?: string;
+    joinCode?: string;
+    members?: User[];
 }
 
 export interface UserArticles {
@@ -15,6 +17,7 @@ export interface User {
     username: string,
     first_name: string,
     last_name: string,
+    email?: string,
     articles?: Article[],
     articlesToReview?: Article[]
 }

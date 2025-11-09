@@ -8,7 +8,9 @@ import ArticleTable from '@/app/components/article/ArticleTable'
 import { getAdminPublisherArticles, getUserPublisherArticles } from '@/app/utils/article-helper'
 import { getPublisherData } from '@/app/utils/publisher-helper'
 import { isUserStaff } from '@/app/utils/auth-server-helper'
-import NewDueDate from '@/app/components/publisher/NewDueDate'
+import NewDueDateBtn from '@/app/components/publisher/NewDueDateBtn'
+import DeletePublisherBtn from '@/app/components/publisher/DeletePublisherBtn'
+import AdminActions from '@/app/components/publisher/AdminActions'
 
 
 interface Props {
@@ -17,36 +19,34 @@ interface Props {
 
 const PublisherView = async ({ params }: Props) => {
   const { publisher_id } = await params;
+  const idAsNumber = +publisher_id; 
+  if(isNaN(idAsNumber) || !idAsNumber){
+    console.error(`Invalid publisher_id provided: ${publisher_id}`);
+  }
 
   const isStaff = await isUserStaff();
   
-  const publisher = await getPublisherData(+publisher_id);
-  let dueDate = null;
-  if(!isStaff && publisher.dueDate){
-    dueDate = new Date(publisher.dueDate);
-  }
+  const publisher = await getPublisherData(idAsNumber);
+  const dueDate = publisher.dueDate ? new Date(publisher.dueDate) : null;
   const pastDue = dueDate ? (new Date() > dueDate) : false;
+  const dueDateReadable = dueDate ? dueDate.toLocaleString() : "Brak";
 
-
-  const adminArticles = isStaff ? await getAdminPublisherArticles(publisher.id) : null;
-  const regularUserArticles = !isStaff ? await getUserPublisherArticles(publisher.id) : null;
+  const adminArticles = isStaff ? await getAdminPublisherArticles(idAsNumber) : null;
+  const regularUserArticles = !isStaff ? await getUserPublisherArticles(idAsNumber) : null;
 
   return (
     <>
       <div>
-        <h1 style={{marginBottom: "8px"}}>Wydawnictwo "{publisher.name}" ({publisher.id})</h1>
+        <h1 style={{marginBottom: "8px"}}>Wydawnictwo "{publisher.name}"</h1>
         <p style={{marginBottom: "32px"}}>{publisher.description}</p>
-
+        <p>Termin przesłania: {dueDateReadable} </p>
         {!pastDue && !isStaff &&
           <Button style={{gap: "8px"}} variant='contained' href={`/myspace/publishers/${publisher.id}/new-article`} component={Link}>
             Przeslij raport
             <FontAwesomeIcon icon={faPlus}/>
           </Button>
         }
-        {isStaff && <>
-          <NewDueDate/>
-          {/* <div>Generuj nowy kod dołączenia</div> */}
-        </>}
+        {isStaff && <AdminActions publisher={publisher}/>}
       </div>
 
       {adminArticles && 

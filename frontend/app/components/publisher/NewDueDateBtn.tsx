@@ -3,8 +3,9 @@
 import React, {useState} from 'react'
 import { Button } from '@mui/material'
 import NewDueDateModal from './NewDueDateModal';
+import { Publisher } from '@/app/types/types';
 
-const NewDueDate = () => {
+const NewDueDateBtn = ({publisher}: {publisher: Publisher}) => {
     const [showModal, setShowModal] = useState(false);
 
     function handleClick(){
@@ -15,10 +16,10 @@ const NewDueDate = () => {
     <Button variant='contained' onClick={handleClick}>Nowy termin</Button>
 
     {showModal && (
-        <NewDueDateModal setShowModal={setShowModal}/>
+        <NewDueDateModal setShowModal={setShowModal} publisher={publisher}/>
     )}
     </>
   )
 }
 
-export default NewDueDate
+export default NewDueDateBtn

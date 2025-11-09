@@ -6,7 +6,15 @@ export async function getPublisherData(id: number): Promise<Publisher>{
         console.log(`Fetching ${id} publisher data`);
         const response = await apiServer.get(`/publisher/${id}/`);
         console.log("Fetched publisher data:", response.data);
-        return response.data;
+        const transformedPublisher = {
+            id: response.data.id,
+            name: response.data.name,
+            description: response.data.description,
+            dueDate: response.data.due_date,
+            joinCode: response.data.join_code
+        }
+        console.log("Transformed data:", transformedPublisher);
+        return transformedPublisher;
     } catch (error) {
         console.error("Error fetching publisher data:", error);
         throw new Error("Failed to fetch publisher data");
