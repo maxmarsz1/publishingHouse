@@ -51,34 +51,28 @@ class AdminViews:
     class DeleteMemberView(APIView):
         permission_classes = [IsAuthenticated]
 
-        def post(self, request, *args, **kwargs):
-            publisher_id = self.kwargs['pk']
+        def delete(self, request, *args, **kwargs):
+            publisher_id = self.kwargs['publisher_id']
+            user_id = self.kwargs['user_id']
 
             try:
-                user_id = request.data['user_id']
-                user_id = int(user_id)
                 user = User.objects.get(id=user_id)
                 membership = PublisherMembership.objects.get(user_id=user_id, publisher_id=publisher_id)
                 membership.delete()
-            except KeyError:
+            except ObjectDoesNotExist:
                 return Response(
-                    {"error": "user_id must be provided"},
-                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
-                    )
-            except ValueError:
-                return Response(
-                    {"error": "user_id must be an integer"},
-                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
-                    )
-            except ObjectDoesNotExist as e:
-                return Response({"error": str(e)}, status=status.HTTP_404_NOT_FOUND)
+                    {"error": "User or membership does not exist."}, 
+                    status=status.HTTP_404_NOT_FOUND
+                )
             except Exception as e:
                 return Response(
-                    {"error": str(e)},
+                    {"error": str(e)}, 
                     status=status.HTTP_500_INTERNAL_SERVER_ERROR
-                    )
-
-            return Response({"message": "Member deleted"})
+                )
+            return Response(
+                {"message": f"User {user.username} removed from publisher."}, 
+                status=status.HTTP_200_OK
+            )
 
     class ListMembersView(APIView):
         serializer_class = UserSerializer
@@ -103,7 +97,7 @@ class AdminViews:
     class GeneratePublisherJoinCode(APIView):
         permission_classes = [IsAuthenticated]
 
-        def post(self, request, *args, **kwargs):
+        def get(self, request, *args, **kwargs):
             publisher_id = self.kwargs['pk']
 
             try:
@@ -285,9 +279,16 @@ class UserViews:
             try:
                 join_code = request.data['join_code']
                 publisher = Publisher.objects.get(join_code=join_code)
+                
+                if PublisherMembership.objects.filter(user_id=user.id, publisher_id=publisher.id).exists():
+                    return Response(
+                        {"error": "You are already a member of this publisher."},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+                
                 membership = PublisherMembership(user_id=user.id, publisher_id=publisher.id)
                 membership.save()
-
+                    
             except KeyError as e:
                 return Response(
                     {"error": f"join_code must be provided ({str(e)})"},
@@ -305,7 +306,7 @@ class UserViews:
                     )
 
             return Response(
-                {"message": "Joined publisher"}
+                PublisherSerializer(publisher).data
             )
             
     class CreateReviewView(APIView):

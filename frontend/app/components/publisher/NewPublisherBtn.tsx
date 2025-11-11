@@ -7,10 +7,11 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons'
 
 import styles from './Btn.module.css'
 import NewPublisherModal from './NewPublisherModal'
+import { Publisher } from '@/app/types/types'
 
 
 
-const NewPublisherBtn = () => {
+const NewPublisherBtn = ({setPublishersState}: {setPublishersState: React.Dispatch<React.SetStateAction<Publisher[]>>}) => {
     const [showModal, setShowModal] = useState(false);
 
     function handleClick(){
@@ -24,7 +25,7 @@ const NewPublisherBtn = () => {
             <FontAwesomeIcon icon={faPlus}/>
         </Button>
         {showModal && (
-            <NewPublisherModal setShowModal={setShowModal}/>
+            <NewPublisherModal setShowModal={setShowModal} setPublishersState={setPublishersState}/>
         )}
         
     </>

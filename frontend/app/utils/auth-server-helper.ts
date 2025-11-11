@@ -44,7 +44,7 @@ export async function getSecureUserClaims(): Promise<TokenPayload | null> {
     }
 }
 
-export async function isUserStaff(): Promise<Boolean>{
+export async function isUserStaff(): Promise<boolean>{
     const claims =  await getSecureUserClaims();
     return claims ? claims.is_staff : false;
 }

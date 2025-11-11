@@ -29,7 +29,7 @@ class Publisher(models.Model):
     def save(self, *args, **kwargs):
         if not self.pk:
             if not self.join_code:
-                self.join_code = generate_join_code(length=8)
+                self.join_code = self.generate_join_code(length=8)
         
         super().save(*args, **kwargs)
         

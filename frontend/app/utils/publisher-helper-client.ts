@@ -56,13 +56,33 @@ export async function generateNewJoinCode(publisher_id: number): Promise<string>
     } 
 }
 
-export async function getPublisherMembers(publisherId: number): Promise<User[]> {
+export async function getPublisherMembers(publisher_id: number): Promise<User[]> {
     try {
-        const response = await apiClient.get(`/publisher/${publisherId}/members/`);
+        const response = await apiClient.get(`/publisher/${publisher_id}/members/`);
         console.log("Fetched publisher members:", response.data);
         return response.data;
     } catch (error) {
         console.error("Error fetching publisher members:", error);
+        throw error;
+    }
+}
+
+export async function deletePublisherMember(publisher_id: number, user_id: number): Promise<void> {
+    try {
+        await apiClient.delete(`/publisher/${publisher_id}/members/${user_id}/`);
+        console.log("Deleted publisher member");
+    } catch (error) {
+        console.error("Error deleting publisher member:", error);
+        throw error;
+    }
+}
+
+export async function joinPublisher(join_code: string): Promise<Publisher> {
+    try {
+        const response = await apiClient.post(`/publisher/join/`, { join_code });
+        return response.data;
+    } catch (error) {
+        console.error("Error joining publisher:", error);
         throw error;
     }
 }

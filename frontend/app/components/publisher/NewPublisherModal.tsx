@@ -6,11 +6,14 @@ import { Button, TextField } from "@mui/material";
 
 import styles from "./Modal.module.css";
 import { createPublisher } from "@/app/utils/publisher-helper-client";
+import { Publisher } from "@/app/types/types";
 
 const NewPublisherModal = ({
   setShowModal,
+  setPublishersState
 }: {
-  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowModal: React.Dispatch<React.SetStateAction<boolean>>,
+  setPublishersState: React.Dispatch<React.SetStateAction<Publisher[]>>
 }) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -31,6 +34,7 @@ const NewPublisherModal = ({
     try {
       const response = await createPublisher({ name, description });
       console.log(response);
+      setPublishersState((prevPublishers: Publisher[]) => [...prevPublishers, response]);
       setShowModal(false);
     } catch (error) {
       if (error instanceof Error) {

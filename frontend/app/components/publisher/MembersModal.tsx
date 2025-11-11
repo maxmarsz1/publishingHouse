@@ -5,7 +5,9 @@ import React, { useState, useEffect } from "react";
 import styles from "./Modal.module.css";
 import Backdrop from "../general/Backdrop";
 import { Button } from "@mui/material";
-import { getPublisherMembers } from "@/app/utils/publisher-helper-client";
+import { deletePublisherMember, getPublisherMembers } from "@/app/utils/publisher-helper-client";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faClose } from "@fortawesome/free-solid-svg-icons";
 
 const MembersModal = ({
   publisher,
@@ -39,6 +41,21 @@ const MembersModal = ({
     fetchMembers();
   }, [publisher.id]);
 
+  async function handleSubmit(user_id: number){
+    if(!publisher.id){
+      console.log("Brak id wydawnictwa");
+      return;
+    }
+    try {
+      deletePublisherMember(publisher.id, user_id);
+      setMembers((prevMembers) => prevMembers.filter((member) => member.id !== user_id));
+    }
+    catch (error) {
+      console.error("Error deleting publisher member:", error);
+      setError("Błąd podczas usuwania członka wydawnictwa");
+    }
+  }
+
   return (
     <>
       <Backdrop />
@@ -46,10 +63,11 @@ const MembersModal = ({
         <h2>Członkowie wydawnictwa</h2>
         {error && <p className={styles.error}>{error}</p>}
         <div>
-          <ul>
+          <ul className={styles.memberList}>
               {members.map((member) => (
-                <li key={member.id}>
+                <li key={member.id}  className={styles.memberItem}>
                   {member.first_name} {member.last_name} ({member.email})
+                  <FontAwesomeIcon icon={faClose} className={styles.closeBtn} onClick={() => handleSubmit(member.id)}/>
                 </li>
               ))}
               {members.length === 0 && <li>Brak członków w wydawnictwie.</li>}

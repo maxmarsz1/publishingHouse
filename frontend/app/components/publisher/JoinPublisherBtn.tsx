@@ -7,10 +7,11 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons'
 
 import styles from './Btn.module.css'
 import JoinPublisherModal from './JoinPublisherModal'
+import { Publisher } from '@/app/types/types'
 
 
 
-const JoinPublisherBtn = () => {
+const JoinPublisherBtn = ({setPublishersState}: {setPublishersState: React.Dispatch<React.SetStateAction<Publisher[]>>}) => {
     const [showModal, setShowModal] = useState(false);
 
     function handleClick(){
@@ -24,7 +25,7 @@ const JoinPublisherBtn = () => {
             <FontAwesomeIcon icon={faPlus}/>
         </Button>
         {showModal && (
-            <JoinPublisherModal setShowModal={setShowModal}/>
+            <JoinPublisherModal setShowModal={setShowModal} setPublishersState={setPublishersState}/>
         )}
         
     </>

@@ -14,10 +14,12 @@ import { Publisher } from "@/app/types/types";
 
 const NewDueDateModal = ({
   setShowModal,
-  publisher
+  publisher,
+  onDueDateUpdate
 }: {
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>,
-  publisher: Publisher
+  publisher: Publisher,
+  onDueDateUpdate: (newDueDate: string) => void;
 }) => {
   const [date, setDate] = useState<Dayjs | null>(dayjs());
   useEffect(() => {
@@ -40,6 +42,7 @@ const NewDueDateModal = ({
     const dueDate = date.toISOString();
     try{
       updatePublisher({...publisher, dueDate});
+      onDueDateUpdate(dueDate);
       setShowModal(false);
     }
     catch(error){

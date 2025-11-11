@@ -40,3 +40,21 @@
 .error{
     color: red;
 }
+.memberList{
+    list-style: none;
+    margin-bottom: 2rem;
+}
+.memberItem{
+    padding: 5px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+}
+.memberItem:nth-child(2n){
+    background-color: var(--background1);
+}
+.closeBtn{
+    color: red;
+    cursor: pointer;
+}
