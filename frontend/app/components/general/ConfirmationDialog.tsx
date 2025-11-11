@@ -18,10 +18,10 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({ open, title, me
             </DialogContent>
             <DialogActions>
                 <Button onClick={onCancel} color="secondary">
-                    Cancel
+                    Anuluj
                 </Button>
                 <Button onClick={onConfirm} color="primary">
-                    Confirm
+                    Potwierdź
                 </Button>
             </DialogActions>
         </Dialog>

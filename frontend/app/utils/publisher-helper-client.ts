@@ -1,38 +1,39 @@
 import apiClient from "./api-client";
 import { Publisher, User } from "../types/types";
 
-export async function createPublisher(publisher: Publisher): Promise<Publisher> {
+
+export async function createPublisher(publisher: { name: string; description?: string }): Promise<Publisher> {
     try {
         const data = {
             name: publisher.name,
             description: publisher.description || null,
-            join_code: publisher.joinCode || null,
-            due_date: publisher.dueDate ? new Date(publisher.dueDate).toISOString() : null,
         };
-        const response =  await apiClient.post('/publishers/', data);
+
+        const response = await apiClient.post('/publishers/', data);
         return response.data;
-    }
-    catch (error) {
-        console.error("Error creating publisher:", error);
+    } catch (error) {
+        console.error("Error creating partial publisher:", error);
         throw error;
-    } 
+    }
 }
 
-export async function updatePublisher(publisher: Publisher): Promise<Publisher> {
+export async function updatePublisher(publisher: Partial<Publisher> & { id: number }): Promise<Publisher> {
     try {
-        const data = {
-            name: publisher.name,
-            description: publisher.description || null,
-            join_code: publisher.joinCode || null,
-            due_date: publisher.dueDate ? new Date(publisher.dueDate).toISOString() : null,
-        };
-        const response =  await apiClient.put(`/publishers/${publisher.id}/`, data);
+        const data: Record<string, any> = {}; 
+
+        if (publisher.name !== undefined) data.name = publisher.name;
+        if (publisher.description !== undefined) data.description = publisher.description;
+        if (publisher.joinCode !== undefined) data.join_code = publisher.joinCode;
+        if (publisher.dueDate !== undefined) {
+            data.due_date = publisher.dueDate ? new Date(publisher.dueDate).toISOString() : null;
+        }
+
+        const response = await apiClient.patch(`/publishers/${publisher.id}/`, data);
         return response.data;
-    }
-    catch (error) {
+    } catch (error) {
         console.error("Error updating publisher:", error);
         throw error;
-    } 
+    }
 }
 
 export async function deletePublisher(publisher_id: number): Promise<void> {

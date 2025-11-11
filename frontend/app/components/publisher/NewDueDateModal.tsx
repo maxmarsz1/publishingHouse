@@ -41,7 +41,7 @@ const NewDueDateModal = ({
     }
     const dueDate = date.toISOString();
     try{
-      updatePublisher({...publisher, dueDate});
+      updatePublisher({id: publisher.id, dueDate});
       onDueDateUpdate(dueDate);
       setShowModal(false);
     }
@@ -70,7 +70,7 @@ const NewDueDateModal = ({
           <Button variant="outlined" onClick={cancel}>
             Anuluj
           </Button>
-          <Button variant="contained" onClick={handleSubmit}>Zmień</Button>
+          <Button variant="contained" color="success" onClick={handleSubmit}>Zapisz</Button>
         </div>
       </div>
     </>

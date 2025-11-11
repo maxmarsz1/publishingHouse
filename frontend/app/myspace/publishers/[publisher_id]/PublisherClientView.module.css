@@ -1,0 +1,19 @@
+.dueDateContainer{
+    margin-bottom: 1rem;
+    position: absolute;
+    right: 0;
+    top: 5px;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.dueDate{
+    color: var(--primary);
+    padding: 10px 15px;
+    background: var(--background1);
+    border-radius: 50px;
+    display: block;
+}
+.topContainer{
+    position: relative;
+}

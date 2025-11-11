@@ -37,7 +37,7 @@ const JoinPublisherModal = ({
     <>
       <Backdrop />
       <div className={styles.modal}>
-        <h2>Dolacz do wydawnictwa</h2>
+        <h2>Dołącz do wydawnictwa</h2>
         <div className={styles.input}>
           <span>Kod: </span>
           <TextField variant="standard" value={joinCode} onChange={(e) => setJoinCode(e.target.value)} style={{ width: "100%" }} />

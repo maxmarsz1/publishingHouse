@@ -9,7 +9,7 @@ interface Props {
 }
 
 const PublisherView = async ({ params }: Props) => {
-  const { publisher_id } = params;
+  const { publisher_id } = await params;
   const idAsNumber = +publisher_id;
 
   if (isNaN(idAsNumber) || !idAsNumber) {

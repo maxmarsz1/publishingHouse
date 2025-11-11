@@ -18,7 +18,7 @@ const ArticleData = ({ article }: Props) => {
     <>
         <div className={styles.infoLine}><strong>Tytuł: </strong>{article.title}</div>
         {!toReview && !isAuthor &&
-          <div className={styles.infoLine}><strong>Autor: </strong>{article.author.first_name} {article.author.last_name}</div>
+          <div className={styles.infoLine}><strong>Autor: </strong>{article.author.first_name} {article.author.last_name} ({article.author.email})</div>
         }
         <div className={styles.infoLine}><strong>Wydawnictwo: </strong>{article.publisher}</div>
         <div className={styles.infoLine}><strong>Abstract: </strong>{article.abstract}</div>

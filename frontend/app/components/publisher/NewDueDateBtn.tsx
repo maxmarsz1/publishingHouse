@@ -19,7 +19,7 @@ const NewDueDateBtn = ({
   }
   return (
     <>
-      <Button variant="contained" onClick={handleClick}>
+      <Button variant="contained" color="success" onClick={handleClick}>
         Nowy termin
       </Button>
 

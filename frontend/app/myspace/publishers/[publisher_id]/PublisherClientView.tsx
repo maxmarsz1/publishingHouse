@@ -8,6 +8,9 @@ import Link from 'next/link';
 import AdminActions from '@/app/components/publisher/AdminActions';
 import ArticleTable from '@/app/components/article/ArticleTable';
 import { Article, Publisher } from '@/app/types/types';
+import styles from './PublisherClientView.module.css'
+import PublisherName from '@/app/components/publisher/PublisherName';
+import PublisherDescription from '@/app/components/publisher/PublisherDescription';
 
 const PublisherClientView = ({
   publisher,
@@ -24,24 +27,25 @@ const PublisherClientView = ({
 }) => {
   const [dueDate, setDueDate] = useState<Date | null>(initialDueDate);
   const [dueDateReadable, setDueDateReadable] = useState<string>(
-    initialDueDate ? initialDueDate.toLocaleString() : 'Brak'
+    initialDueDate ? initialDueDate.toLocaleString('pl-PL', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'}) : 'Brak'
   );
 
   const pastDue = dueDate ? new Date() > dueDate : false;
 
-  // Callback to update dueDate
   const updateDueDate = (newDueDate: string) => {
     const updatedDate = new Date(newDueDate);
     setDueDate(updatedDate);
-    setDueDateReadable(updatedDate.toLocaleString());
+    setDueDateReadable(updatedDate.toLocaleString('pl-PL', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'}));
   };
 
   return (
     <>
       <div>
-        <h1 style={{ marginBottom: '8px' }}>Wydawnictwo "{publisher.name}"</h1>
-        <p style={{ marginBottom: '32px' }}>{publisher.description}</p>
-        <p>Termin przesłania: {dueDateReadable}</p>
+        <div className={styles.topContainer}>
+          <PublisherName publisherName={publisher.name} publisherId={publisher.id} isStaff={isStaff}/>
+          <PublisherDescription publisherDescription={publisher.description} publisherId={publisher.id} isStaff={isStaff}/>
+          <p className={styles.dueDateContainer}>Termin przesłania: <span className={styles.dueDate}>{dueDateReadable}</span></p>
+        </div>
         {!pastDue && !isStaff && (
           <Button
             style={{ gap: '8px' }}

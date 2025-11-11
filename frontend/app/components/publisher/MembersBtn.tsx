@@ -10,7 +10,7 @@ const MembersBtn = ({publisher}: {publisher: Publisher}) => {
 
   return (
     <>
-    <Button variant='outlined' onClick={() => setShowModal(true)}>Zarządzaj członkami</Button>
+    <Button variant='contained' onClick={() => setShowModal(true)}>Zarządzaj członkami</Button>
 
     {showModal &&
         <MembersModal publisher={publisher} setShowModal={setShowModal}/>
