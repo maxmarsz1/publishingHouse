@@ -10,7 +10,7 @@ import MobileMenu from './MobileMenu'
 import api from '@/app/utils/api-client'
 import { AxiosError } from 'axios'
 
-const Navbar = () => {
+const Navbar = ({isStaff}: {isStaff: boolean}) => {
   const router = useRouter();
 
   const handleLogout = async (e: React.MouseEvent) => {
@@ -39,7 +39,9 @@ const Navbar = () => {
             <Image alt='logo' src="/logo.webp" width={128} height={44} className={styles.logo}/>
           </Link>
           <Link className={styles.desktopLink} href="/myspace/publishers">Wydawnictwa</Link>
-          <Link className={styles.desktopLink} href="/myspace/articles">Raporty</Link>
+          {!isStaff &&
+            <Link className={styles.desktopLink} href="/myspace/articles">Raporty</Link>
+          }
           <Link className={styles.desktopLink} href="/myspace/account">Konto</Link>
         </div>
         <a 

@@ -3,9 +3,11 @@
 import React from "react";
 import { useState } from "react";
 import { Button, MenuItem, TextField } from "@mui/material";
+import { useRouter } from "next/navigation";
 
 import { ArticleType, ArticleTypeDisplay, ITArticleCategory, ITArticleCategoryDisplay, Publisher } from "@/app/types/types";
 import styles from "./NewArticleForm.module.css";
+import { createArticle } from "@/app/utils/article-helper-client";
 
 const raportTypeOptions = Object.values(ArticleType).map((type) => ({
   value: type,
@@ -31,9 +33,66 @@ const NewArticle = ({ publisher }: NewRaportProps) => {
     ITArticleCategory.MachineLearning
   );
   const [comment, setComment] = useState("");
+  const [keywords, setKeywords] = useState("");
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+
+  const router = useRouter();
+
+  function handleFileSelect(selectedFile: File) {
+    if (selectedFile && selectedFile.type !== "application/pdf") {
+      console.log("Proszę przesłać plik w formacie PDF.");
+      setUploadedFile(null);
+      return;
+    }
+    setUploadedFile(selectedFile);
+  }
+
+  async function handleSubmit(){
+    if (!title || !abstract || !uploadedFile) {
+      console.log("Proszę uzupełnić tytuł, abstrakt i przesłać plik.");
+      return;
+    }
+    try {
+      const articleData = {
+        title,
+        abstract,
+        articleType,
+        articleCategory,
+        comment,
+        keywords,
+        file: uploadedFile,
+        publisherId: publisher.id,
+      }
+      const response = await createArticle(articleData);
+      console.log("Raport został pomyślnie utworzony:", response);
+      router.push(`/myspace/articles/${response.id}`);
+    }
+    catch(error){
+      console.error("Błąd podczas tworzenia raportu:", error);
+    }
+  }
 
   return (
     <div>
+      <Button
+        variant="contained"
+        component="label"
+        className={styles.uploadButton}
+      >
+        {uploadedFile ? 
+        (<p>Wybrany plik: {uploadedFile.name}</p>) : 
+        (<p>Prześlij plik</p>)
+        }
+        <input
+          type="file"
+          hidden
+          onChange={(e) => {
+        if (e.target.files && e.target.files[0]) {
+          handleFileSelect(e.target.files[0]);
+        }
+          }}
+        />
+      </Button>
       <TextField
         id="title"
         value={title}
@@ -97,21 +156,22 @@ const NewArticle = ({ publisher }: NewRaportProps) => {
         fullWidth
         className={styles.inputField}
       />
+      <TextField
+        id="keywords"
+        label="Słowa kluczowe (oddzielone przecinkiem)"
+        value={keywords}
+        onChange={(e) => setKeywords(e.target.value)}
+        fullWidth
+        className={styles.inputField}
+      />
+
+      
 
       <Button
         variant="contained"
         color="primary"
         className={styles.submitButton}
-        onClick={() => {
-          // Handle submission logic here
-          console.log({
-            title,
-            abstract,
-            raportType: articleType,
-            raportCategory: articleCategory,
-            comment,
-          });
-        }}
+        onClick={handleSubmit}
       >
         Wyślij
       </Button>

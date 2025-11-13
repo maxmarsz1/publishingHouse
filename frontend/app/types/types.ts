@@ -31,6 +31,7 @@ export interface Article {
     author: User,
     status: Status,
     keywords: string,
+    comment: string,
     createdAt: string,
     grade?: number,
     publisher: String,
@@ -39,6 +40,17 @@ export interface Article {
     file?: string,   // Optional for now
     reviews?: Review[],
     reviewers?: User[]
+}
+
+export interface NewArticle {
+    title: string,
+    abstract: string,
+    articleType: ArticleType,
+    articleCategory: ITArticleCategory,
+    comment: string,
+    keywords: string,
+    file: File,
+    publisherId: number
 }
 
 export interface Review {

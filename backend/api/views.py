@@ -17,7 +17,7 @@ from raports.models import Raport, RaportReview
 from users.models import User
 from publishers.models import Publisher, PublisherMembership
 
-from raports.serializers import RaportSerializer, RaportReviewSerializer, RaportListSerializer, AuthorRaportSerializer, ReviewerRaportSerializer, AdminRaportSerializer, CreateReviewSerializer
+from raports.serializers import RaportSerializer, NewRaportSerializer, RaportReviewSerializer, RaportListSerializer, AuthorRaportSerializer, ReviewerRaportSerializer, AdminRaportSerializer, CreateReviewSerializer
 from users.serializers import UserSerializer, UserRegistrationSerializer, CustomTokenObtainPairSerializer
 from publishers.serializers import PublisherSerializer, PublisherMembershipSerializer
 
@@ -181,23 +181,20 @@ class UserViews:
     class CreateRaportView(APIView):
         permission_classes = [IsAuthenticated]
 
-        def post(self, request):
+        def post(self, request, pk):
             user = request.user
 
             try:
-                publisher_id = request.data.get('publisher')
-                if not publisher_id:
-                    return Response({"error": "Publisher ID must be provided."}, status=status.HTTP_400_BAD_REQUEST)
-
-                if not PublisherMembership.objects.filter(publisher_id=publisher_id, user=user).exists():
+                publisher = Publisher.objects.get(id=pk)
+                if not PublisherMembership.objects.filter(publisher_id=publisher.id, user=user).exists():
                     return Response({"error": "You must be a member of the publisher to create a raport."}, status=status.HTTP_403_FORBIDDEN)
 
-                if Raport.objects.filter(publisher_id=publisher_id, author=user).exists():
+                if Raport.objects.filter(publisher_id=publisher.id, author=user).exists():
                     return Response({"error": "You can only publish one raport for each publisher."}, status=status.HTTP_400_BAD_REQUEST)
 
-                serializer = RaportSerializer(data=request.data)
+                serializer = NewRaportSerializer(data=request.data)
                 if serializer.is_valid():
-                    raport = serializer.save(author=user)
+                    raport = serializer.save(author=user, publisher=publisher)
                     return Response(RaportSerializer(raport).data, status=status.HTTP_201_CREATED)
                 else:
                     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

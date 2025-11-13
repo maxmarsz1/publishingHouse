@@ -1,7 +1,5 @@
-import { Publisher, Article, Status, ArticleType, ITArticleCategory, User, UserArticles } from "../types/types";
-import { getPublisherData } from "./publisher-helper";
+import { Article, UserArticles } from "../types/types";
 import apiServer from "./api-server";
-import apiClient from "./api-client";
 
 
 export async function getAdminPublisherArticles(id: number): Promise<Article[]> {
