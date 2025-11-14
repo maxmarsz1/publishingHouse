@@ -5,6 +5,7 @@ import { getArticleData } from '@/app/utils/article-helper'
 import styles from './page.module.css'
 import ArticleData from '@/app/components/article/ArticleData'
 import ArticleReviews from '@/app/components/article/ArticleReviews'
+import { isUserStaff } from '@/app/utils/auth-server-helper'
 
 
 interface Props{
@@ -19,6 +20,7 @@ const ArticleView = async ({params}: Props) => {
   if (isNaN(idAsNumber) || !idAsNumber) {
     console.error(`Invalid article_id provided: ${article_id}`);
   }
+  const isStaff = await isUserStaff();
 
   const article: Article = await getArticleData(idAsNumber);
   
@@ -26,7 +28,7 @@ const ArticleView = async ({params}: Props) => {
     <>
       <h1 className={styles.title}>Przegląd artykułu</h1>
 
-      <ArticleData article={article}/>
+      <ArticleData article={article} isStaff={isStaff}/>
       {article.reviews && article.reviews.length > 0 &&
         <ArticleReviews reviews={article.reviews} />
       }

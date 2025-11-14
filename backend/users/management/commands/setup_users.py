@@ -13,6 +13,8 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS('Successfully ensured admin user exists.'))
 
         john, created = User.objects.get_or_create(username='johnsmith', defaults={'email': 'john.smith@example.com'})
+        
+        print(john, created, john.is_active)
         john.set_password('johnPassword')
         john.save()
         self.stdout.write(self.style.SUCCESS('Successfully ensured johnsmith user exists.'))

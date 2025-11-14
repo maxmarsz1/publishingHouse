@@ -17,7 +17,7 @@ from raports.models import Raport, RaportReview
 from users.models import User
 from publishers.models import Publisher, PublisherMembership
 
-from raports.serializers import RaportSerializer, NewRaportSerializer, RaportReviewSerializer, RaportListSerializer, AuthorRaportSerializer, ReviewerRaportSerializer, AdminRaportSerializer, CreateReviewSerializer
+from raports.serializers import RaportSerializer, NewOrUpdateRaportSerializer, RaportReviewSerializer, RaportListSerializer, AuthorRaportSerializer, ReviewerRaportSerializer, AdminRaportSerializer, CreateReviewSerializer
 from users.serializers import UserSerializer, UserRegistrationSerializer, CustomTokenObtainPairSerializer
 from publishers.serializers import PublisherSerializer, PublisherMembershipSerializer
 
@@ -141,7 +141,8 @@ class UserViews:
             }
             return Response(user_raports, status=status.HTTP_200_OK)
         
-    class RaportView(APIView):
+        
+    class RaportDetailUpdateDeleteView(APIView):
         permission_classes = [IsAuthenticated]
 
         def get(self, request, pk):
@@ -178,6 +179,65 @@ class UserViews:
                     status=status.HTTP_500_INTERNAL_SERVER_ERROR
                 )
                 
+        def put(self, request, pk):
+            user = request.user
+
+            try:
+                raport = Raport.objects.get(id=pk)
+
+                if user != raport.author:
+                    return Response(
+                        {"error": "You do not have permission to update this raport."},
+                        status=status.HTTP_403_FORBIDDEN
+                    )
+
+                serializer = NewOrUpdateRaportSerializer(raport, data=request.data, partial=True)
+                if serializer.is_valid():
+                    serializer.save()
+                    return Response(serializer.data, status=status.HTTP_200_OK)
+                else:
+                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+            except ObjectDoesNotExist:
+                return Response(
+                    {"error": "Raport does not exist."},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+            except Exception as e:
+                return Response(
+                    {"error": str(e)},
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                )
+
+        def delete(self, request, pk):
+            user = request.user
+
+            try:
+                raport = Raport.objects.get(id=pk)
+
+                if user != raport.author and not user.is_superuser:
+                    return Response(
+                        {"error": "You do not have permission to delete this raport."},
+                        status=status.HTTP_403_FORBIDDEN
+                    )
+
+                raport.delete()
+                return Response(
+                    {"message": "Raport deleted successfully."},
+                    status=status.HTTP_200_OK
+                )
+
+            except ObjectDoesNotExist:
+                return Response(
+                    {"error": "Raport does not exist."},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+            except Exception as e:
+                return Response(
+                    {"error": str(e)},
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                )
+                
     class CreateRaportView(APIView):
         permission_classes = [IsAuthenticated]
 
@@ -192,7 +252,7 @@ class UserViews:
                 if Raport.objects.filter(publisher_id=publisher.id, author=user).exists():
                     return Response({"error": "You can only publish one raport for each publisher."}, status=status.HTTP_400_BAD_REQUEST)
 
-                serializer = NewRaportSerializer(data=request.data)
+                serializer = NewOrUpdateRaportSerializer(data=request.data)
                 if serializer.is_valid():
                     raport = serializer.save(author=user, publisher=publisher)
                     return Response(RaportSerializer(raport).data, status=status.HTTP_201_CREATED)

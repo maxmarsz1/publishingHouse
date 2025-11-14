@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { Button } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faClock, faPlus } from '@fortawesome/free-solid-svg-icons';
 import Link from 'next/link';
 import AdminActions from '@/app/components/publisher/AdminActions';
 import ArticleTable from '@/app/components/article/ArticleTable';
@@ -44,7 +44,13 @@ const PublisherClientView = ({
         <div className={styles.topContainer}>
           <PublisherName publisherName={publisher.name} publisherId={publisher.id} isStaff={isStaff}/>
           <PublisherDescription publisherDescription={publisher.description} publisherId={publisher.id} isStaff={isStaff}/>
-          <p className={styles.dueDateContainer}>Termin przesłania: <span className={styles.dueDate}>{dueDateReadable}</span></p>
+          <p className={styles.dueDateContainer}>
+            <span>
+              <FontAwesomeIcon icon={faClock} />&nbsp;
+              Termin przesłania: 
+            </span>
+            <span className={styles.dueDate}>{dueDateReadable}</span>
+          </p>
         </div>
         {!pastDue && !isStaff && (
           <Button

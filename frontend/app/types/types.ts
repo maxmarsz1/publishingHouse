@@ -34,10 +34,10 @@ export interface Article {
     comment: string,
     createdAt: string,
     grade?: number,
-    publisher: String,
+    publisher: Publisher,
     toReview?: boolean,
     isAuthor?: boolean,
-    file?: string,   // Optional for now
+    file: File | string,   // Optional for now
     reviews?: Review[],
     reviewers?: User[]
 }

@@ -26,7 +26,7 @@ urlpatterns = [
     path('user/publishers/', UserViews.PublishersView.as_view(), name='user-publishers'),
     path('user/raports/', UserViews.RaportsView.as_view(), name='user-raports'),
     path('user/change-password/', UserViews.ChangePasswordView.as_view(), name='change-password'),
-    path('raport/<int:pk>/', UserViews.RaportView.as_view(), name='raport-view'),
+    path('raport/<int:pk>/', UserViews.RaportDetailUpdateDeleteView.as_view(), name='raport-view'),
     path('raport/<int:pk>/create-review/', UserViews.CreateReviewView.as_view(), name='create-review'),
     path('profile/', UserViews.ProfileView.as_view(), name='profile'),
 

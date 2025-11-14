@@ -9,9 +9,9 @@ from users.models import User
 class RaportSerializer(serializers.ModelSerializer):
     class Meta:
         model = Raport
-        fields = ['id', 'title', 'author', 'publisher', 'abstract', 'reviewers', 'created_at', 'status']
+        fields = ['id', 'title', 'author', 'publisher', 'abstract', 'reviewers', 'created_at', 'status', 'comment']
         
-class NewRaportSerializer(serializers.ModelSerializer):
+class NewOrUpdateRaportSerializer(serializers.ModelSerializer):
     class Meta:
         model = Raport
         fields = ['title', 'abstract', 'raport_type', 'category', 'keywords', 'file', 'comment', 'publisher']
@@ -20,10 +20,18 @@ class NewRaportSerializer(serializers.ModelSerializer):
         }
 
 class RaportListSerializer(serializers.ModelSerializer):
+    publisher = serializers.SerializerMethodField()
+
     class Meta:
         model = Raport
         fields = ['id', 'title', 'author', 'publisher', 'status', 'created_at']
         ordering = ['-author.last_name', '-author.first_name', '-created_at']
+
+    def get_publisher(self, obj):
+        return {
+            "id": obj.publisher.id,
+            "name": obj.publisher.name
+        } if obj.publisher else None
 
 class AnonymizedReviewSerializer(serializers.ModelSerializer):
     class Meta:
@@ -50,10 +58,13 @@ class AuthorRaportSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Raport
-        fields = ['id', 'title', 'abstract', 'status', 'created_at', 'category', 'raport_type', 'keywords', 'file', 'reviews', 'publisher']
+        fields = ['id', 'title', 'abstract', 'status', 'created_at', 'category', 'raport_type', 'keywords', 'file', 'reviews', 'publisher', 'comment']
 
     def get_publisher(self, obj):
-        return obj.publisher.name if obj.publisher else None
+        return {
+            "id": obj.publisher.id,
+            "name": obj.publisher.name
+        } if obj.publisher else None
 
 
 class ReviewerRaportSerializer(serializers.ModelSerializer):
@@ -63,7 +74,7 @@ class ReviewerRaportSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Raport
-        fields = ['id', 'title', 'abstract', 'status', 'created_at', 'category', 'raport_type', 'keywords', 'file', 'to_review', 'publisher']
+        fields = ['id', 'title', 'abstract', 'status', 'created_at', 'category', 'raport_type', 'keywords', 'file', 'to_review', 'publisher', 'comment']
     
     def get_to_review(self, obj):
         # Logic to determine if the raport is "to review" for the current user
@@ -73,7 +84,10 @@ class ReviewerRaportSerializer(serializers.ModelSerializer):
         return False
 
     def get_publisher(self, obj):
-        return obj.publisher.name if obj.publisher else None
+        return {
+            "id": obj.publisher.id,
+            "name": obj.publisher.name
+        } if obj.publisher else None
 
 
 class AdminRaportSerializer(serializers.ModelSerializer):
@@ -84,10 +98,13 @@ class AdminRaportSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Raport
-        fields = ['id', 'title', 'author', 'abstract', 'status', 'created_at', 'category', 'raport_type', 'keywords', 'file', 'reviews', 'publisher']
+        fields = ['id', 'title', 'author', 'abstract', 'status', 'created_at', 'category', 'raport_type', 'keywords', 'file', 'reviews', 'publisher', 'comment']
 
     def get_publisher(self, obj):
-        return obj.publisher.name if obj.publisher else None
+        return {
+            "id": obj.publisher.id,
+            "name": obj.publisher.name
+        } if obj.publisher else None
     
 
 class CreateReviewSerializer(serializers.ModelSerializer):

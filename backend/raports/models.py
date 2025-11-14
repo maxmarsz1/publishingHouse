@@ -63,7 +63,7 @@ class Raport(models.Model):
     status = models.CharField(
         max_length=10,
         choices=RaportStatus.choices,
-        default=RaportStatus.PENDING
+        default=RaportStatus.SENT
     )
     raport_type = models.CharField(
         max_length=30,

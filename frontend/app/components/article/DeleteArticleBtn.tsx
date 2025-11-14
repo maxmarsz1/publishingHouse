@@ -1,6 +1,6 @@
 'use client'
 
-import { deletePublisher } from '@/app/utils/publisher-helper-client';
+import { deleteArticle } from '@/app/utils/article-helper-client';
 import { Button } from '@mui/material';
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation';
@@ -8,17 +8,17 @@ import ConfirmationDialog from '../general/ConfirmationDialog';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
-const DeletePublisherBtn = ({publisherId}: {publisherId: number}) => {
+const DeleteArticleBtn = ({articleId}: {articleId: number}) => {
     const [showModal, setShowModal] = useState(false);
     const router = useRouter();
 
     async function handleConfirm(){
         try{
-            await deletePublisher(publisherId);
+            await deleteArticle(articleId);
             router.push("/myspace/publishers");
         }
         catch(error){
-            console.error("Error deleting publisher:", error);
+            console.error("Error deleting article:", error);
         }
         finally{
             setShowModal(false);
@@ -37,4 +37,4 @@ const DeletePublisherBtn = ({publisherId}: {publisherId: number}) => {
   )
 }
 
-export default DeletePublisherBtn
+export default DeleteArticleBtn
