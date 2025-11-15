@@ -6,6 +6,7 @@ import styles from './page.module.css'
 import ArticleData from '@/app/components/article/ArticleData'
 import ArticleReviews from '@/app/components/article/ArticleReviews'
 import { isUserStaff } from '@/app/utils/auth-server-helper'
+import ArticleReviewerInfo from '@/app/components/article/ArticleReviewerInfo'
 
 
 interface Props{
@@ -31,6 +32,9 @@ const ArticleView = async ({params}: Props) => {
       <ArticleData article={article} isStaff={isStaff}/>
       {article.reviews && article.reviews.length > 0 &&
         <ArticleReviews reviews={article.reviews} />
+      }
+      {article.review && 
+        <ArticleReviewerInfo review={article.review} />
       }
     </>
   )

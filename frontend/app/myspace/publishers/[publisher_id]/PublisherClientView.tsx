@@ -7,7 +7,7 @@ import { faClock, faPlus } from '@fortawesome/free-solid-svg-icons';
 import Link from 'next/link';
 import AdminActions from '@/app/components/publisher/AdminActions';
 import ArticleTable from '@/app/components/article/ArticleTable';
-import { Article, Publisher } from '@/app/types/types';
+import { Article, Publisher, UserArticles } from '@/app/types/types';
 import styles from './PublisherClientView.module.css'
 import PublisherName from '@/app/components/publisher/PublisherName';
 import PublisherDescription from '@/app/components/publisher/PublisherDescription';
@@ -22,8 +22,8 @@ const PublisherClientView = ({
   publisher: Publisher;
   dueDate: Date | null;
   isStaff: boolean;
-  adminArticles: Article[] | null;
-  regularUserArticles: { authored_articles: Article[] } | null;
+  adminArticles?: Article[] | null;
+  regularUserArticles?: UserArticles | null;
 }) => {
   const [dueDate, setDueDate] = useState<Date | null>(initialDueDate);
   const [dueDateReadable, setDueDateReadable] = useState<string>(
@@ -74,10 +74,16 @@ const PublisherClientView = ({
         />
       )}
       {regularUserArticles && (
-        <ArticleTable
-          title={'Twoje raporty'}
-          articles={regularUserArticles.authored_articles}
-        />
+        <>
+          <ArticleTable
+            title={'Twoje raporty'}
+            articles={regularUserArticles.authored_articles}
+          />
+          <ArticleTable
+            title={'Raporty do recenzji'}
+            articles={regularUserArticles.articles_to_review}
+          />
+        </>
       )}
     </>
   );

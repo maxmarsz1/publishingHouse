@@ -43,7 +43,7 @@
       "email": "anna.reviewer@example.com",
       "first_name": "Anna",
       "last_name": "Reviewer",
-      "password": "pbkdf2_sha256$260000$P3r9I2c4K7s2d1t1m2t1r7s7b1s9s2y5$y4k4d1j5y5g6s4j4g2k4n3x1b2q1v3s3k2p7x6e4o3j2g2e4k3g2g1t2q7s2r4s7",
+      "password": "pbkdf2_sha256$1000000$Tbcs6kE7t03unv3CY3bLZv$SSOUHu5s0JLREOEH9BLsPVyaTpdNTUsa3OIG4OJJKIY=",
       "is_superuser": false,
       "date_joined": "2025-01-02T11:00:00Z",
       "is_active": true,

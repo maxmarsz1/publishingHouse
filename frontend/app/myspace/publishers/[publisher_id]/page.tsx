@@ -3,6 +3,7 @@ import { isUserStaff } from '@/app/utils/auth-server-helper';
 import { getPublisherData } from '@/app/utils/publisher-helper';
 import { getAdminPublisherArticles, getUserPublisherArticles } from '@/app/utils/article-helper'
 import PublisherClientView from './PublisherClientView';
+import { UserArticles } from '@/app/types/types';
 
 interface Props {
   params: { publisher_id: string };

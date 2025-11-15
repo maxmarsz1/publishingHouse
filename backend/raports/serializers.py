@@ -71,10 +71,11 @@ class ReviewerRaportSerializer(serializers.ModelSerializer):
     '''Used for reviewer RaportView'''
     to_review = serializers.SerializerMethodField()
     publisher = serializers.SerializerMethodField()
+    review = serializers.SerializerMethodField()
 
     class Meta:
         model = Raport
-        fields = ['id', 'title', 'abstract', 'status', 'created_at', 'category', 'raport_type', 'keywords', 'file', 'to_review', 'publisher', 'comment']
+        fields = ['id', 'title', 'abstract', 'status', 'created_at', 'category', 'raport_type', 'keywords', 'file', 'to_review', 'publisher', 'comment', 'review']
     
     def get_to_review(self, obj):
         # Logic to determine if the raport is "to review" for the current user
@@ -88,6 +89,21 @@ class ReviewerRaportSerializer(serializers.ModelSerializer):
             "id": obj.publisher.id,
             "name": obj.publisher.name
         } if obj.publisher else None
+
+    def get_review(self, obj):
+        # Logic to fetch the review of the current user for this raport
+        request = self.context.get('request')
+        if request:
+            review = obj.raport_reviews.filter(reviewer=request.user).first()
+            if review:
+                return {
+                    "id": review.id,
+                    "comment": review.comment,
+                    "grade": review.grade,
+                    "status": review.status,
+                    "review_date": review.review_date
+                }
+        return None
 
 
 class AdminRaportSerializer(serializers.ModelSerializer):

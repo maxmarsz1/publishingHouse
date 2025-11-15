@@ -36,6 +36,7 @@ export interface Article {
     grade?: number,
     publisher: Publisher,
     toReview?: boolean,
+    review?: Review,
     isAuthor?: boolean,
     file: File | string,   // Optional for now
     reviews?: Review[],
@@ -55,10 +56,10 @@ export interface NewArticle {
 
 export interface Review {
     id: number,
-    article: Article,
-    reviewer: User,
-    comments: string,
-    reviewDate: string,
+    article?: Article,
+    reviewer?: User,
+    comment: string,
+    review_date: string,
     status: ReviewStatus,
     grade: number,
 }
