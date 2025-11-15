@@ -70,3 +70,16 @@ export async function updateArticle(updatedArticleData: Partial<Article> & { id:
     throw error;
   }
 }
+
+export async function downloadArticle(articleId: number): Promise<Blob> {
+  try {
+    const response = await apiClient.get(`/raport/${articleId}/download/`, {
+      responseType: "blob",
+    });
+    console.log("Article downloaded successfully");
+    return response.data as Blob;
+  } catch (error) {
+    console.error("Error downloading article:", error);
+    throw error;
+  }
+}

@@ -5,6 +5,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework import exceptions
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
+from django.http import FileResponse
 from rest_framework_simplejwt.views import TokenObtainPairView
 from django.conf import settings
 from datetime import datetime, timedelta
@@ -190,6 +191,18 @@ class UserViews:
                         {"error": "You do not have permission to update this raport."},
                         status=status.HTTP_403_FORBIDDEN
                     )
+                    
+                if raport.publisher.due_date and raport.publisher.due_date < timezone.now().date():
+                    return Response(
+                        {"error": "Cannot update this raport. The publisher's due date has passed."},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+                
+                if raport.status in [Raport.RaportStatus.APPROVED, Raport.RaportStatus.PUBLISHED, Raport.RaportStatus.REJECTED]:
+                    return Response(
+                        {"error": "Cannot update this raport. Its status does not allow updates."},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
 
                 serializer = NewOrUpdateRaportSerializer(raport, data=request.data, partial=True)
                 if serializer.is_valid():
@@ -219,6 +232,12 @@ class UserViews:
                     return Response(
                         {"error": "You do not have permission to delete this raport."},
                         status=status.HTTP_403_FORBIDDEN
+                    )
+                    
+                if raport.publisher.due_date and raport.publisher.due_date < timezone.now().date():
+                    return Response(
+                        {"error": "Cannot delete a raport. The publisher's due date has passed."},
+                        status=status.HTTP_400_BAD_REQUEST
                     )
 
                 raport.delete()
@@ -251,6 +270,12 @@ class UserViews:
 
                 if Raport.objects.filter(publisher_id=publisher.id, author=user).exists():
                     return Response({"error": "You can only publish one raport for each publisher."}, status=status.HTTP_400_BAD_REQUEST)
+                
+                if publisher.due_date and publisher.due_date < timezone.now().date():
+                    return Response(
+                        {"error": "Cannot create a raport. The publisher's due date has passed."},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
 
                 serializer = NewOrUpdateRaportSerializer(data=request.data)
                 if serializer.is_valid():
@@ -264,6 +289,24 @@ class UserViews:
                     {"error": str(e)},
                     status=status.HTTP_500_INTERNAL_SERVER_ERROR
                 )
+    
+    class DownloadRaportFileView(APIView):
+        permission_classes = [IsAuthenticated]
+
+        def get(self, request, pk):
+            try:
+                raport = Raport.objects.get(id=pk)
+
+                if not raport.file:
+                    return Response({"error": "No file associated with this raport."}, status=status.HTTP_404_NOT_FOUND)
+
+                response = FileResponse(raport.file.open(), as_attachment=True, filename=raport.file.name)
+                return response
+
+            except Raport.DoesNotExist:
+                return Response({"error": "Raport not found."}, status=status.HTTP_404_NOT_FOUND)
+            except Exception as e:
+                return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
     class PublisherRaportsView(APIView):
         serializer_class = RaportSerializer

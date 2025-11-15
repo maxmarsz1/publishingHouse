@@ -2,6 +2,10 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import(
  TokenObtainPairView, TokenRefreshView, TokenVerifyView)
+from django.conf.urls.static import static
+from django.conf import settings
+
+
 
 from .views import AdminViews, UserViews
 
@@ -28,6 +32,7 @@ urlpatterns = [
     path('user/change-password/', UserViews.ChangePasswordView.as_view(), name='change-password'),
     path('raport/<int:pk>/', UserViews.RaportDetailUpdateDeleteView.as_view(), name='raport-view'),
     path('raport/<int:pk>/create-review/', UserViews.CreateReviewView.as_view(), name='create-review'),
+    path('raport/<int:pk>/download/', UserViews.DownloadRaportFileView.as_view(), name='download-raport'),
     path('profile/', UserViews.ProfileView.as_view(), name='profile'),
 
     path('register/', UserViews.RegistrationView.as_view(), name='register'),
@@ -35,3 +40,5 @@ urlpatterns = [
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('logout/', UserViews.LogoutView.as_view(), name='logout'),
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
