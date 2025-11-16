@@ -296,6 +296,10 @@ class UserViews:
         def get(self, request, pk):
             try:
                 raport = Raport.objects.get(id=pk)
+                user = request.user
+                
+                if not (user.is_staff or user == raport.author or user in raport.reviewers.all()):
+                    return Response({"error": "You do not have permission to download this raport."}, status=status.HTTP_403_FORBIDDEN)
 
                 if not raport.file:
                     return Response({"error": "No file associated with this raport."}, status=status.HTTP_404_NOT_FOUND)
@@ -307,6 +311,52 @@ class UserViews:
                 return Response({"error": "Raport not found."}, status=status.HTTP_404_NOT_FOUND)
             except Exception as e:
                 return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    class UpdateReviewInviteView(APIView):
+        permission_classes = [IsAuthenticated]
+
+        def post(self, request, pk):
+            user = request.user
+
+            try:
+                review = RaportReview.objects.get(id=pk)
+
+                if review.reviewer != user:
+                    return Response(
+                        {"error": "You do not have permission to update this review invite."},
+                        status=status.HTTP_403_FORBIDDEN
+                    )
+                if review.status != RaportReview.RaportReviewStatus.INVITE_SENT:
+                    return Response(
+                        {"error": "This review invite cannot be updated."},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+
+                accept = request.data.get('accept')
+                if accept is None:
+                    return Response(
+                        {"error": "accept field is required."},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+
+                review.status = RaportReview.RaportReviewStatus.PENDING if accept else RaportReview.RaportReviewStatus.INVITE_REJECTED
+                review.save()
+
+                return Response(
+                    {"message": "Review invite status updated successfully."},
+                    status=status.HTTP_200_OK
+                )
+
+            except ObjectDoesNotExist:
+                return Response(
+                    {"error": "Review does not exist."},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+            except Exception as e:
+                return Response(
+                    {"error": str(e)},
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                )
     
     class PublisherRaportsView(APIView):
         serializer_class = RaportSerializer

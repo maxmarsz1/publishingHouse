@@ -1,6 +1,6 @@
 'use client'
 
-import { Article, Status } from '@/app/types/types';
+import { Article, ReviewStatus, Status } from '@/app/types/types';
 import { faDownload, faEdit, faStar } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button } from '@mui/material';
@@ -13,9 +13,10 @@ import { downloadArticle } from '@/app/utils/article-helper-client';
 interface ArticleActionsProps {
     article: Article;
     isStaff: boolean;
+    reviewStatus: ReviewStatus | null;
 }
 
-const ArticleActions = ({article, isStaff}: ArticleActionsProps) => {
+const ArticleActions = ({article, isStaff, reviewStatus}: ArticleActionsProps) => {
   async function handleDownload(){
     if(!article.file || article.file == '' || typeof article.file !== 'string') return;
 
@@ -39,13 +40,13 @@ const ArticleActions = ({article, isStaff}: ArticleActionsProps) => {
 
   return (
     <div className={styles.container}>
-        {article.file && article.file != '' && typeof article.file === 'string' &&
+        {article.isAuthor || isStaff || reviewStatus && reviewStatus == ReviewStatus.Pending &&
           <Button className={styles.downloadBtn} variant='contained' onClick={handleDownload}>
             Pobierz artykuł&nbsp;
             <FontAwesomeIcon icon={faDownload} />  
           </Button>
         }
-        {article.toReview &&
+        {reviewStatus && reviewStatus == ReviewStatus.Pending &&
           <Button className={styles.reviewBtn} variant='outlined' component={Link} href={`/myspace/articles/${article.id}/review`}>
             Recenzuj&nbsp;
             <FontAwesomeIcon icon={faStar}/>

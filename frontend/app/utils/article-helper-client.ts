@@ -83,3 +83,13 @@ export async function downloadArticle(articleId: number): Promise<Blob> {
     throw error;
   }
 }
+
+export async function answearReviewInvite(reviewId: number, accept: boolean): Promise<void> {
+  try {
+    await apiClient.post(`/raport/${reviewId}/review-invite-response/`, {accept});
+    console.log("Review invite response sent successfully");
+  } catch (error) {
+    console.error("Error sending review invite response:", error);
+    throw error;
+  }
+}

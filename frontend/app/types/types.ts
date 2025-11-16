@@ -66,12 +66,16 @@ export interface Review {
 
 export enum ReviewStatus {
     Pending = "pending",
-    Sumbitted = "submitted"
+    Sumbitted = "submitted",
+    Invited = "invited",
+    InviteRejected = "invite_rejected"
 }
 
 export const ReviewStatusDisplay: Record<ReviewStatus, string> = {
     [ReviewStatus.Pending]: "Oczekuje",
     [ReviewStatus.Sumbitted]: "Wysłana",
+    [ReviewStatus.Invited]: "Zaproszony do recenzji",
+    [ReviewStatus.InviteRejected]: "Zaproszenie odrzucone",
 }
 
 export enum Status {

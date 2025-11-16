@@ -94,6 +94,8 @@ class RaportReview(models.Model):
     class RaportReviewStatus(models.TextChoices):
         PENDING = 'pending', 'Pending Review'
         SUBMITTED = 'submitted', 'Submitted Review'
+        INVITE_SENT = 'invited', 'Reviewer Invited'
+        INVITE_REJECTED = 'invite_rejected', 'Invite rejected'
 
 
     raport = models.ForeignKey(Raport, on_delete=models.CASCADE, related_name='raport_reviews')
@@ -102,9 +104,9 @@ class RaportReview(models.Model):
     comment = models.TextField(blank=True, null=True)
     grade = models.FloatField(null=True, blank=True, help_text='Grade from 0 to 5')
     status = models.CharField(
-        max_length=10,
+        max_length=20,
         choices=RaportReviewStatus.choices,
-        default=RaportReviewStatus.PENDING
+        default=RaportReviewStatus.INVITE_SENT
     )
 
     class Meta:

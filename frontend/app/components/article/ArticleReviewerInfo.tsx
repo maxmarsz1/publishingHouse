@@ -1,14 +1,19 @@
+'use client'
+
 import React from "react";
 import styles from "./ArticleReviewerInfo.module.css";
 import { Review, ReviewStatus, ReviewStatusDisplay } from "@/app/types/types";
-import { faCheckCircle, faHourglassHalf, faTimesCircle, IconDefinition } from "@fortawesome/free-solid-svg-icons";
+import { faCheckCircle, faEnvelope, faHourglassHalf, faTimesCircle, IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ArticleReviewInvited from "./ArticleReviewInvited";
 
 interface ArticleReviewerInfoProps {
   review: Review;
+  reviewStatus: ReviewStatus | null;
+  setReviewStatus: React.Dispatch<React.SetStateAction<ReviewStatus | null>>;
 }
 
-const ArticleReviewerInfo = ({ review }: ArticleReviewerInfoProps) => {
+const ArticleReviewerInfo = ({ review, reviewStatus, setReviewStatus }: ArticleReviewerInfoProps) => {
   const reviewDateReadable = review.review_date ? new Date(review.review_date).toLocaleDateString(
     "pl-PL",
     {
@@ -23,6 +28,8 @@ const ArticleReviewerInfo = ({ review }: ArticleReviewerInfoProps) => {
   const statusIcon: Record<ReviewStatus, IconDefinition> = {
     submitted: faCheckCircle,
     pending: faHourglassHalf,
+    invited: faEnvelope,
+    invite_rejected: faTimesCircle,
   };
 
   return (
@@ -30,10 +37,19 @@ const ArticleReviewerInfo = ({ review }: ArticleReviewerInfoProps) => {
       <h2 className={styles.h2}>
         Status twojej recenzji:
         <div className={styles.reviewStatus}>
-            {<FontAwesomeIcon icon={statusIcon[review.status]} className={styles.statusIcon} />}&nbsp;
-            {ReviewStatusDisplay[review.status]}
+          {reviewStatus &&
+            <>
+              {<FontAwesomeIcon icon={statusIcon[reviewStatus]} className={styles.statusIcon} />}&nbsp;
+              {ReviewStatusDisplay[reviewStatus]}
+            </>
+          }
         </div>
       </h2>
+      {reviewStatus == ReviewStatus.Invited &&
+        <ArticleReviewInvited reviewId={review.id} setReviewStatus={setReviewStatus} />
+      }
+      
+      {(reviewStatus == ReviewStatus.Pending || reviewStatus == ReviewStatus.Sumbitted) &&
       <div className={styles.grid}>
         <div className={styles.header}>Komentarz</div>
         <div className={styles.header}>Ocena</div>
@@ -46,6 +62,8 @@ const ArticleReviewerInfo = ({ review }: ArticleReviewerInfoProps) => {
         </div>
         <div>{reviewDateReadable}</div>
       </div>
+      }
+      
     </div>
   );
 };

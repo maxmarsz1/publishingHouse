@@ -22,7 +22,7 @@
     "pk": 2,
     "fields": {
       "title": "Optimizing Multi-Cloud Deployment Patterns",
-      "author": 2,
+      "author": 1,
       "reviewers": [],
       "publisher": 2,
       "status": "pending",
@@ -54,7 +54,18 @@
       "reviewer": 3,
       "review_date": null,
       "comment": null,
-      "status": "pending"
+      "status": "invited"
+    }
+  },
+  {
+    "model": "raports.raportreview",
+    "pk": 3,
+    "fields": {
+      "raport": 2,
+      "reviewer": 2,
+      "review_date": null,
+      "comment": null,
+      "status": "invited"
     }
   }
 ]

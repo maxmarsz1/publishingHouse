@@ -21,7 +21,8 @@ const NewDueDateModal = ({
   publisher: Publisher,
   onDueDateUpdate: (newDueDate: string) => void;
 }) => {
-  const [date, setDate] = useState<Dayjs | null>(dayjs());
+  const [date, setDate] = useState<Dayjs | null>(dayjs().add(1, 'day').startOf('hour'));
+
   useEffect(() => {
     if (publisher.dueDate && publisher.dueDate !== "") {
       const parsedDate = dayjs(publisher.dueDate);

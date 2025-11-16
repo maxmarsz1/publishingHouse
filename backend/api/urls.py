@@ -32,6 +32,7 @@ urlpatterns = [
     path('user/change-password/', UserViews.ChangePasswordView.as_view(), name='change-password'),
     path('raport/<int:pk>/', UserViews.RaportDetailUpdateDeleteView.as_view(), name='raport-view'),
     path('raport/<int:pk>/create-review/', UserViews.CreateReviewView.as_view(), name='create-review'),
+    path('raport/<int:pk>/review-invite-response/', UserViews.UpdateReviewInviteView.as_view(), name='invite-handling'),
     path('raport/<int:pk>/download/', UserViews.DownloadRaportFileView.as_view(), name='download-raport'),
     path('profile/', UserViews.ProfileView.as_view(), name='profile'),
 

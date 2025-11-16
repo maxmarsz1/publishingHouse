@@ -56,5 +56,15 @@
       "role": "admin",
       "date_joined": "2025-01-04T12:02:00Z"
     }
+  },
+  {
+    "model": "publishers.publishermembership",
+    "pk": 5,
+    "fields": {
+      "user": 2,
+      "publisher": 2,
+      "role": "member",
+      "date_joined": "2025-01-04T12:02:00Z"
+    }
   }
 ]

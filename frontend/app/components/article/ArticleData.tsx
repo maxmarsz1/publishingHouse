@@ -1,25 +1,12 @@
 import React from "react";
-import { Button } from "@mui/material";
 
 import {
   Article,
   ArticleTypeDisplay,
   ITArticleCategoryDisplay,
-  Status,
 } from "@/app/types/types";
 import styles from "./ArticleData.module.css";
-import Link from "next/link";
 import { getStatusDisplayText } from "@/app/utils/status-helper";
-import Articles from "@/app/myspace/articles/page";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faDownload,
-  faEdit,
-  faStar,
-  faXmark,
-} from "@fortawesome/free-solid-svg-icons";
-import DeleteArticleBtn from "./DeleteArticleBtn";
-import ArticleActions from "./ArticleActions";
 
 interface Props {
   article: Article;
@@ -27,8 +14,6 @@ interface Props {
 }
 
 const ArticleData = ({ article, isStaff }: Props) => {
-  const toReview = article.toReview ? article.toReview : false;
-  const isAuthor = article.isAuthor ? article.isAuthor : false;
   const createdAt = new Date(article.createdAt);
   const createdAtString = createdAt.toLocaleDateString("pl-PL", {
     hour: "numeric",
@@ -88,8 +73,6 @@ const ArticleData = ({ article, isStaff }: Props) => {
         <strong>Kategoria artykułu: </strong>
         {ITArticleCategoryDisplay[article.articleCategory]}
       </div>
-
-      <ArticleActions article={article} isStaff={isStaff} />
     </>
   );
 };

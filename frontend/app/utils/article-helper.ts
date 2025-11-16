@@ -53,6 +53,7 @@ export async function getUserArticles(): Promise<UserArticles>{
 export async function getArticleData(id: number): Promise<Article>{
   try {
     const response = await apiServer.get(`/raport/${id}/`);
+    console.log(response.data)
     const transformedArticle = {
       ...response.data,
       articleType: response.data.raport_type,
