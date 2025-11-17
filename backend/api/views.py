@@ -20,7 +20,7 @@ from raports.models import Raport, RaportReview
 from users.models import User
 from publishers.models import Publisher, PublisherMembership
 
-from raports.serializers import RaportSerializer, NewOrUpdateRaportSerializer, RaportReviewSerializer, RaportListSerializer, AuthorRaportSerializer, ReviewerRaportSerializer, AdminRaportSerializer, CreateReviewSerializer
+from raports.serializers import RaportSerializer, RaportReviewReviewerSerializer, PublisherRaportsSerializer, NewOrUpdateRaportSerializer, RaportReviewSerializer, RaportListSerializer, AuthorRaportSerializer, ReviewerRaportSerializer, AdminRaportSerializer, CreateReviewSerializer
 from users.serializers import UserSerializer, UserRegistrationSerializer, CustomTokenObtainPairSerializer
 from publishers.serializers import PublisherSerializer, PublisherMembershipSerializer
 
@@ -133,14 +133,14 @@ class UserViews:
         def get(self, request):
             user = self.request.user
             authored_raports = Raport.objects.filter(author=user)
-            review_raports = Raport.objects.filter(reviewers=user)
+            user_reviews = RaportReview.objects.filter(reviewer=user)
             
             authored_serializer = self.serializer_class(authored_raports, many=True)
-            review_serializer = self.serializer_class(review_raports, many=True)
+            reviews_serializer = RaportReviewReviewerSerializer(user_reviews, many=True)
             
             user_raports = {
                 "authored_raports": authored_serializer.data,
-                "raports_to_review": review_serializer.data
+                "user_reviews": reviews_serializer.data
             }
             return Response(user_raports, status=status.HTTP_200_OK)
         
@@ -361,7 +361,7 @@ class UserViews:
                 )
     
     class PublisherRaportsView(APIView):
-        serializer_class = RaportSerializer
+        serializer_class = PublisherRaportsSerializer
         permission_classes = [IsAuthenticated]
 
         def get(self, request, *args, **kwargs):
@@ -374,15 +374,14 @@ class UserViews:
                 return Response({"all_raports": serializer.data})
             else:
                 authored_raports = Raport.objects.filter(publisher__id=publisher_id, author=user)
-
-                review_raports = Raport.objects.filter(publisher__id=publisher_id, reviewers=user)
+                user_reviews = RaportReview.objects.filter(raport__publisher__id=publisher_id, reviewer=user)
 
                 authored_serializer = self.serializer_class(authored_raports, many=True)
-                review_serializer = self.serializer_class(review_raports, many=True)
+                review_serializer = RaportReviewReviewerSerializer(user_reviews, many=True)
 
                 return Response({
                     "authored_raports": authored_serializer.data,
-                    "raports_to_review": review_serializer.data
+                    "user_reviews": review_serializer.data
                 })
     
     class PublishersView(generics.ListAPIView):

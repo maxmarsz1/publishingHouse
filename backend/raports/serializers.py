@@ -11,6 +11,13 @@ class RaportSerializer(serializers.ModelSerializer):
         model = Raport
         fields = ['id', 'title', 'author', 'publisher', 'abstract', 'reviewers', 'created_at', 'status', 'comment']
         
+        
+class PublisherRaportsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Raport
+        fields = ['id', 'title', 'status']
+        order = ['-created_at']
+
 class NewOrUpdateRaportSerializer(serializers.ModelSerializer):
     class Meta:
         model = Raport
@@ -50,6 +57,18 @@ class RaportReviewSerializer(serializers.ModelSerializer):
         model = RaportReview
         fields = ['id', 'raport', 'reviewer', 'comment', 'status', 'review_date', 'grade']
 
+class RaportReviewReviewerSerializer(serializers.ModelSerializer):
+    raport = serializers.SerializerMethodField()
+
+    class Meta:
+        model = RaportReview
+        fields = ['id', 'raport', 'status']
+        
+    def get_raport(self, obj):
+        return {
+            "id": obj.raport.id,
+            "title": obj.raport.title
+        } if obj.raport else None
 
 class AuthorRaportSerializer(serializers.ModelSerializer):
     '''Used for author RaportView'''

@@ -18,8 +18,6 @@ interface ArticleActionsProps {
 
 const ArticleActions = ({article, isStaff, reviewStatus}: ArticleActionsProps) => {
   async function handleDownload(){
-    if(!article.file || article.file == '' || typeof article.file !== 'string') return;
-
     try {
       const response = await downloadArticle(article.id);
       const blob = new Blob([response], { type: 'application/pdf' });

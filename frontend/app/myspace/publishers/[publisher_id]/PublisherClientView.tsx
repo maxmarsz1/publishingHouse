@@ -11,6 +11,7 @@ import { Article, Publisher, UserArticles } from '@/app/types/types';
 import styles from './PublisherClientView.module.css'
 import PublisherName from '@/app/components/publisher/PublisherName';
 import PublisherDescription from '@/app/components/publisher/PublisherDescription';
+import ReviewsTable from '@/app/components/article/ReviewsTable';
 
 const PublisherClientView = ({
   publisher,
@@ -79,9 +80,8 @@ const PublisherClientView = ({
             title={'Twoje raporty'}
             articles={regularUserArticles.authored_articles}
           />
-          <ArticleTable
-            title={'Raporty do recenzji'}
-            articles={regularUserArticles.articles_to_review}
+          <ReviewsTable
+            reviews={regularUserArticles.user_reviews}
           />
         </>
       )}

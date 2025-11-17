@@ -9,7 +9,7 @@ export interface Publisher {
 
 export interface UserArticles {
     authored_articles: Article[],
-    articles_to_review: Article[]
+    user_reviews: Review[]
 }
 
 export interface User {
@@ -38,7 +38,6 @@ export interface Article {
     toReview?: boolean,
     review?: Review,
     isAuthor?: boolean,
-    file: File | string,   // Optional for now
     reviews?: Review[],
     reviewers?: User[]
 }
@@ -56,7 +55,7 @@ export interface NewArticle {
 
 export interface Review {
     id: number,
-    article?: Article,
+    raport?: Article,
     reviewer?: User,
     comment: string,
     review_date: string,

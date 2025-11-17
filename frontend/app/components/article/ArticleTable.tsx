@@ -1,6 +1,6 @@
 import React from 'react'
 import { Article } from '../../types/types'
-import styles from './ArticleTable.module.css'
+import styles from './Table.module.css'
 import { getStatusDisplayText } from '../../utils/status-helper'
 import Link from 'next/link'
 

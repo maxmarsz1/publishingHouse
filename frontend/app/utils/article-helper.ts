@@ -20,13 +20,13 @@ export async function getUserPublisherArticles(id: number): Promise<UserArticles
     console.log("Fetched articles data:", response.data);
     return {
       authored_articles: response.data.authored_raports,
-      articles_to_review: response.data.raports_to_review
+      user_reviews: response.data.user_reviews
     } as UserArticles;
   } catch (error) {
     console.error("Error fetching articles:", error);
     return {
       authored_articles: [],
-      articles_to_review: []
+      user_reviews: []
     };
   }
 }
@@ -36,8 +36,8 @@ export async function getUserArticles(): Promise<UserArticles>{
     const response = await apiServer.get(`/user/raports/`);
     console.log(response.data)
     const transformedArticle = {
-      authored_articles: response.data.authored_raports,
-      articles_to_review: response.data.raports_to_review
+      authored_articles: response.data.authored_raports ? response.data.authored_raports : [],
+      user_reviews: response.data.user_reviews ? response.data.user_reviews : []
     }
     console.log("Fetched articles data:", transformedArticle);
     return transformedArticle as UserArticles;
@@ -45,7 +45,7 @@ export async function getUserArticles(): Promise<UserArticles>{
     console.error("Error fetching articles:", error);
     return {
       authored_articles: [],
-      articles_to_review: []
+      user_reviews: []
     };
   }
 }

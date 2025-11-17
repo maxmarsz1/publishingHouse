@@ -5,9 +5,9 @@ import React, { useState } from 'react'
 import { Article, ReviewStatus } from '@/app/types/types'
 import styles from './ArticleViewClient.module.css'
 import ArticleData from '@/app/components/article/ArticleData'
-import ArticleReviews from '@/app/components/article/ArticleReviews'
 import ArticleReviewerInfo from '@/app/components/article/ArticleReviewerInfo'
 import ArticleActions from '@/app/components/article/ArticleActions'
+import ArticleReviewsTable from '@/app/components/article/ArticleReviewsTable'
 
 
 interface Props{
@@ -23,8 +23,8 @@ const ArticleViewClient = ({isStaff, article}: Props) => {
 
       <ArticleData article={article} isStaff={isStaff}/>
       <ArticleActions article={article} isStaff={isStaff} reviewStatus={reviewStatus}/>
-      {article.reviews && article.reviews.length > 0 &&
-        <ArticleReviews reviews={article.reviews} />
+      {article.reviews &&
+        <ArticleReviewsTable isAuthor={article.isAuthor} reviews={article.reviews} />
       }
       {article.review && 
         <ArticleReviewerInfo review={article.review} reviewStatus={reviewStatus} setReviewStatus={setReviewStatus!} />
