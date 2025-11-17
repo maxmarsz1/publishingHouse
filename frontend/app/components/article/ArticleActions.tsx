@@ -40,7 +40,7 @@ const ArticleActions = ({article, isStaff, reviewStatus}: ArticleActionsProps) =
 
   return (
     <div className={styles.container}>
-        {article.isAuthor || isStaff || reviewStatus && reviewStatus == ReviewStatus.Pending &&
+        {(article.isAuthor || isStaff || (reviewStatus && reviewStatus == ReviewStatus.Pending)) &&
           <Button className={styles.downloadBtn} variant='contained' onClick={handleDownload}>
             Pobierz artykuł&nbsp;
             <FontAwesomeIcon icon={faDownload} />  

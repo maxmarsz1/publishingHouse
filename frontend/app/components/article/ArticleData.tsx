@@ -16,7 +16,7 @@ interface Props {
 const ArticleData = ({ article, isStaff }: Props) => {
   const createdAt = new Date(article.createdAt);
   const createdAtString = createdAt.toLocaleDateString("pl-PL", {
-    hour: "numeric",
+    hour: "2-digit",
     minute: "2-digit",
     year: "numeric",
     month: "long",

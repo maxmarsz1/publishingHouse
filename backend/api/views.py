@@ -11,6 +11,8 @@ from django.conf import settings
 from datetime import datetime, timedelta
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
 import pytz
 
 
@@ -497,6 +499,23 @@ class UserViews:
         def get(self, request):
             serializer = UserSerializer(request.user)
             return Response(serializer.data)
+        
+        def put(self, request):
+            user = request.user
+
+            try:
+                serializer = UserSerializer(user, data=request.data, partial=True)
+                if serializer.is_valid():
+                    serializer.save()
+                    return Response(serializer.data, status=status.HTTP_200_OK)
+                else:
+                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+            except Exception as e:
+                return Response(
+                    {"error": str(e)},
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                    )
     
     class ChangePasswordView(APIView):
         permission_classes = [IsAuthenticated]
@@ -507,16 +526,18 @@ class UserViews:
             try:
                 current_password = request.data['current_password']
                 new_password = request.data['new_password']
-                new_password_repeat = request.data['new_password_repeat']
 
                 if not user.check_password(current_password):
                     return Response(
                         {"error": "Current password is incorrect"},
                         status=status.HTTP_400_BAD_REQUEST
                     )
-                if new_password != new_password_repeat:
+                    
+                try:
+                    validate_password(new_password, user=user)
+                except ValidationError as e:
                     return Response(
-                        {"error": "New passwords do not match"},
+                        {"error": e.messages},
                         status=status.HTTP_400_BAD_REQUEST
                     )
 

@@ -11,7 +11,7 @@
       "raport_type": "original_research",
       "category": "artificial_intelligence",
       "abstract": "A comprehensive study on the role of Artificial Intelligence in network defense systems, covering intrusion detection and threat modeling.",
-      "file": "raports/files/report_ai_cybersecurity.pdf",
+      "file": "raports/files/raport_ai_cybersecurity.pdf",
       "keywords": "AI, cybersecurity, deep learning, network defense",
       "created_at": "2025-01-10T15:00:00Z",
       "comment": null
@@ -29,7 +29,7 @@
       "raport_type": "technical_report",
       "category": "cloud_computing",
       "abstract": "Review of current best practices for deploying applications across heterogeneous cloud environments (AWS, Azure, GCP).",
-      "file": "raports/files/report_multi_cloud.pdf",
+      "file": "raports/files/raport_multi_cloud.pdf",
       "keywords": "AWS, Azure, multi-cloud, DevOps, scalability",
       "created_at": "2025-01-15T16:00:00Z",
       "comment": null
@@ -43,7 +43,8 @@
       "reviewer": 3,
       "review_date": "2025-01-12T10:30:00Z",
       "comment": "Excellent work, minor edits needed for the conclusion section. The methodology is sound.",
-      "status": "submitted"
+      "status": "submitted",
+      "grade": 5
     }
   },
   {

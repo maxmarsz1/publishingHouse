@@ -66,5 +66,15 @@
       "role": "member",
       "date_joined": "2025-01-04T12:02:00Z"
     }
+  },
+  {
+    "model": "publishers.publishermembership",
+    "pk": 6,
+    "fields": {
+      "user": 3,
+      "publisher": 2,
+      "role": "member",
+      "date_joined": "2025-01-04T12:02:00Z"
+    }
   }
 ]

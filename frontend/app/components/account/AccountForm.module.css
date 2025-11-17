@@ -1,0 +1,28 @@
+.halfWidthInput{
+    width: calc(50% - 8px);
+}
+.halfWidthInput:first-of-type{
+    margin-right: 16px;
+}
+
+.newPasswordContainer{
+    background-color: var(--background1);
+    border-radius: 20px;
+    padding: 20px 40px;
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+}
+.newPassBtn{
+    margin-top: 1rem !important;
+    align-self: flex-end;
+}
+.btns{
+    margin: 1rem 0;
+    display: flex;
+    gap: 8px;
+    justify-content: end;
+}
+.input input[disabled], .input label{
+    -webkit-text-fill-color: white !important
+}
