@@ -6,7 +6,8 @@ from rest_framework import exceptions
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
 from django.http import FileResponse
-from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from rest_framework_simplejwt.exceptions import InvalidToken
 from django.conf import settings
 from datetime import datetime, timedelta
 from rest_framework_simplejwt.exceptions import TokenError
@@ -236,7 +237,7 @@ class UserViews:
                         status=status.HTTP_403_FORBIDDEN
                     )
                     
-                if raport.publisher.due_date and raport.publisher.due_date < timezone.now().date():
+                if raport.publisher.due_date and raport.publisher.due_date < timezone.now():
                     return Response(
                         {"error": "Cannot delete a raport. The publisher's due date has passed."},
                         status=status.HTTP_400_BAD_REQUEST
@@ -589,7 +590,42 @@ class UserViews:
                 del response.data['refresh']
 
             return response
+        
+    class CustomTokenRefreshView(TokenRefreshView):
+        def post(self, request, *args, **kwargs):
+            # Make mutable copy of request data
+            mutable_data = request.data.copy()
 
+            # Use refresh token from cookie if available
+            refresh_token = request.COOKIES.get("refreshToken")
+            if refresh_token:
+                mutable_data["refresh"] = refresh_token
+
+            # Temporarily replace request.data with mutable copy
+            request._full_data = mutable_data  # DRF >= 3.13 supports this hack
+
+            # Call parent post
+            response = super().post(request, *args, **kwargs)
+
+            # If refresh succeeded, set access token in HttpOnly cookie
+            if response.status_code == 200:
+                access_token = response.data.get("access")
+                if access_token:
+                    access_lifetime = settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME']
+
+                    response.set_cookie(
+                        key='accessToken',
+                        value=access_token,
+                        expires=datetime.now(pytz.utc) + access_lifetime,
+                        secure=settings.SECURE_PROXY_SSL_HEADER is not None,
+                        httponly=True,
+                        samesite='Lax',
+                    )
+
+                    # Optionally remove token from response body
+                    del response.data['access']
+
+            return response
     
 
     class LogoutView(APIView):

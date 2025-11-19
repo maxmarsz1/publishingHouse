@@ -1,5 +1,5 @@
 import React from 'react'
-import PublishersContainer from "../../components/publisher/PublishersContainer"
+import MagazineContainer from "../../components/magazines/MagazineContainer"
 import { getPublishers } from '@/app/utils/publisher-helper'
 import { isUserStaff } from '@/app/utils/auth-server-helper'
 
@@ -10,7 +10,7 @@ const Publishers = async () => {
 
   return (
     <>
-      <PublishersContainer publishers={publishers} isStaff={isStaff}/>
+      <MagazineContainer publishers={publishers} isStaff={isStaff}/>
     </>
   )
 }

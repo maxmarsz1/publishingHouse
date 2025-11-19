@@ -6,15 +6,15 @@ import { getArticleData } from '@/app/utils/article-helper'
 
 interface Props{
     params: {
-        article_id: string
+        articleId: string
     }
 }
 
 const ArticleReviewPage = async ({params}: Props) => {
-    const { article_id } = await params;
-    const idAsNumber = +article_id; 
+    const { articleId } = await params;
+    const idAsNumber = +articleId; 
     if (isNaN(idAsNumber) || !idAsNumber) {
-      console.error(`Invalid article_id provided: ${article_id}`);
+      console.error(`Invalid article_id provided: ${articleId}`);
     }
     const article: Article = await getArticleData(idAsNumber);
   return (

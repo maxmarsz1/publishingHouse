@@ -7,6 +7,7 @@ import {
 } from "@/app/types/types";
 import styles from "./ArticleData.module.css";
 import { getStatusDisplayText } from "@/app/utils/status-helper";
+import Link from "next/link";
 
 interface Props {
   article: Article;
@@ -36,8 +37,8 @@ const ArticleData = ({ article, isStaff }: Props) => {
         </div>
       )}
       <div className={styles.infoLine}>
-        <strong>Wydawnictwo: </strong>
-        {article.publisher.name}
+        <strong>Czasopismo: </strong>
+        <Link href={`/myspace/magazines/${article.publisher.id}`}>{article.publisher.name}</Link>
       </div>
       <div className={styles.infoLine}>
         <strong>Abstract: </strong>

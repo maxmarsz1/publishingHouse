@@ -6,7 +6,7 @@ import { Button, TextField } from "@mui/material";
 import { Publisher } from "@/app/types/types";
 import { joinPublisher } from "@/app/utils/publisher-helper-client";
 
-const JoinPublisherModal = ({
+const JoinMagazineModal = ({
   setShowModal,
   setPublishersState,
 }: {
@@ -37,7 +37,7 @@ const JoinPublisherModal = ({
     <>
       <Backdrop />
       <div className={styles.modal}>
-        <h2>Dołącz do wydawnictwa</h2>
+        <h2>Dołącz do czasopisma</h2>
         <div className={styles.input}>
           <span>Kod: </span>
           <TextField variant="standard" value={joinCode} onChange={(e) => setJoinCode(e.target.value)} style={{ width: "100%" }} />
@@ -53,4 +53,4 @@ const JoinPublisherModal = ({
   );
 };
 
-export default JoinPublisherModal;
+export default JoinMagazineModal;

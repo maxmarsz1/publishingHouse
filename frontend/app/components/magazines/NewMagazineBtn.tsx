@@ -6,12 +6,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 
 import styles from './Btn.module.css'
-import JoinPublisherModal from './JoinPublisherModal'
+import NewMagazineModal from './NewMagazineModal'
 import { Publisher } from '@/app/types/types'
 
 
 
-const JoinPublisherBtn = ({setPublishersState}: {setPublishersState: React.Dispatch<React.SetStateAction<Publisher[]>>}) => {
+const NewMagazineBtn = ({setPublishersState}: {setPublishersState: React.Dispatch<React.SetStateAction<Publisher[]>>}) => {
     const [showModal, setShowModal] = useState(false);
 
     function handleClick(){
@@ -21,15 +21,15 @@ const JoinPublisherBtn = ({setPublishersState}: {setPublishersState: React.Dispa
   return (
     <>
         <Button className={styles.joinBtn} variant='contained' onClick={handleClick}>
-            Dołącz do wydawnictwa
+            Nowe czasopismo
             <FontAwesomeIcon icon={faPlus}/>
         </Button>
         {showModal && (
-            <JoinPublisherModal setShowModal={setShowModal} setPublishersState={setPublishersState}/>
+            <NewMagazineModal setShowModal={setShowModal} setPublishersState={setPublishersState}/>
         )}
         
     </>
   )
 }
 
-export default JoinPublisherBtn
+export default NewMagazineBtn

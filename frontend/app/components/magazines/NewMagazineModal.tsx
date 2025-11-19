@@ -8,7 +8,7 @@ import styles from "./Modal.module.css";
 import { createPublisher } from "@/app/utils/publisher-helper-client";
 import { Publisher } from "@/app/types/types";
 
-const NewPublisherModal = ({
+const NewMagazineModal = ({
   setShowModal,
   setPublishersState,
 }: {
@@ -61,7 +61,7 @@ const NewPublisherModal = ({
     <>
       <Backdrop />
       <div className={styles.modal}>
-        <h2>Stwórz nowe wydawnictwo</h2>
+        <h2>Stwórz nowe czasopismo</h2>
         {error && <p className={styles.error}>{error}</p>}
         <TextField
           variant="standard"
@@ -92,4 +92,4 @@ const NewPublisherModal = ({
   );
 };
 
-export default NewPublisherModal;
+export default NewMagazineModal;

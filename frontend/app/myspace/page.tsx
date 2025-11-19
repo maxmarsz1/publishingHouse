@@ -1,5 +1,5 @@
 import React from 'react'
-import Publishers from './publishers/page'
+import Publishers from './magazines/page'
 
 const MySpace = () => {
   return (

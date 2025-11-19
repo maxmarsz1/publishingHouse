@@ -4,10 +4,10 @@ import { Button } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 
-import styles from "./PublisherName.module.css";
+import styles from "./MagazineName.module.css";
 import { updatePublisher } from "@/app/utils/publisher-helper-client";
 
-const PublisherName = ({
+const MagazineName = ({
   publisherId,
   publisherName,
   isStaff,
@@ -86,4 +86,4 @@ const PublisherName = ({
   );
 };
 
-export default PublisherName;
+export default MagazineName;

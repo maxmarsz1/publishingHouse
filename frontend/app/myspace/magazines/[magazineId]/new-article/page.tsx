@@ -5,16 +5,16 @@ import ArticleForm from "@/app/components/article/ArticleForm";
 import ArticleFormatting from "@/app/components/article/ArticleFormating";
 
 interface Props {
-  params: { publisher_id: string };
+  params: { magazineId: string };
 }
 
 
 const page = async ({ params }: Props) => {
-  const { publisher_id } = await params;
+  const { magazineId } = await params;
   
-  const idAsNumber = +publisher_id; 
+  const idAsNumber = +magazineId; 
   if (isNaN(idAsNumber) || !idAsNumber) {
-    console.error(`Invalid publisherId provided: ${publisher_id}`);
+    console.error(`Invalid publisherId provided: ${magazineId}`);
   }
   const publisher = await getPublisherData(idAsNumber);
 

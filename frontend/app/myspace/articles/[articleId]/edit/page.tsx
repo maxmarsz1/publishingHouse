@@ -6,16 +6,16 @@ import ArticleFormatting from "@/app/components/article/ArticleFormating";
 import { getArticleData } from "@/app/utils/article-helper";
 
 interface Props {
-  params: { article_id: string };
+  params: { articleId: string };
 }
 
 
 const page = async ({ params }: Props) => {
-  const { article_id } = await params;
+  const { articleId } = await params;
   
-  const idAsNumber = +article_id; 
+  const idAsNumber = +articleId; 
   if (isNaN(idAsNumber) || !idAsNumber) {
-    console.error(`Invalid article_id provided: ${article_id}`);
+    console.error(`Invalid article_id provided: ${articleId}`);
   }
   const article = await getArticleData(idAsNumber);
 

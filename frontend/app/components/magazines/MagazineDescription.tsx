@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencilAlt } from '@fortawesome/free-solid-svg-icons';
 import { updatePublisher } from '@/app/utils/publisher-helper-client';
 
-const PublisherDescription = ({
+const MagazineDescription = ({
   publisherDescription,
   publisherId,
   isStaff
@@ -84,4 +84,4 @@ const PublisherDescription = ({
   );
 };
 
-export default PublisherDescription;
+export default MagazineDescription;

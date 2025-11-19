@@ -15,7 +15,7 @@ const DeleteArticleBtn = ({articleId}: {articleId: number}) => {
     async function handleConfirm(){
         try{
             await deleteArticle(articleId);
-            router.push("/myspace/publishers");
+            router.push("/myspace/magazines");
         }
         catch(error){
             console.error("Error deleting article:", error);

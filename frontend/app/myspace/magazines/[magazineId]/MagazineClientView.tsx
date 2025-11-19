@@ -5,15 +5,15 @@ import { Button } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClock, faPlus } from '@fortawesome/free-solid-svg-icons';
 import Link from 'next/link';
-import AdminActions from '@/app/components/publisher/AdminActions';
+import AdminActions from '@/app/components/magazines/AdminActions';
 import ArticleTable from '@/app/components/article/ArticleTable';
 import { Article, Publisher, UserArticles } from '@/app/types/types';
-import styles from './PublisherClientView.module.css'
-import PublisherName from '@/app/components/publisher/PublisherName';
-import PublisherDescription from '@/app/components/publisher/PublisherDescription';
+import styles from './MagazineClientView.module.css'
+import MagazineName from '@/app/components/magazines/MagazineName';
+import MagazineDescription from '@/app/components/magazines/MagazineDescription';
 import ReviewsTable from '@/app/components/article/ReviewsTable';
 
-const PublisherClientView = ({
+const MagazineClientView = ({
   publisher,
   dueDate: initialDueDate,
   isStaff,
@@ -43,8 +43,8 @@ const PublisherClientView = ({
     <>
       <div>
         <div className={styles.topContainer}>
-          <PublisherName publisherName={publisher.name} publisherId={publisher.id} isStaff={isStaff}/>
-          <PublisherDescription publisherDescription={publisher.description} publisherId={publisher.id} isStaff={isStaff}/>
+          <MagazineName publisherName={publisher.name} publisherId={publisher.id} isStaff={isStaff}/>
+          <MagazineDescription publisherDescription={publisher.description} publisherId={publisher.id} isStaff={isStaff}/>
           <p className={styles.dueDateContainer}>
             <span>
               <FontAwesomeIcon icon={faClock} />&nbsp;
@@ -89,4 +89,4 @@ const PublisherClientView = ({
   );
 };
 
-export default PublisherClientView;
+export default MagazineClientView;

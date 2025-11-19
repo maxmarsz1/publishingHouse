@@ -1,6 +1,6 @@
 import React from "react";
 import NewDueDateBtn from "./NewDueDateBtn";
-import DeletePublisherBtn from "./DeletePublisherBtn";
+import DeleteMagazineBtn from "./DeleteMagazineBtn";
 import { Publisher } from "@/app/types/types";
 import styles from "./AdminActions.module.css";
 import JoinCode from "./JoinCode";
@@ -18,7 +18,7 @@ const AdminActions = ({
       <div className={styles.left}>
         <NewDueDateBtn publisher={publisher} onDueDateUpdate={onDueDateUpdate} />
         <MembersBtn publisher={publisher} />
-        {publisher.id && <DeletePublisherBtn publisherId={publisher.id} />}
+        {publisher.id && <DeleteMagazineBtn publisherId={publisher.id} />}
       </div>
       <JoinCode publisher={publisher} />
     </div>

@@ -38,7 +38,7 @@ const Navbar = ({isStaff}: {isStaff: boolean}) => {
           <Link href='/myspace/'>
             <Image alt='logo' src="/logo.webp" width={128} height={44} className={styles.logo}/>
           </Link>
-          <Link className={styles.desktopLink} href="/myspace/publishers">Wydawnictwa</Link>
+          <Link className={styles.desktopLink} href="/myspace/magazines">Czasopisma</Link>
           {!isStaff &&
             <Link className={styles.desktopLink} href="/myspace/articles">Raporty</Link>
           }

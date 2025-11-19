@@ -39,7 +39,8 @@ export interface Article {
     review?: Review,
     isAuthor?: boolean,
     reviews?: Review[],
-    reviewers?: User[]
+    reviewers?: User[],
+    file?: File,
 }
 
 export interface NewArticle {

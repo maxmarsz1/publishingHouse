@@ -8,7 +8,7 @@ import ConfirmationDialog from '../general/ConfirmationDialog';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
-const DeletePublisherBtn = ({publisherId}: {publisherId: number}) => {
+const DeleteMagazineBtn = ({publisherId}: {publisherId: number}) => {
     const [showModal, setShowModal] = useState(false);
     const router = useRouter();
 
@@ -37,4 +37,4 @@ const DeletePublisherBtn = ({publisherId}: {publisherId: number}) => {
   )
 }
 
-export default DeletePublisherBtn
+export default DeleteMagazineBtn
