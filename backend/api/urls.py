@@ -36,10 +36,10 @@ urlpatterns = [
     path('raport/<int:pk>/download/', UserViews.DownloadRaportFileView.as_view(), name='download-raport'),
     path('user/', UserViews.ProfileView.as_view(), name='profile'),
 
-    path('register/', UserViews.RegistrationView.as_view(), name='register'),
-    path('login/', UserViews.CustomTokenObtainPairView.as_view(), name='login'),
+    path('auth/register/', UserViews.RegistrationView.as_view(), name='register'),
+    path('auth/login/', UserViews.CustomTokenObtainPairView.as_view(), name='login'),
     path('auth/refresh/', UserViews.CustomTokenRefreshView.as_view(), name='token_refresh'),
-    path('logout/', UserViews.LogoutView.as_view(), name='logout'),
+    path('auth/logout/', UserViews.LogoutView.as_view(), name='logout'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

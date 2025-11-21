@@ -17,7 +17,7 @@ const Navbar = ({isStaff}: {isStaff: boolean}) => {
     e.preventDefault();
 
     try {
-      const response = await api.post('/logout/'); 
+      const response = await api.post('/auth/logout/'); 
       
       console.log('Logout successful:', response.data);
 

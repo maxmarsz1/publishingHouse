@@ -5,18 +5,20 @@ import { faDownload, faEdit, faStar } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button } from '@mui/material';
 import Link from 'next/link';
-import React from 'react'
+import React, { useContext } from 'react'
 import DeleteArticleBtn from './DeleteArticleBtn';
 import styles from './ArticleActions.module.css';
 import { downloadArticle } from '@/app/utils/article-helper-client';
+import { UserContext } from '@/app/context/UserContext';
 
 interface ArticleActionsProps {
     article: Article;
-    isStaff: boolean;
     reviewStatus: ReviewStatus | null;
 }
 
-const ArticleActions = ({article, isStaff, reviewStatus}: ArticleActionsProps) => {
+const ArticleActions = ({article, reviewStatus}: ArticleActionsProps) => {
+  const { isStaff } = useContext(UserContext);
+  
   async function handleDownload(){
     try {
       const response = await downloadArticle(article.id);

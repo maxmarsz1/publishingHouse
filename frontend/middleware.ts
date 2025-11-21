@@ -3,33 +3,26 @@ import type { NextRequest } from 'next/server';
 
 const authRoutes = ['/auth/login', '/auth/register'];
 
-export function middleware(request: NextRequest) {
-  const accessToken = request.cookies.get('accessToken')?.value;
-  const refreshToken = request.cookies.get('refreshToken')?.value;
+interface MiddlewareRequest extends NextRequest {
+  cookies: NextRequest['cookies'];
+}
 
+export function middleware(request: MiddlewareRequest) {
+  const accessToken = request.cookies.get('access')?.value;
+  const refreshToken = request.cookies.get('refresh')?.value;
   const pathname = request.nextUrl.pathname;
 
   const isProtectedRoute = pathname.startsWith('/myspace');
   const isAuthRoute = authRoutes.includes(pathname);
 
-  // ---------------------------
-  // 1. Protect /myspace/*
-  // ---------------------------
   if (isProtectedRoute) {
-    // If no access token AND no refresh token → fully logged out
     if (!accessToken && !refreshToken) {
       const loginUrl = new URL('/auth/login', request.url);
       return NextResponse.redirect(loginUrl);
     }
-
-    // If accessToken missing but refreshToken exists → allow
-    // Axios on the server will refresh the token automatically.
     return NextResponse.next();
   }
 
-  // ---------------------------
-  // 2. Block access to login/register if logged in
-  // ---------------------------
   if (isAuthRoute) {
     if (accessToken || refreshToken) {
       const myspaceUrl = new URL('/myspace', request.url);
@@ -37,7 +30,6 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  // Allow everything else
   return NextResponse.next();
 }
 

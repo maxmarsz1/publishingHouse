@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import TextField from "@mui/material/TextField";
 import { Button } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -6,16 +6,16 @@ import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 
 import styles from "./MagazineName.module.css";
 import { updatePublisher } from "@/app/utils/publisher-helper-client";
+import { UserContext } from "@/app/context/UserContext";
 
 const MagazineName = ({
   publisherId,
   publisherName,
-  isStaff,
 }: {
   publisherId: number;
   publisherName: string;
-  isStaff: boolean;
 }) => {
+  const { isStaff } = useContext(UserContext);
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState(publisherName);
   const [nameInput, setNameInput] = useState(publisherName);

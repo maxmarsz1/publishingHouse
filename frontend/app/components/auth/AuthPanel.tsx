@@ -1,13 +1,14 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import apiClient from '@/app/utils/api-client'
 import InputLine from './InputLine'
 import styles from './AuthPanel.module.css'
 import { Button } from '@mui/material'
 import Link from 'next/link'
 import { AxiosError } from 'axios'
+import { UserContext } from '@/app/context/UserContext'
+import { jwtDecode } from "jwt-decode";
 
 interface Props {
     mode: string
@@ -27,13 +28,15 @@ const AuthPanel = ({ mode }: Props) => {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const { setIsStaff } = useContext(UserContext);
 
 
   const handleSubmit = async () => {
     setLoading(true);
     setError(null);
     
-    const endpointPath = isLogin ? `/login/` : `/register/`; 
+    const endpointPath = isLogin ? `login/` : `register/`; 
+    const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
     
     let data: any = {
       username,
@@ -50,38 +53,37 @@ const AuthPanel = ({ mode }: Props) => {
     }
 
     try {
-      const response = await apiClient.post(endpointPath, data); 
-      console.log(`${isLogin ? 'Login' : 'Registration'} successful!`, response.data);
+      const res = await fetch(`${API_BASE_URL}/auth/${endpointPath}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+        credentials: 'include'
+      });
+      const resData = await res.json();
+      console.log(`${isLogin ? 'Login' : 'Registration'} successful!`, resData);
 
       if (isLogin) {
-        // alert('Zalogowano pomyślnie!');
-        // 💡 You should now redirect the user or update application state.
+        const decodeResponse = await fetch('/api/auth/decode', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+        });
+      
+        if (decodeResponse.ok) {
+          const { isStaff } = await decodeResponse.json();
+          setIsStaff(isStaff);
+        } else {
+          console.error('Failed to decode access token:', await decodeResponse.json());
+        }
         router.push('/myspace');
       } else {
-        // alert('Rejestracja pomyślna! Teraz możesz się zalogować.');
         router.push('/auth/login'); 
       }
     } catch (err) {
-      console.error('API Error:', err);
-      if (err instanceof AxiosError && err.response) {
-        const errorData = err.response.data;
-        console.log(err.response.data)
-        
-        let errorMessage = "Wystąpił błąd.";
-        if (errorData.detail) {
-            errorMessage = errorData.detail; // Common for JWT errors
-        } else if (errorData.username) {
-            errorMessage = `Login: ${errorData.username.join(' ')}`; // Common for validation errors
-        } else if (errorData.password) {
-            errorMessage = `Hasło: ${errorData.password.join(' ')}`;
-        } else if (errorData.email) {
-            errorMessage = `Email: ${errorData.email.join(' ')}`;
-        }
-        
-        setError(`Błąd: ${errorMessage}`);
-
+      console.error(`${isLogin ? 'Login' : 'Registration'} error:`, err);
+      if (err instanceof Error) {
+        setError(err.message);
       } else {
-        setError("Wystąpił nieznany błąd podczas komunikacji z serwerem.");
+        setError("Wystąpił nieoczekiwany błąd.");
       }
     } finally {
       setLoading(false);

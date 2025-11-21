@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 
 import {
   Article,
@@ -8,13 +8,14 @@ import {
 import styles from "./ArticleData.module.css";
 import { getStatusDisplayText } from "@/app/utils/status-helper";
 import Link from "next/link";
+import { UserContext } from "@/app/context/UserContext";
 
 interface Props {
   article: Article;
-  isStaff: boolean;
 }
 
-const ArticleData = ({ article, isStaff }: Props) => {
+const ArticleData = ({ article }: Props) => {
+  const { isStaff } = useContext(UserContext);
   const createdAt = new Date(article.createdAt);
   const createdAtString = createdAt.toLocaleDateString("pl-PL", {
     hour: "2-digit",

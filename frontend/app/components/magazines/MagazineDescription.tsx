@@ -1,19 +1,19 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencilAlt } from '@fortawesome/free-solid-svg-icons';
 import { updatePublisher } from '@/app/utils/publisher-helper-client';
+import { UserContext } from '@/app/context/UserContext';
 
 const MagazineDescription = ({
   publisherDescription,
-  publisherId,
-  isStaff
+  publisherId
 }: {
   publisherDescription: string | undefined;
   publisherId: number;
-  isStaff: boolean;
 }) => {
+  const { isStaff } = useContext(UserContext);
   const [isEditing, setIsEditing] = useState(false);
   const [description, setDescription] = useState(publisherDescription || '');
   const [descriptionInput, setDescriptionInput] = useState(publisherDescription || '');

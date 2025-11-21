@@ -391,6 +391,7 @@ class UserViews:
 
         def get_queryset(self):
             user = self.request.user
+            print(user)
             if user.is_staff:
                 return Publisher.objects.all()
             return Publisher.objects.filter(members=user)
@@ -570,21 +571,21 @@ class UserViews:
                 refresh_lifetime = settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME']
                 
                 response.set_cookie(
-                    key='accessToken',
+                    key='access',
                     value=access_token,
                     expires=datetime.now(pytz.utc) + access_lifetime,
-                    secure=settings.SECURE_PROXY_SSL_HEADER is not None,
+                    secure=True,
                     httponly=True,
-                    samesite='Lax'
+                    samesite='None'
                 )
 
                 response.set_cookie(
-                    key='refreshToken',
+                    key='refresh',
                     value=refresh_token,
                     expires=datetime.now(pytz.utc) + refresh_lifetime,
-                    secure=settings.SECURE_PROXY_SSL_HEADER is not None,
+                    secure=True,
                     httponly=True,
-                    samesite='Lax'
+                    samesite='None'
                 )
                 del response.data['access']
                 del response.data['refresh']
@@ -593,37 +594,15 @@ class UserViews:
         
     class CustomTokenRefreshView(TokenRefreshView):
         def post(self, request, *args, **kwargs):
-            # Make mutable copy of request data
             mutable_data = request.data.copy()
 
-            # Use refresh token from cookie if available
-            refresh_token = request.COOKIES.get("refreshToken")
+            refresh_token = request.COOKIES.get("refresh")
             if refresh_token:
                 mutable_data["refresh"] = refresh_token
 
-            # Temporarily replace request.data with mutable copy
-            request._full_data = mutable_data  # DRF >= 3.13 supports this hack
+            request._full_data = mutable_data
 
-            # Call parent post
             response = super().post(request, *args, **kwargs)
-
-            # If refresh succeeded, set access token in HttpOnly cookie
-            if response.status_code == 200:
-                access_token = response.data.get("access")
-                if access_token:
-                    access_lifetime = settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME']
-
-                    response.set_cookie(
-                        key='accessToken',
-                        value=access_token,
-                        expires=datetime.now(pytz.utc) + access_lifetime,
-                        secure=settings.SECURE_PROXY_SSL_HEADER is not None,
-                        httponly=True,
-                        samesite='Lax',
-                    )
-
-                    # Optionally remove token from response body
-                    del response.data['access']
 
             return response
     
@@ -632,7 +611,7 @@ class UserViews:
         permission_classes = [IsAuthenticated]
 
         def post(self, request):
-            refresh_token = request.COOKIES.get('refreshToken')
+            refresh_token = request.COOKIES.get('refresh')
         
             if not refresh_token:
                 return Response({"detail": "Refresh token not found in cookies."}, status=status.HTTP_400_BAD_REQUEST)
@@ -642,8 +621,8 @@ class UserViews:
                 token.blacklist()
                 
                 response = Response({"detail": "Successfully logged out."}, status=status.HTTP_200_OK)
-                response.delete_cookie('accessToken')
-                response.delete_cookie('refreshToken')
+                response.delete_cookie('access')
+                response.delete_cookie('refresh')
 
                 return response
                 

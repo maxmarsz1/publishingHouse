@@ -8,6 +8,7 @@ import "./globals.css";
 
 import { config } from '@fortawesome/fontawesome-svg-core'
 import '@fortawesome/fontawesome-svg-core/styles.css'
+import { UserProvider } from "./context/UserContext";
 config.autoAddCss = false
 
 const roboto = Roboto({
@@ -38,11 +39,13 @@ export default function RootLayout({
   return (
     <html lang="en" className={poppins.variable}>
       <body>
-        <AppRouterCacheProvider>
-          <ThemeProvider theme={theme}>
-            {children}
-          </ThemeProvider>
-        </AppRouterCacheProvider>
+          <AppRouterCacheProvider>
+            <ThemeProvider theme={theme}>
+              <UserProvider>
+                {children}
+              </UserProvider>
+            </ThemeProvider>
+          </AppRouterCacheProvider>
       </body>
     </html>
   );

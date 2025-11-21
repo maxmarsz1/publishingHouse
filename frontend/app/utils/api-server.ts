@@ -15,7 +15,7 @@ const apiServer = axios.create({
 });
 
 let isRefreshing = false;
-let pendingRequests: ((token: string) => void)[] = [];
+let pendingRequests: (() => void)[] = [];
 
 // ------------------ REQUEST INTERCEPTOR ------------------
 apiServer.interceptors.request.use(async (config: InternalAxiosRequestConfig) => {
@@ -38,62 +38,11 @@ apiServer.interceptors.response.use(
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       console.warn("Access token expired. Attempting to refresh...");
-
-      if (!isRefreshing) {
-        isRefreshing = true;
-
-        try {
-          const newToken = await refreshAccessToken();
-
-          // Resolve queued requests
-          pendingRequests.forEach((cb) => cb(newToken));
-          pendingRequests = [];
-          isRefreshing = false;
-
-          originalRequest.headers.Authorization = `Bearer ${newToken}`;
-          return apiServer(originalRequest);
-
-        } catch (err) {
-          isRefreshing = false;
-          pendingRequests = [];
-          console.error("Token refresh failed:", err);
-          return Promise.reject(err);
-        }
-      }
-
-      // Queue concurrent requests
-      return new Promise((resolve) => {
-        pendingRequests.push((newToken: string) => {
-          originalRequest.headers.Authorization = `Bearer ${newToken}`;
-          resolve(apiServer(originalRequest));
-        });
-      });
     }
 
-    return Promise.reject(error);
+    return Promise.reject(error); // Propagate other errors
   }
 );
 
-// ------------------ REFRESH FUNCTION ------------------
-async function refreshAccessToken(): Promise<string> {
-  try {
-    const NEXT_URL = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-    // Call your Next.js proxy endpoint
-    const response = await axios.post(
-      `${NEXT_URL}/api/auth/refresh`,
-      {},                   // body can be empty; proxy reads cookies
-      { withCredentials: true }
-    );
-
-    const newAccessToken = response.data.access;
-    if (!newAccessToken) throw new Error("No access token returned from proxy");
-
-    return newAccessToken;
-
-  } catch (err) {
-    console.error("Failed to refresh token via proxy:", err);
-    throw err;
-  }
-}
 
 export default apiServer;

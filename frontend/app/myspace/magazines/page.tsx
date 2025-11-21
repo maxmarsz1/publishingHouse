@@ -1,18 +1,19 @@
-import React from 'react'
+'use client'
+
+import React, { useEffect, useState } from 'react'
 import MagazineContainer from "../../components/magazines/MagazineContainer"
 import { getPublishers } from '@/app/utils/publisher-helper'
-import { isUserStaff } from '@/app/utils/auth-server-helper'
+import { Publisher } from '@/app/types/types';
 
 
-const Publishers = async () => {
-  const publishers = await getPublishers();
-  const isStaff = await isUserStaff();
+export default function Publishers() {
+  const [publishers, setPublishers] = useState<Publisher[] | null>(null);
 
-  return (
-    <>
-      <MagazineContainer publishers={publishers} isStaff={isStaff}/>
-    </>
-  )
+  useEffect(() => {
+    getPublishers().then(setPublishers).catch(console.error);
+  }, []);
+
+  if (!publishers) return <p>Ładowanie...</p>;
+
+  return <MagazineContainer publishers={publishers} />;
 }
-
-export default Publishers

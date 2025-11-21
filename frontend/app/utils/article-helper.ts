@@ -1,10 +1,10 @@
 import { Article, UserArticles } from "../types/types";
-import apiServer from "./api-server";
+import apiClient from "./api-client";
 
 
 export async function getAdminPublisherArticles(id: number): Promise<Article[]> {
   try {
-    const response = await apiServer.get(`/publisher/${id}/raports/`);
+    const response = await apiClient.get(`/publisher/${id}/raports/`);
 
     console.log("Fetched articles data:", response.data.all_raports);
     return response.data.all_raports as Article[];
@@ -16,7 +16,7 @@ export async function getAdminPublisherArticles(id: number): Promise<Article[]> 
 
 export async function getUserPublisherArticles(id: number): Promise<UserArticles>{
   try {
-    const response = await apiServer.get(`/publisher/${id}/raports/`);
+    const response = await apiClient.get(`/publisher/${id}/raports/`);
     console.log("Fetched articles data:", response.data);
     return {
       authored_articles: response.data.authored_raports,
@@ -33,7 +33,7 @@ export async function getUserPublisherArticles(id: number): Promise<UserArticles
 
 export async function getUserArticles(): Promise<UserArticles>{
   try {
-    const response = await apiServer.get(`/user/raports/`);
+    const response = await apiClient.get(`/user/raports/`);
     console.log(response.data)
     const transformedArticle = {
       authored_articles: response.data.authored_raports ? response.data.authored_raports : [],
@@ -52,7 +52,7 @@ export async function getUserArticles(): Promise<UserArticles>{
 
 export async function getArticleData(id: number): Promise<Article>{
   try {
-    const response = await apiServer.get(`/raport/${id}/`);
+    const response = await apiClient.get(`/raport/${id}/`);
     console.log(response.data)
     const transformedArticle = {
       ...response.data,
