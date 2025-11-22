@@ -53,12 +53,12 @@ const PublisherViewClient = () => {
         setDueDateReadable(
           due
             ? due.toLocaleString('pl-PL', {
-                day: 'numeric',
-                month: 'long',
-                year: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-              })
+              day: 'numeric',
+              month: 'long',
+              year: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit',
+            })
             : 'Brak'
         );
 
@@ -96,9 +96,9 @@ const PublisherViewClient = () => {
     );
   };
 
-  if (loading) return <p>Loading…</p>;
+  if (loading) return <p>Ładowanie...</p>;
   if (error) return <p>{error}</p>;
-  if (!publisher) return <p>Publisher not found</p>;
+  if (!publisher) return <p>Wystąpił problem z wczytaniem danych.</p>;
 
   const pastDue = dueDate ? new Date() > dueDate : false;
 
@@ -106,8 +106,8 @@ const PublisherViewClient = () => {
     <>
       <div>
         <div className={styles.topContainer}>
-          <MagazineName publisherName={publisher.name} publisherId={publisher.id}/>
-          <MagazineDescription publisherDescription={publisher.description} publisherId={publisher.id}/>
+          <MagazineName publisherName={publisher.name} publisherId={publisher.id} />
+          <MagazineDescription publisherDescription={publisher.description} publisherId={publisher.id} />
           <p className={styles.dueDateContainer}>
             <span>
               <FontAwesomeIcon icon={faClock} />&nbsp;Termin przesłania:{' '}
@@ -120,7 +120,7 @@ const PublisherViewClient = () => {
           <Button
             style={{ gap: '8px' }}
             variant="contained"
-            href={`/myspace/publishers/${publisher.id}/new-article`}
+            href={`/myspace/magazines/${publisher.id}/new-article`}
             component={Link}
           >
             Przeslij raport

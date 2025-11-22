@@ -19,21 +19,21 @@ const Navbar = () => {
       <Container className={styles.navbarContainer}>
         <div className={styles.leftLinks}>
           <Link href='/myspace/'>
-            <Image alt='logo' src="/logo.webp" width={128} height={44} className={styles.logo}/>
+            <Image alt='logo' src="/logo.webp" width={128} height={44} className={styles.logo} />
           </Link>
           <Link className={styles.desktopLink} href="/myspace/magazines">Czasopisma</Link>
           {!isStaff &&
-            <Link className={styles.desktopLink} href="/myspace/articles">Raporty</Link>
+            <Link className={styles.desktopLink} href="/myspace/articles">Twoje Raporty</Link>
           }
           <Link className={styles.desktopLink} href="/myspace/account">Konto</Link>
         </div>
-        <a 
+        <a
           className={styles.logoutLink}
           onClick={logoutUser}
         >
           Wyloguj się
         </a>
-        <MobileMenu/>
+        <MobileMenu />
       </Container>
     </nav>
 

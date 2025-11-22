@@ -1,21 +1,29 @@
-.halfWidth{
+.halfWidth {
     width: 50%;
     padding-right: 5px !important;
 }
-.halfWidth + .halfWidth{
+
+.halfWidth+.halfWidth {
     padding-right: 0 !important;
     padding-left: 5px !important;
 }
-.inputField{
+
+.inputField {
     margin-bottom: 1rem !important;
 }
-.submitButton{
+
+.submitButton {
     font-size: 18px !important;
     text-transform: none !important;
     padding: 6px 32px !important;
 }
-.uploadButton{
+
+.uploadButton {
     width: 100%;
     margin-bottom: 1rem !important;
     padding: 6px 32px !important;
+}
+
+.formContainer {
+    margin-bottom: 2rem;
 }

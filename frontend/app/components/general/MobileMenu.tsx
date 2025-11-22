@@ -6,8 +6,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars, faXmark } from '@fortawesome/free-solid-svg-icons'
 import styles from "./MobileMenu.module.css"
 import { useRouter } from 'next/navigation'
-import apiClient from '@/app/utils/api-client'
-import { AxiosError } from 'axios'
 import { useUser } from '@/app/context/UserContext'
 
 const MobileMenu = () => {
@@ -37,20 +35,20 @@ const MobileMenu = () => {
         setIsOpen(false);
     };
 
-  return (
-    <div className={styles.wrapper}>
-        <div className={styles.hamburger} onClick={() => setIsOpen(!isOpen)}>
-            <FontAwesomeIcon icon={faBars}  />
+    return (
+        <div className={styles.wrapper}>
+            <div className={styles.hamburger} onClick={() => setIsOpen(!isOpen)}>
+                <FontAwesomeIcon icon={faBars} />
+            </div>
+            <div className={`${styles.menu} ${isOpen ? styles.open : ''}`}>
+                <Link className={styles.mobileLink} href="/myspace/magazines" onClick={handleLinkClick}>Czasopisma</Link>
+                <Link className={styles.mobileLink} href="/myspace/articles" onClick={handleLinkClick}>Twoje Raporty</Link>
+                <Link className={styles.mobileLink} href="/myspace/account" onClick={handleLinkClick}>Konto</Link>
+                <a className={styles.mobileLink} onClick={logoutUser}>Wyloguj się</a>
+                <FontAwesomeIcon icon={faXmark} className={styles.closeIcon} onClick={() => setIsOpen(!isOpen)} />
+            </div>
         </div>
-        <div className={`${styles.menu} ${isOpen ? styles.open : ''}`}>
-          <Link className={styles.mobileLink} href="/myspace/publishers" onClick={handleLinkClick}>Wydawnictwa</Link>
-          <Link className={styles.mobileLink} href="/myspace/articles" onClick={handleLinkClick}>Raporty</Link>
-          <Link className={styles.mobileLink} href="/myspace/account" onClick={handleLinkClick}>Konto</Link>
-          <a className={styles.mobileLink} onClick={logoutUser}>Wyloguj się</a>
-          <FontAwesomeIcon icon={faXmark} className={styles.closeIcon}  onClick={() => setIsOpen(!isOpen)}/>
-        </div>
-    </div>
-  )
+    )
 }
 
 export default MobileMenu
