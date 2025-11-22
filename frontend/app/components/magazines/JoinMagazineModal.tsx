@@ -4,7 +4,7 @@ import styles from "./Modal.module.css";
 import Backdrop from "../general/Backdrop";
 import { Button, TextField } from "@mui/material";
 import { Publisher } from "@/app/types/types";
-import { joinPublisher } from "@/app/utils/publisher-helper-client";
+import { joinPublisher } from "@/app/utils/publisher-helper";
 
 const JoinMagazineModal = ({
   setShowModal,

@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 
 import styles from "./MagazineName.module.css";
-import { updatePublisher } from "@/app/utils/publisher-helper-client";
+import { updatePublisher } from "@/app/utils/publisher-helper";
 import { UserContext } from "@/app/context/UserContext";
 
 const MagazineName = ({

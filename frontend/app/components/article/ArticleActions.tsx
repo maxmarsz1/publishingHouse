@@ -8,7 +8,7 @@ import Link from 'next/link';
 import React, { useContext } from 'react'
 import DeleteArticleBtn from './DeleteArticleBtn';
 import styles from './ArticleActions.module.css';
-import { downloadArticle } from '@/app/utils/article-helper-client';
+import { downloadArticle } from '@/app/utils/article-helper';
 import { UserContext } from '@/app/context/UserContext';
 
 interface ArticleActionsProps {

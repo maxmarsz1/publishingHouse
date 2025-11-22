@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button, TextField, MenuItem } from "@mui/material";
 import { Article, ArticleType, ArticleTypeDisplay, ITArticleCategory, ITArticleCategoryDisplay } from "@/app/types/types";
-import { createArticle, updateArticle } from "@/app/utils/article-helper-client";
+import { createArticle, updateArticle } from "@/app/utils/article-helper";
 import styles from "./ArticleForm.module.css";
 
 const articleCategoryOptions = Object.values(ITArticleCategory).map((type) => ({

@@ -1,6 +1,6 @@
 'use client'
 
-import { deletePublisher } from '@/app/utils/publisher-helper-client';
+import { deletePublisher } from '@/app/utils/publisher-helper';
 import { Button } from '@mui/material';
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation';

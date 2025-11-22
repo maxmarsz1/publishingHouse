@@ -11,7 +11,7 @@ export async function POST(req: Request) {
       cookies.split('; ').map((c) => c.split('='))
     );
 
-    const accessToken = cookieMap['access'];
+    const accessToken = cookieMap['accessToken'];
     if (!accessToken) {
       return NextResponse.json({ error: 'Access token not found' }, { status: 401 });
     }

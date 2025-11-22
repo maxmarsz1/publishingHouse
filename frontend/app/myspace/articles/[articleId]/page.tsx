@@ -46,7 +46,7 @@ const ArticleViewClientMerged = () => {
     loadData();
   }, [articleId, idAsNumber]);
 
-  if (loading) return <p>Ladowanie...</p>;
+  if (loading) return <p>Ładowanie...</p>;
   if (error) return <p>{error}</p>;
   if (!article) return <p>Raport nie istnieje.</p>;
 

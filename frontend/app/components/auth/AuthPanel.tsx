@@ -6,9 +6,8 @@ import InputLine from './InputLine'
 import styles from './AuthPanel.module.css'
 import { Button } from '@mui/material'
 import Link from 'next/link'
-import { AxiosError } from 'axios'
 import { UserContext } from '@/app/context/UserContext'
-import { jwtDecode } from "jwt-decode";
+import { updateUserContext } from '@/app/utils/user-context-helper'
 
 interface Props {
     mode: string
@@ -63,17 +62,7 @@ const AuthPanel = ({ mode }: Props) => {
       console.log(`${isLogin ? 'Login' : 'Registration'} successful!`, resData);
 
       if (isLogin) {
-        const decodeResponse = await fetch('/api/auth/decode', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-        });
-      
-        if (decodeResponse.ok) {
-          const { isStaff } = await decodeResponse.json();
-          setIsStaff(isStaff);
-        } else {
-          console.error('Failed to decode access token:', await decodeResponse.json());
-        }
+        updateUserContext(setIsStaff);
         router.push('/myspace');
       } else {
         router.push('/auth/login'); 

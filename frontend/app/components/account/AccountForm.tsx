@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import styles from "./AccountForm.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faSave, faXmark } from "@fortawesome/free-solid-svg-icons";
-import { updateAccountData, updatePassword } from "@/app/utils/account-helper-client";
+import { updateAccountData, updatePassword } from "@/app/utils/account-helper";
 
 interface Props {
   userData: User;

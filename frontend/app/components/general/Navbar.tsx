@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import React from 'react'
+import React, { useContext } from 'react'
 import { useRouter } from 'next/navigation'
 import styles from "./Navbar.module.css"
 import { Container } from '@mui/material'
@@ -9,27 +9,10 @@ import Image from 'next/image'
 import MobileMenu from './MobileMenu'
 import api from '@/app/utils/api-client'
 import { AxiosError } from 'axios'
+import { UserContext } from '@/app/context/UserContext'
 
-const Navbar = ({isStaff}: {isStaff: boolean}) => {
-  const router = useRouter();
-
-  const handleLogout = async (e: React.MouseEvent) => {
-    e.preventDefault();
-
-    try {
-      const response = await api.post('/auth/logout/'); 
-      
-      console.log('Logout successful:', response.data);
-
-    } catch (err) {
-      console.error('Logout error:', err);
-      if (err instanceof AxiosError && err.response?.status === 400) {
-        console.warn("Token was already invalid or blacklisted. Proceeding with client logout.");
-      }
-    } finally {
-      router.push('/auth/login'); 
-    }
-  };
+const Navbar = () => {
+  const { isStaff, logoutUser } = useContext(UserContext);
 
   return (
     <nav className={styles.navbar}>
@@ -45,9 +28,8 @@ const Navbar = ({isStaff}: {isStaff: boolean}) => {
           <Link className={styles.desktopLink} href="/myspace/account">Konto</Link>
         </div>
         <a 
-          href="/auth/logout"
           className={styles.logoutLink}
-          onClick={handleLogout}
+          onClick={logoutUser}
         >
           Wyloguj się
         </a>
