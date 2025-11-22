@@ -6,7 +6,6 @@ const SECRET_KEY = process.env.JWT_VERIFICATION_KEY;
 export async function POST(req: Request) {
   try {
     const cookies = req.headers.get('cookie') || '';
-    console.log(req.headers.get('cookie'))
     const cookieMap = Object.fromEntries(
       cookies.split('; ').map((c) => c.split('='))
     );

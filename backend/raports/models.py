@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import MinValueValidator, MaxValueValidator
 from users.models import User
 from publishers.models import Publisher
 
@@ -103,6 +104,18 @@ class RaportReview(models.Model):
     review_date = models.DateTimeField(null=True, blank=True)
     comment = models.TextField(blank=True, null=True)
     grade = models.FloatField(null=True, blank=True, help_text='Grade from 0 to 5')
+    
+    content_consistency = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(5)], null=True, blank=True)
+    goal_formulation = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(5)], null=True, blank=True)
+    structure_correctness = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(5)], null=True, blank=True)
+    terminology_relevance = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(5)], null=True, blank=True)
+    graphic_design = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(5)], null=True, blank=True)
+    aesthetics = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(5)], null=True, blank=True)
+    literature_selection = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(5)], null=True, blank=True)
+    conclusions_correctness = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(5)], null=True, blank=True)
+    goal_achievement = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(5)], null=True, blank=True)
+    language_correctness = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(5)], null=True, blank=True)
+
     status = models.CharField(
         max_length=20,
         choices=RaportReviewStatus.choices,
@@ -116,3 +129,19 @@ class RaportReview(models.Model):
 
     def __str__(self):
         return f"{self.reviewer.username} reviewing {self.raport.title} ({self.get_status_display()})"
+
+    def save(self, *args, **kwargs):
+        fields = [
+            self.content_consistency, self.goal_formulation, self.structure_correctness,
+            self.terminology_relevance, self.graphic_design, self.aesthetics,
+            self.literature_selection, self.conclusions_correctness, self.goal_achievement,
+            self.language_correctness
+        ]
+        valid_scores = [field for field in fields if field is not None]
+        
+        if valid_scores:
+            self.grade = sum(valid_scores) / len(valid_scores)
+        else:
+            self.grade = None
+        
+        super().save(*args, **kwargs)
