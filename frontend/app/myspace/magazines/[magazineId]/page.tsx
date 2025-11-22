@@ -20,17 +20,13 @@ import styles from './page.module.css';
 import { Publisher, Article, UserArticles } from '@/app/types/types';
 import { UserContext } from '@/app/context/UserContext';
 
-interface Props {
-  params: { magazineId: string };
-}
-
 const PublisherViewClient = () => {
   const params = useParams();
   const magazineId = params?.magazineId;
   const idAsNumber = +magazineId!;
+  const { isStaff } = useContext(UserContext);
 
   const [publisher, setPublisher] = useState<Publisher | null>(null);
-  const { isStaff } = useContext(UserContext);
   const [adminArticles, setAdminArticles] = useState<Article[] | null>(null);
   const [regularUserArticles, setRegularUserArticles] = useState<UserArticles | null>(null);
   const [dueDate, setDueDate] = useState<Date | null>(null);
@@ -68,10 +64,12 @@ const PublisherViewClient = () => {
 
         if (isStaff) {
           const admin = await getAdminPublisherArticles(idAsNumber);
+          console.log("all raports: ", admin)
           setAdminArticles(admin);
         } else {
           const userArticles = await getUserPublisherArticles(idAsNumber);
           setRegularUserArticles(userArticles);
+          console.log("user raports: ", userArticles)
         }
       } catch (err) {
         console.error(err);

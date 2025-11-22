@@ -1,24 +1,25 @@
 "use client";
 
-import { createContext, useState, useEffect, ReactNode } from "react";
+import { createContext, useState, ReactNode } from "react";
 
 type UserContextType = {
-  isStaff: boolean | null;
+  // We can simplify this to boolean since the server will always tell us true/false
+  isStaff: boolean; 
   setIsStaff: (value: boolean) => void;
 };
 
 export const UserContext = createContext<UserContextType>({
-  isStaff: null,
+  isStaff: false,
   setIsStaff: () => {},
 });
 
-export function UserProvider({ children }: { children: ReactNode }) {
-  const [isStaff, setIsStaff] = useState<boolean | null>(null);
+interface UserProviderProps {
+  children: ReactNode;
+  initialIsStaff: boolean;
+}
 
-  useEffect(() => {
-    const staff = localStorage.getItem("is_staff");
-    if (staff !== null) setIsStaff(staff === "true");
-  }, []);
+export function UserProvider({ children, initialIsStaff }: UserProviderProps) {
+  const [isStaff, setIsStaff] = useState<boolean>(initialIsStaff);
 
   return (
     <UserContext.Provider value={{ isStaff, setIsStaff }}>

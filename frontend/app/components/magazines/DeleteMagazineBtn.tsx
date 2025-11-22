@@ -15,10 +15,10 @@ const DeleteMagazineBtn = ({publisherId}: {publisherId: number}) => {
     async function handleConfirm(){
         try{
             await deletePublisher(publisherId);
-            router.push("/myspace/publishers");
+            router.push("/myspace/magazines");
         }
         catch(error){
-            console.error("Error deleting publisher:", error);
+            console.error("Error deleting magazine:", error);
         }
         finally{
             setShowModal(false);

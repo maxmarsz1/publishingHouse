@@ -16,13 +16,11 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Access token not found' }, { status: 401 });
     }
 
-    // Decode the access token
     const decoded = jwt.decode(accessToken);
     if (!decoded) {
       return NextResponse.json({ error: 'Invalid access token' }, { status: 400 });
     }
 
-    // Extract the is_staff field
     const isStaff = typeof decoded === 'object' && decoded !== null && 'is_staff' in decoded ? decoded.is_staff : false;
 
     return NextResponse.json({ isStaff });
