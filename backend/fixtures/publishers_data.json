@@ -3,8 +3,8 @@
     "model": "publishers.publisher",
     "pk": 1,
     "fields": {
-      "name": "Tech Reports Inc.",
-      "description": "A publisher focused on cutting-edge IT research.",
+      "name": "Czasopismo Politechniki",
+      "description": "Czasopismo skupiające się na publikacjach naukowych i technicznych.",
       "members": []
     }
   },
@@ -12,8 +12,35 @@
     "model": "publishers.publisher",
     "pk": 2,
     "fields": {
-      "name": "Code & Logic",
-      "description": "Community-driven publisher for programming articles.",
+      "name": "Innowacje IT Polska",
+      "description": "Najnowsze trendy w świecie technologii informatycznych.",
+      "members": []
+    }
+  },
+  {
+    "model": "publishers.publisher",
+    "pk": 3,
+    "fields": {
+      "name": "Medycyna Przyszłości",
+      "description": "Publikacje medyczne i badania kliniczne.",
+      "members": []
+    }
+  },
+  {
+    "model": "publishers.publisher",
+    "pk": 4,
+    "fields": {
+      "name": "Ekonomia i Rynek",
+      "description": "Analizy rynkowe, raporty ekonomiczne i finanse.",
+      "members": []
+    }
+  },
+  {
+    "model": "publishers.publisher",
+    "pk": 5,
+    "fields": {
+      "name": "Sztuka i Design",
+      "description": "Wydawnictwo poświęcone sztuce współczesnej i designowi.",
       "members": []
     }
   },
@@ -24,7 +51,7 @@
       "user": 2,
       "publisher": 1,
       "role": "admin",
-      "date_joined": "2025-01-01T10:01:00Z"
+      "date_joined": "2025-01-01T10:00:00Z"
     }
   },
   {
@@ -34,7 +61,7 @@
       "user": 3,
       "publisher": 1,
       "role": "member",
-      "date_joined": "2025-01-01T10:02:00Z"
+      "date_joined": "2025-01-02T11:00:00Z"
     }
   },
   {
@@ -43,38 +70,78 @@
     "fields": {
       "user": 4,
       "publisher": 2,
-      "role": "member",
-      "date_joined": "2025-01-04T12:01:00Z"
+      "role": "admin",
+      "date_joined": "2025-01-03T12:00:00Z"
     }
   },
   {
     "model": "publishers.publishermembership",
     "pk": 4,
     "fields": {
-      "user": 1,
+      "user": 5,
       "publisher": 2,
-      "role": "admin",
-      "date_joined": "2025-01-04T12:02:00Z"
+      "role": "member",
+      "date_joined": "2025-01-04T13:00:00Z"
     }
   },
   {
     "model": "publishers.publishermembership",
     "pk": 5,
     "fields": {
-      "user": 2,
-      "publisher": 2,
-      "role": "member",
-      "date_joined": "2025-01-04T12:02:00Z"
+      "user": 6,
+      "publisher": 3,
+      "role": "admin",
+      "date_joined": "2025-01-05T14:00:00Z"
     }
   },
   {
     "model": "publishers.publishermembership",
     "pk": 6,
     "fields": {
-      "user": 3,
-      "publisher": 2,
+      "user": 7,
+      "publisher": 3,
       "role": "member",
-      "date_joined": "2025-01-04T12:02:00Z"
+      "date_joined": "2025-01-06T15:00:00Z"
+    }
+  },
+  {
+    "model": "publishers.publishermembership",
+    "pk": 7,
+    "fields": {
+      "user": 8,
+      "publisher": 4,
+      "role": "admin",
+      "date_joined": "2025-01-07T16:00:00Z"
+    }
+  },
+  {
+    "model": "publishers.publishermembership",
+    "pk": 8,
+    "fields": {
+      "user": 9,
+      "publisher": 4,
+      "role": "member",
+      "date_joined": "2025-01-08T17:00:00Z"
+    }
+  },
+  {
+    "model": "publishers.publishermembership",
+    "pk": 9,
+    "fields": {
+      "user": 10,
+      "publisher": 5,
+      "role": "admin",
+      "date_joined": "2025-01-09T18:00:00Z"
+    }
+  },
+  {
+    "model": "publishers.publishermembership",
+    "pk": 10,
+    "fields": {
+      "user": 2,
+      "publisher": 5,
+      "role": "member",
+      "date_joined": "2025-01-10T19:00:00Z"
     }
   }
 ]

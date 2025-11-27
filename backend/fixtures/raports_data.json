@@ -3,17 +3,17 @@
     "model": "raports.raport",
     "pk": 1,
     "fields": {
-      "title": "AI in Cybersecurity",
-      "author": 4,
+      "title": "Nowoczesne metody inżynierii oprogramowania",
+      "author": 3,
       "reviewers": [],
       "publisher": 1,
       "status": "published",
       "raport_type": "original_research",
-      "category": "artificial_intelligence",
-      "abstract": "A comprehensive study on the role of Artificial Intelligence in network defense systems, covering intrusion detection and threat modeling.",
-      "file": "raports/files/raport_ai_cybersecurity.pdf",
-      "keywords": "AI, cybersecurity, deep learning, network defense",
-      "created_at": "2025-01-10T15:00:00Z",
+      "category": "software_engineering",
+      "abstract": "Przegląd najnowszych metodyk zwinnych i ich zastosowanie w dużych projektach komercyjnych.",
+      "file": "raports/files/raport_inzynieria_oprogramowania.pdf",
+      "keywords": "agile, scrum, inżynieria oprogramowania, zarządzanie projektami",
+      "created_at": "2025-01-11T10:00:00Z",
       "comment": null
     }
   },
@@ -21,17 +21,161 @@
     "model": "raports.raport",
     "pk": 2,
     "fields": {
-      "title": "Optimizing Multi-Cloud Deployment Patterns",
-      "author": 1,
+      "title": "Analiza wydajności baz danych NoSQL",
+      "author": 2,
+      "reviewers": [],
+      "publisher": 1,
+      "status": "pending",
+      "raport_type": "technical_report",
+      "category": "databases",
+      "abstract": "Porównanie wydajności MongoDB i Cassandra w systemach rozproszonych przetwarzających duże zbiory danych.",
+      "file": "raports/files/raport_nosql.pdf",
+      "keywords": "nosql, mongodb, cassandra, bazy danych, big data",
+      "created_at": "2025-01-12T11:00:00Z",
+      "comment": null
+    }
+  },
+  {
+    "model": "raports.raport",
+    "pk": 3,
+    "fields": {
+      "title": "Sztuczna Inteligencja w diagnostyce medycznej",
+      "author": 5,
       "reviewers": [],
       "publisher": 2,
+      "status": "published",
+      "raport_type": "review_article",
+      "category": "artificial_intelligence",
+      "abstract": "Jak algorytmy uczenia głębokiego wspomagają analizę obrazów medycznych.",
+      "file": "raports/files/raport_ai_medycyna.pdf",
+      "keywords": "AI, medycyna, deep learning, diagnostyka obrazowa",
+      "created_at": "2025-01-13T12:00:00Z",
+      "comment": null
+    }
+  },
+  {
+    "model": "raports.raport",
+    "pk": 4,
+    "fields": {
+      "title": "Cyberbezpieczeństwo w bankowości mobilnej",
+      "author": 4,
+      "reviewers": [],
+      "publisher": 2,
+      "status": "rejected",
+      "raport_type": "case_report",
+      "category": "cybersecurity",
+      "abstract": "Analiza wektorów ataku na aplikacje bankowe i metody zabezpieczeń biometrycznych.",
+      "file": "raports/files/raport_cyber_bank.pdf",
+      "keywords": "cyberbezpieczeństwo, bankowość, biometria, ataki",
+      "created_at": "2025-01-14T13:00:00Z",
+      "comment": "Raport wymaga szerszego omówienia standardów PSD2."
+    }
+  },
+  {
+    "model": "raports.raport",
+    "pk": 5,
+    "fields": {
+      "title": "Algorytmy kwantowe w kryptografii",
+      "author": 7,
+      "reviewers": [],
+      "publisher": 3,
+      "status": "published",
+      "raport_type": "theoretical_paper",
+      "category": "quantum_computing",
+      "abstract": "Potencjalne zagrożenia dla współczesnych algorytmów szyfrujących ze strony komputerów kwantowych.",
+      "file": "raports/files/raport_kwantowy.pdf",
+      "keywords": "kryptografia, komputery kwantowe, algorytm shora, bezpieczeństwo",
+      "created_at": "2025-01-15T14:00:00Z",
+      "comment": null
+    }
+  },
+  {
+    "model": "raports.raport",
+    "pk": 6,
+    "fields": {
+      "title": "Wpływ UX na retencję użytkowników",
+      "author": 6,
+      "reviewers": [],
+      "publisher": 3,
+      "status": "pending",
+      "raport_type": "review_article",
+      "category": "human_computer_interaction",
+      "abstract": "Badanie zależności między intuicyjnością interfejsu a czasem spędzanym w aplikacji.",
+      "file": "raports/files/raport_ux.pdf",
+      "keywords": "UX, UI, retencja, psychologia użytkownika, HCI",
+      "created_at": "2025-01-16T15:00:00Z",
+      "comment": null
+    }
+  },
+  {
+    "model": "raports.raport",
+    "pk": 7,
+    "fields": {
+      "title": "Blockchain w łańcuchach dostaw",
+      "author": 9,
+      "reviewers": [],
+      "publisher": 4,
+      "status": "published",
+      "raport_type": "original_research",
+      "category": "blockchain",
+      "abstract": "Implementacja rozproszonego rejestru w celu zwiększenia transparentności logistyki.",
+      "file": "raports/files/raport_blockchain_logistyka.pdf",
+      "keywords": "blockchain, logistyka, supply chain, transparentność",
+      "created_at": "2025-01-17T16:00:00Z",
+      "comment": null
+    }
+  },
+  {
+    "model": "raports.raport",
+    "pk": 8,
+    "fields": {
+      "title": "Architektura mikroserwisów w chmurze",
+      "author": 8,
+      "reviewers": [],
+      "publisher": 4,
       "status": "pending",
       "raport_type": "technical_report",
       "category": "cloud_computing",
-      "abstract": "Review of current best practices for deploying applications across heterogeneous cloud environments (AWS, Azure, GCP).",
-      "file": "raports/files/raport_multi_cloud.pdf",
-      "keywords": "AWS, Azure, multi-cloud, DevOps, scalability",
-      "created_at": "2025-01-15T16:00:00Z",
+      "abstract": "Najlepsze praktyki wdrażania mikroserwisów przy użyciu Kubernetes i Docker.",
+      "file": "raports/files/raport_mikroserwisy.pdf",
+      "keywords": "mikroserwisy, chmura, kubernetes, docker, skalowalność",
+      "created_at": "2025-01-18T17:00:00Z",
+      "comment": null
+    }
+  },
+  {
+    "model": "raports.raport",
+    "pk": 9,
+    "fields": {
+      "title": "Minimalizm w projektowaniu interfejsów webowych",
+      "author": 10,
+      "reviewers": [],
+      "publisher": 5,
+      "status": "published",
+      "raport_type": "short_communication",
+      "category": "web_development",
+      "abstract": "Analiza trendu minimalizmu i jego wpływ na szybkość ładowania stron.",
+      "file": "raports/files/raport_web_design.pdf",
+      "keywords": "web design, minimalizm, frontend, wydajność",
+      "created_at": "2025-01-19T18:00:00Z",
+      "comment": null
+    }
+  },
+  {
+    "model": "raports.raport",
+    "pk": 10,
+    "fields": {
+      "title": "Ewolucja silników gier wideo",
+      "author": 2,
+      "reviewers": [],
+      "publisher": 5,
+      "status": "pending",
+      "raport_type": "review_article",
+      "category": "game_development",
+      "abstract": "Od 2D do fotorealizmu - historia rozwoju technologii w gamingu.",
+      "file": "raports/files/raport_gamedev.pdf",
+      "keywords": "gamedev, silniki gier, unreal engine, unity, grafika",
+      "created_at": "2025-01-20T19:00:00Z",
       "comment": null
     }
   },
@@ -40,9 +184,9 @@
     "pk": 1,
     "fields": {
       "raport": 1,
-      "reviewer": 3,
-      "review_date": "2025-01-12T10:30:00Z",
-      "comment": "Excellent work, minor edits needed for the conclusion section. The methodology is sound.",
+      "reviewer": 2,
+      "review_date": "2025-01-12T10:00:00Z",
+      "comment": "Bardzo rzetelne opracowanie metodyk zwinnych. Polecam.",
       "status": "submitted",
       "grade": 5
     }
@@ -50,6 +194,54 @@
   {
     "model": "raports.raportreview",
     "pk": 2,
+    "fields": {
+      "raport": 3,
+      "reviewer": 4,
+      "review_date": "2025-01-14T11:00:00Z",
+      "comment": "Ciekawa perspektywa na AI, ale brakuje danych o skuteczności klinicznej.",
+      "status": "submitted",
+      "grade": 4
+    }
+  },
+  {
+    "model": "raports.raportreview",
+    "pk": 3,
+    "fields": {
+      "raport": 4,
+      "reviewer": 5,
+      "review_date": "2025-01-15T12:00:00Z",
+      "comment": "Zbyt powierzchowne podejście do biometrii. Wymaga poprawek.",
+      "status": "submitted",
+      "grade": 2
+    }
+  },
+  {
+    "model": "raports.raportreview",
+    "pk": 4,
+    "fields": {
+      "raport": 7,
+      "reviewer": 8,
+      "review_date": "2025-01-18T13:00:00Z",
+      "comment": "Świetna analiza implementacji blockchaina. Wnioski są bardzo przekonujące.",
+      "status": "submitted",
+      "grade": 5
+    }
+  },
+  {
+    "model": "raports.raportreview",
+    "pk": 5,
+    "fields": {
+      "raport": 9,
+      "reviewer": 2,
+      "review_date": "2025-01-20T14:00:00Z",
+      "comment": "Dobre przykłady optymalizacji, ale mało o dostępności (a11y).",
+      "status": "submitted",
+      "grade": 4
+    }
+  },
+  {
+    "model": "raports.raportreview",
+    "pk": 6,
     "fields": {
       "raport": 2,
       "reviewer": 3,
@@ -60,10 +252,32 @@
   },
   {
     "model": "raports.raportreview",
-    "pk": 3,
+    "pk": 7,
     "fields": {
-      "raport": 2,
-      "reviewer": 2,
+      "raport": 6,
+      "reviewer": 7,
+      "review_date": null,
+      "comment": null,
+      "status": "invited"
+    }
+  },
+  {
+    "model": "raports.raportreview",
+    "pk": 8,
+    "fields": {
+      "raport": 8,
+      "reviewer": 9,
+      "review_date": null,
+      "comment": null,
+      "status": "invited"
+    }
+  },
+  {
+    "model": "raports.raportreview",
+    "pk": 9,
+    "fields": {
+      "raport": 10,
+      "reviewer": 10,
       "review_date": null,
       "comment": null,
       "status": "invited"

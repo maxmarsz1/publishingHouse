@@ -24,7 +24,7 @@ export async function POST(req: Request) {
 
     // Extract the is_staff field
     const isStaff = typeof decoded === 'object' && decoded !== null && 'is_staff' in decoded ? decoded.is_staff : false;
-
+    console.log("Found isStaff in token: ", isStaff);
     return NextResponse.json({ isStaff });
   } catch (error) {
     console.error('Error decoding access token:', error);

@@ -12,9 +12,9 @@ class Command(BaseCommand):
         admin.save()
         self.stdout.write(self.style.SUCCESS('Successfully ensured admin user exists.'))
 
-        john, created = User.objects.get_or_create(username='johnsmith', defaults={'email': 'john.smith@example.com'})
+        jan, created = User.objects.get_or_create(username='jan.kowalski', defaults={'email': 'jan.kowalski@example.com'})
         
-        print(john, created, john.is_active)
-        john.set_password('johnPassword')
-        john.save()
-        self.stdout.write(self.style.SUCCESS('Successfully ensured johnsmith user exists.'))
+        print(jan, created, jan.is_active)
+        jan.set_password('janPassword')
+        jan.save()
+        self.stdout.write(self.style.SUCCESS('Successfully ensured jan.kowalski user exists.'))
