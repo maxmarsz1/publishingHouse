@@ -12,6 +12,7 @@ from django.conf import settings
 from datetime import datetime, timedelta
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.settings import api_settings
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 import pytz
@@ -391,7 +392,6 @@ class UserViews:
 
         def get_queryset(self):
             user = self.request.user
-            print(user)
             if user.is_staff:
                 return Publisher.objects.all()
             return Publisher.objects.filter(members=user)
@@ -571,7 +571,7 @@ class UserViews:
                 refresh_lifetime = settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME']
                 
                 response.set_cookie(
-                    key='access',
+                    key='accessToken',
                     value=access_token,
                     expires=datetime.now(pytz.utc) + access_lifetime,
                     secure=True,
@@ -580,7 +580,7 @@ class UserViews:
                 )
 
                 response.set_cookie(
-                    key='refresh',
+                    key='refreshToken',
                     value=refresh_token,
                     expires=datetime.now(pytz.utc) + refresh_lifetime,
                     secure=True,
@@ -594,24 +594,73 @@ class UserViews:
         
     class CustomTokenRefreshView(TokenRefreshView):
         def post(self, request, *args, **kwargs):
-            mutable_data = request.data.copy()
+            refresh_token = request.COOKIES.get("refreshToken")
+            
+            if not refresh_token:
+                return Response(
+                    {"detail": "Refresh token not found in cookies."},
+                    status=status.HTTP_401_UNAUTHORIZED
+                )
 
-            refresh_token = request.COOKIES.get("refresh")
-            if refresh_token:
-                mutable_data["refresh"] = refresh_token
+            data = {'refresh': refresh_token}
+            
+            serializer = self.get_serializer(data=data)
 
-            request._full_data = mutable_data
+            try:
+                serializer.is_valid(raise_exception=True)
+            except Exception:
+                return Response(
+                    {"detail": "Token is invalid or expired."},
+                    status=status.HTTP_401_UNAUTHORIZED
+                )
 
-            response = super().post(request, *args, **kwargs)
+            response_data = serializer.validated_data
+            
+            access_token = response_data.get('access')
+            # refresh_token_new = response_data.get('refresh') 
+            
+            access_lifetime = api_settings.ACCESS_TOKEN_LIFETIME 
+            refresh_lifetime = api_settings.REFRESH_TOKEN_LIFETIME
+            now = datetime.now(pytz.utc)
+            
+            response = Response(response_data, status=status.HTTP_200_OK)
+
+            response.set_cookie(
+                key='accessToken',
+                value=access_token,
+                expires=now + access_lifetime,
+                secure=True,
+                httponly=True,
+                samesite='None'
+            )
+            
+            # response.set_cookie(
+            #     key='refreshToken',
+            #     value=refresh_token_new,
+            #     expires=now + refresh_lifetime,
+            #     secure=True,
+            #     httponly=True,
+            #     samesite='None'
+            # )
+
+            response.data.pop('access', None)
+            # response.data.pop('refresh', None)
 
             return response
-    
+
+    class UserIsStaffView(APIView):
+        permission_classes = [IsAuthenticated]
+
+        def get(self, request):
+            user = request.user
+            return Response({"is_staff": user.is_staff})
+        
 
     class LogoutView(APIView):
         permission_classes = [IsAuthenticated]
 
         def post(self, request):
-            refresh_token = request.COOKIES.get('refresh')
+            refresh_token = request.COOKIES.get('refreshToken')
         
             if not refresh_token:
                 return Response({"detail": "Refresh token not found in cookies."}, status=status.HTTP_400_BAD_REQUEST)
@@ -621,8 +670,8 @@ class UserViews:
                 token.blacklist()
                 
                 response = Response({"detail": "Successfully logged out."}, status=status.HTTP_200_OK)
-                response.delete_cookie('access')
-                response.delete_cookie('refresh')
+                response.delete_cookie('accessToken')
+                response.delete_cookie('refreshToken')
 
                 return response
                 

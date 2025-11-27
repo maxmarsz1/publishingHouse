@@ -8,8 +8,8 @@ interface MiddlewareRequest extends NextRequest {
 }
 
 export function middleware(request: MiddlewareRequest) {
-  const accessToken = request.cookies.get('access')?.value;
-  const refreshToken = request.cookies.get('refresh')?.value;
+  const accessToken = request.cookies.get('accessToken')?.value;
+  const refreshToken = request.cookies.get('refreshToken')?.value;
   const pathname = request.nextUrl.pathname;
 
   const isProtectedRoute = pathname.startsWith('/myspace');

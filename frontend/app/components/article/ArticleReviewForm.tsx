@@ -7,11 +7,12 @@ import { useRouter } from 'next/navigation';
 
 import styles from './ArticleReviewForm.module.css'
 import apiClient from '@/app/utils/api-client';
+import { reviewCriteriaDisplay } from '@/app/types/types';
 
 const StyledRating = styled(Rating)({
-    '& .MuiRating-iconEmpty': {
-        color: '#FFFCF2',
-    }
+  '& .MuiRating-iconEmpty': {
+    color: '#FFFCF2',
+  }
 });
 
 interface ArticleReviewFormProps {
@@ -19,28 +20,40 @@ interface ArticleReviewFormProps {
 }
 
 const ArticleReviewForm: React.FC<ArticleReviewFormProps> = ({ articleId }) => {
-    const [comment, setComment] = useState("");
-    const [grade, setGrade] = useState<number | null>(2.5);
-    const router = useRouter();
+  const [comment, setComment] = useState("");
+  const [grade, setGrade] = useState<number | null>(2.5);
+  const [criteriaGrades, setCriteriaGrades] = useState<Record<string, number>>(
+    Object.keys(reviewCriteriaDisplay).reduce((acc, key) => ({ ...acc, [key]: 2.5 }), {})
+  );
+  const router = useRouter();
 
-    async function handleSubmit(){
-      if(grade){
-        try {
-          await apiClient.post(`/raport/${articleId}/create-review/`, {
-            comment,
-            grade
-          });
-          console.log("Review created successfully");
-          router.push(`/myspace/articles/${articleId}`);
-        } catch (error) {
-          console.error("Error creating review:", error);
-          throw new Error("Failed to create review");
-        }
-        
-      } else {
-        console.log("Brak oceny");
+  const handleCriteriaChange = (key: string, value: number | null) => {
+    const newGrades = { ...criteriaGrades, [key]: value || 0 };
+    setCriteriaGrades(newGrades);
+
+    const values = Object.values(newGrades);
+    const avg = values.reduce((a, b) => a + b, 0) / values.length;
+    setGrade(avg);
+  };
+
+  async function handleSubmit() {
+    if (grade) {
+      try {
+        await apiClient.post(`/raport/${articleId}/create-review/`, {
+          comment,
+          ...criteriaGrades
+        });
+        console.log("Review created successfully");
+        router.push(`/myspace/articles/${articleId}`);
+      } catch (error) {
+        console.error("Error creating review:", error);
+        throw new Error("Failed to create review");
       }
+
+    } else {
+      console.log("Brak oceny");
     }
+  }
 
 
 
@@ -57,19 +70,38 @@ const ArticleReviewForm: React.FC<ArticleReviewFormProps> = ({ articleId }) => {
         fullWidth
         className={styles.inputField}
       />
-      <Typography component="legend">Ocena</Typography>
-      <StyledRating
-        name="half-rating"
-        value={grade}
-        onChange={(_, newValue) => setGrade(newValue)}
-        precision={0.5} 
-      />
+
+      <div className={styles.criteria}>
+        {Object.entries(reviewCriteriaDisplay).map(([key, label]) => (
+          <div key={key} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Typography component="legend">{label as string}</Typography>
+            <StyledRating
+              name={key}
+              value={criteriaGrades[key]}
+              onChange={(_, newValue) => handleCriteriaChange(key, newValue)}
+              precision={0.5}
+            />
+          </div>
+        ))}
+      </div>
+
+      <div className={styles.finalGrade}>
+        <Typography component="legend" style={{ fontWeight: 'bold' }}>Ocena końcowa</Typography>
+        <StyledRating
+          name="half-rating"
+          value={grade}
+          readOnly
+          precision={0.1}
+        />
+        <Typography variant="h6" style={{ marginLeft: '10px' }}>{grade?.toFixed(2)}</Typography>
+      </div>
 
       <Button
         variant="contained"
         color="primary"
         className={styles.submitBtn}
         onClick={handleSubmit}
+        style={{ marginTop: '20px', marginBottom: '20px' }}
       >
         Wyślij
       </Button>

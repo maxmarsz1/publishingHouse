@@ -20,17 +20,13 @@ import styles from './page.module.css';
 import { Publisher, Article, UserArticles } from '@/app/types/types';
 import { UserContext } from '@/app/context/UserContext';
 
-interface Props {
-  params: { magazineId: string };
-}
-
 const PublisherViewClient = () => {
   const params = useParams();
   const magazineId = params?.magazineId;
   const idAsNumber = +magazineId!;
+  const { isStaff } = useContext(UserContext);
 
   const [publisher, setPublisher] = useState<Publisher | null>(null);
-  const { isStaff } = useContext(UserContext);
   const [adminArticles, setAdminArticles] = useState<Article[] | null>(null);
   const [regularUserArticles, setRegularUserArticles] = useState<UserArticles | null>(null);
   const [dueDate, setDueDate] = useState<Date | null>(null);
@@ -57,21 +53,23 @@ const PublisherViewClient = () => {
         setDueDateReadable(
           due
             ? due.toLocaleString('pl-PL', {
-                day: 'numeric',
-                month: 'long',
-                year: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-              })
+              day: 'numeric',
+              month: 'long',
+              year: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit',
+            })
             : 'Brak'
         );
 
         if (isStaff) {
           const admin = await getAdminPublisherArticles(idAsNumber);
+          console.log("all raports: ", admin)
           setAdminArticles(admin);
         } else {
           const userArticles = await getUserPublisherArticles(idAsNumber);
           setRegularUserArticles(userArticles);
+          console.log("user raports: ", userArticles)
         }
       } catch (err) {
         console.error(err);
@@ -98,9 +96,9 @@ const PublisherViewClient = () => {
     );
   };
 
-  if (loading) return <p>Loading…</p>;
+  if (loading) return <p>Ładowanie...</p>;
   if (error) return <p>{error}</p>;
-  if (!publisher) return <p>Publisher not found</p>;
+  if (!publisher) return <p>Wystąpił problem z wczytaniem danych.</p>;
 
   const pastDue = dueDate ? new Date() > dueDate : false;
 
@@ -108,8 +106,8 @@ const PublisherViewClient = () => {
     <>
       <div>
         <div className={styles.topContainer}>
-          <MagazineName publisherName={publisher.name} publisherId={publisher.id}/>
-          <MagazineDescription publisherDescription={publisher.description} publisherId={publisher.id}/>
+          <MagazineName publisherName={publisher.name} publisherId={publisher.id} />
+          <MagazineDescription publisherDescription={publisher.description} publisherId={publisher.id} />
           <p className={styles.dueDateContainer}>
             <span>
               <FontAwesomeIcon icon={faClock} />&nbsp;Termin przesłania:{' '}
@@ -122,7 +120,7 @@ const PublisherViewClient = () => {
           <Button
             style={{ gap: '8px' }}
             variant="contained"
-            href={`/myspace/publishers/${publisher.id}/new-article`}
+            href={`/myspace/magazines/${publisher.id}/new-article`}
             component={Link}
           >
             Przeslij raport

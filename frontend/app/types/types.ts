@@ -62,6 +62,16 @@ export interface Review {
     review_date: string,
     status: ReviewStatus,
     grade: number,
+    content_consistency?: number,
+    goal_formulation?: number,
+    structure_correctness?: number,
+    terminology_relevance?: number,
+    graphic_design?: number,
+    aesthetics?: number,
+    literature_selection?: number,
+    conclusions_correctness?: number,
+    goal_achievement?: number,
+    language_correctness?: number,
 }
 
 export enum ReviewStatus {
@@ -162,4 +172,17 @@ export const ITArticleCategoryDisplay: Record<ITArticleCategory, string> = {
     [ITArticleCategory.QuantumComputing]: "Obliczenia Kwantowe",
     [ITArticleCategory.HumanComputerInteraction]: "Interakcja Człowiek-Komputer (HCI)",
     [ITArticleCategory.Other]: "Inne",
+};
+
+export const reviewCriteriaDisplay: Record<string, string> = {
+    content_consistency: 'Zgodność treści pracy z tematem',
+    goal_formulation: 'Sformułowanie celu pracy',
+    structure_correctness: 'Poprawność układu pracy',
+    terminology_relevance: 'Trafność zastosowanej terminologii',
+    graphic_design: 'Opracowanie graficzne pracy',
+    aesthetics: 'Estetyka pracy',
+    literature_selection: 'Dobór literatury',
+    conclusions_correctness: 'Poprawność sformułowanych wniosków',
+    goal_achievement: 'Osiągnięcie celu pracy',
+    language_correctness: 'Stylistyka i poprawność językowa'
 };

@@ -12,7 +12,9 @@ interface ArticlesTableProps {
 }
 
 const ArticleTable = ({ title, articles, showPublisher = false, admin = false }: ArticlesTableProps) => {
-  return (
+    console.log(articles)
+  
+    return (
     <div className={styles.tableWrapper}>
         <h2>{title}</h2>
         <table className={styles.table}>

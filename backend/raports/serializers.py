@@ -55,7 +55,11 @@ class RaportReviewSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = RaportReview
-        fields = ['id', 'raport', 'reviewer', 'comment', 'status', 'review_date', 'grade']
+        fields = ['id', 'raport', 'reviewer', 'comment', 'status', 'review_date', 'grade', 
+                  'content_consistency', 'goal_formulation', 'structure_correctness', 
+                  'terminology_relevance', 'graphic_design', 'aesthetics', 
+                  'literature_selection', 'conclusions_correctness', 'goal_achievement', 
+                  'language_correctness']
 
 class RaportReviewReviewerSerializer(serializers.ModelSerializer):
     raport = serializers.SerializerMethodField()
@@ -144,14 +148,32 @@ class AdminRaportSerializer(serializers.ModelSerializer):
 
 class CreateReviewSerializer(serializers.ModelSerializer):
     raport_id = serializers.IntegerField(write_only=True)
-    grade = serializers.FloatField(
-        validators=[MinValueValidator(0.0), MaxValueValidator(5.0)]
-    )
     comment = serializers.CharField(required=True)
 
     class Meta:
         model = RaportReview
-        fields = ['raport_id', 'comment', 'grade']
+        fields = ['raport_id', 'comment', 'content_consistency', 'goal_formulation', 
+                  'structure_correctness', 'terminology_relevance', 'graphic_design', 
+                  'aesthetics', 'literature_selection', 'conclusions_correctness', 
+                  'goal_achievement', 'language_correctness']
+        extra_kwargs = {
+            'content_consistency': {'required': True, 'allow_null': False},
+            'goal_formulation': {'required': True, 'allow_null': False},
+            'structure_correctness': {'required': True, 'allow_null': False},
+            'terminology_relevance': {'required': True, 'allow_null': False},
+            'graphic_design': {'required': True, 'allow_null': False},
+            'aesthetics': {'required': True, 'allow_null': False},
+            'literature_selection': {'required': True, 'allow_null': False},
+            'conclusions_correctness': {'required': True, 'allow_null': False},
+            'goal_achievement': {'required': True, 'allow_null': False},
+            'language_correctness': {'required': True, 'allow_null': False},
+        }
+
+    def validate_comment(self, value):
+        word_count = len(value.split())
+        if word_count < 100 or word_count > 1000:
+            raise serializers.ValidationError(f"Comment must be between 100 and 1000 words. Currently: {word_count} words.")
+        return value
 
     def validate(self, data):
         request = self.context.get('request')
@@ -179,7 +201,18 @@ class CreateReviewSerializer(serializers.ModelSerializer):
 
         review, created = RaportReview.objects.get_or_create(raport=raport, reviewer=user)
         review.comment = validated_data.get('comment')
-        review.grade = validated_data.get('grade')
+        
+        review.content_consistency = validated_data.get('content_consistency')
+        review.goal_formulation = validated_data.get('goal_formulation')
+        review.structure_correctness = validated_data.get('structure_correctness')
+        review.terminology_relevance = validated_data.get('terminology_relevance')
+        review.graphic_design = validated_data.get('graphic_design')
+        review.aesthetics = validated_data.get('aesthetics')
+        review.literature_selection = validated_data.get('literature_selection')
+        review.conclusions_correctness = validated_data.get('conclusions_correctness')
+        review.goal_achievement = validated_data.get('goal_achievement')
+        review.language_correctness = validated_data.get('language_correctness')
+        
         review.review_date = timezone.now()
         review.status = "submitted"
         review.save()

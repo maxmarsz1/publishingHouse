@@ -3,7 +3,7 @@ import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencilAlt } from '@fortawesome/free-solid-svg-icons';
-import { updatePublisher } from '@/app/utils/publisher-helper-client';
+import { updatePublisher } from '@/app/utils/publisher-helper';
 import { UserContext } from '@/app/context/UserContext';
 
 const MagazineDescription = ({

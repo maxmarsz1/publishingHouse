@@ -6,7 +6,7 @@ import React, { useState } from 'react'
 import { Button } from '@mui/material'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faRotate } from '@fortawesome/free-solid-svg-icons'
-import { generateNewJoinCode } from '@/app/utils/publisher-helper-client'
+import { generateNewJoinCode } from '@/app/utils/publisher-helper'
 
 const JoinCode = ({publisher}: {publisher: Publisher}) => {
     const [joinCode, setJoinCode] = useState(publisher.joinCode ? publisher.joinCode : "Brak");

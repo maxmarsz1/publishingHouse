@@ -5,7 +5,7 @@ import React from 'react'
 import styles from './ArticleReviewInvited.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { answearReviewInvite } from '@/app/utils/article-helper-client';
+import { answearReviewInvite } from '@/app/utils/article-helper';
 import { ReviewStatus } from '@/app/types/types';
 
 interface ArticleReviewInvitedProps {

@@ -7,7 +7,7 @@ class CookieJWTAuthentication(JWTAuthentication):
     HTTP-only cookies instead of the Authorization header.
     """
     def authenticate(self, request):
-        raw_token = request.COOKIES.get('access')
+        raw_token = request.COOKIES.get('accessToken')
 
         if raw_token is None:
             return None 

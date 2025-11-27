@@ -1,6 +1,6 @@
 'use client'
 
-import { deleteArticle } from '@/app/utils/article-helper-client';
+import { deleteArticle } from '@/app/utils/article-helper';
 import { Button } from '@mui/material';
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation';

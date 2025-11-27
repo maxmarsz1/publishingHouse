@@ -5,7 +5,7 @@ import Backdrop from "../general/Backdrop";
 import { Button, TextField } from "@mui/material";
 
 import styles from "./Modal.module.css";
-import { createPublisher } from "@/app/utils/publisher-helper-client";
+import { createPublisher } from "@/app/utils/publisher-helper";
 import { Publisher } from "@/app/types/types";
 
 const NewMagazineModal = ({

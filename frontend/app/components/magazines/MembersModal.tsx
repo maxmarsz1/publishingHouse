@@ -5,7 +5,7 @@ import React, { useState, useEffect } from "react";
 import styles from "./Modal.module.css";
 import Backdrop from "../general/Backdrop";
 import { Button } from "@mui/material";
-import { deletePublisherMember, getPublisherMembers } from "@/app/utils/publisher-helper-client";
+import { deletePublisherMember, getPublisherMembers } from "@/app/utils/publisher-helper";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 

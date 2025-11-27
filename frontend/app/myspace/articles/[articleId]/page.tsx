@@ -46,13 +46,13 @@ const ArticleViewClientMerged = () => {
     loadData();
   }, [articleId, idAsNumber]);
 
-  if (loading) return <p>Loading…</p>;
+  if (loading) return <p>Ładowanie...</p>;
   if (error) return <p>{error}</p>;
-  if (!article) return <p>Article not found</p>;
+  if (!article) return <p>Raport nie istnieje.</p>;
 
   return (
     <>
-      <h1 className={styles.title}>Przegląd artykułu</h1>
+      <h1 className={styles.title}>Przegląd raportu</h1>
 
       <ArticleData article={article}/>
       <ArticleActions article={article} reviewStatus={reviewStatus} />

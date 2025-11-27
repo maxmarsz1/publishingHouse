@@ -9,7 +9,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, { Dayjs } from 'dayjs';
 
 import styles from "./Modal.module.css";
-import { updatePublisher } from "@/app/utils/publisher-helper-client";
+import { updatePublisher } from "@/app/utils/publisher-helper";
 import { Publisher } from "@/app/types/types";
 
 const NewDueDateModal = ({
