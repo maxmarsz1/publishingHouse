@@ -185,10 +185,9 @@
     "fields": {
       "raport": 1,
       "reviewer": 2,
-      "review_date": "2025-01-12T10:00:00Z",
-      "comment": "Bardzo rzetelne opracowanie metodyk zwinnych. Polecam.",
-      "status": "submitted",
-      "grade": 5
+      "review_date": null,
+      "comment": null,
+      "status": "invited"
     }
   },
   {
@@ -200,7 +199,17 @@
       "review_date": "2025-01-14T11:00:00Z",
       "comment": "Ciekawa perspektywa na AI, ale brakuje danych o skuteczności klinicznej.",
       "status": "submitted",
-      "grade": 4
+      "grade": 4.0,
+      "content_consistency": 4.0,
+      "goal_formulation": 4.0,
+      "structure_correctness": 4.0,
+      "terminology_relevance": 4.0,
+      "graphic_design": 4.0,
+      "aesthetics": 4.0,
+      "literature_selection": 4.0,
+      "conclusions_correctness": 4.0,
+      "goal_achievement": 4.0,
+      "language_correctness": 4.0
     }
   },
   {
@@ -212,7 +221,17 @@
       "review_date": "2025-01-15T12:00:00Z",
       "comment": "Zbyt powierzchowne podejście do biometrii. Wymaga poprawek.",
       "status": "submitted",
-      "grade": 2
+      "grade": 2.0,
+      "content_consistency": 2.0,
+      "goal_formulation": 2.0,
+      "structure_correctness": 2.0,
+      "terminology_relevance": 2.0,
+      "graphic_design": 2.0,
+      "aesthetics": 2.0,
+      "literature_selection": 2.0,
+      "conclusions_correctness": 2.0,
+      "goal_achievement": 2.0,
+      "language_correctness": 2.0
     }
   },
   {
@@ -224,7 +243,17 @@
       "review_date": "2025-01-18T13:00:00Z",
       "comment": "Świetna analiza implementacji blockchaina. Wnioski są bardzo przekonujące.",
       "status": "submitted",
-      "grade": 5
+      "grade": 5.0,
+      "content_consistency": 5.0,
+      "goal_formulation": 5.0,
+      "structure_correctness": 5.0,
+      "terminology_relevance": 5.0,
+      "graphic_design": 5.0,
+      "aesthetics": 5.0,
+      "literature_selection": 5.0,
+      "conclusions_correctness": 5.0,
+      "goal_achievement": 5.0,
+      "language_correctness": 5.0
     }
   },
   {
@@ -236,7 +265,17 @@
       "review_date": "2025-01-20T14:00:00Z",
       "comment": "Dobre przykłady optymalizacji, ale mało o dostępności (a11y).",
       "status": "submitted",
-      "grade": 4
+      "grade": 4.0,
+      "content_consistency": 4.0,
+      "goal_formulation": 4.0,
+      "structure_correctness": 4.0,
+      "terminology_relevance": 4.0,
+      "graphic_design": 4.0,
+      "aesthetics": 4.0,
+      "literature_selection": 4.0,
+      "conclusions_correctness": 4.0,
+      "goal_achievement": 4.0,
+      "language_correctness": 4.0
     }
   },
   {
@@ -247,7 +286,18 @@
       "reviewer": 3,
       "review_date": null,
       "comment": null,
-      "status": "invited"
+      "status": "invited",
+      "grade": null,
+      "content_consistency": null,
+      "goal_formulation": null,
+      "structure_correctness": null,
+      "terminology_relevance": null,
+      "graphic_design": null,
+      "aesthetics": null,
+      "literature_selection": null,
+      "conclusions_correctness": null,
+      "goal_achievement": null,
+      "language_correctness": null
     }
   },
   {
@@ -258,7 +308,18 @@
       "reviewer": 7,
       "review_date": null,
       "comment": null,
-      "status": "invited"
+      "status": "invited",
+      "grade": null,
+      "content_consistency": null,
+      "goal_formulation": null,
+      "structure_correctness": null,
+      "terminology_relevance": null,
+      "graphic_design": null,
+      "aesthetics": null,
+      "literature_selection": null,
+      "conclusions_correctness": null,
+      "goal_achievement": null,
+      "language_correctness": null
     }
   },
   {
@@ -269,7 +330,18 @@
       "reviewer": 9,
       "review_date": null,
       "comment": null,
-      "status": "invited"
+      "status": "invited",
+      "grade": null,
+      "content_consistency": null,
+      "goal_formulation": null,
+      "structure_correctness": null,
+      "terminology_relevance": null,
+      "graphic_design": null,
+      "aesthetics": null,
+      "literature_selection": null,
+      "conclusions_correctness": null,
+      "goal_achievement": null,
+      "language_correctness": null
     }
   },
   {
@@ -280,7 +352,18 @@
       "reviewer": 10,
       "review_date": null,
       "comment": null,
-      "status": "invited"
+      "status": "invited",
+      "grade": null,
+      "content_consistency": null,
+      "goal_formulation": null,
+      "structure_correctness": null,
+      "terminology_relevance": null,
+      "graphic_design": null,
+      "aesthetics": null,
+      "literature_selection": null,
+      "conclusions_correctness": null,
+      "goal_achievement": null,
+      "language_correctness": null
     }
   }
 ]
