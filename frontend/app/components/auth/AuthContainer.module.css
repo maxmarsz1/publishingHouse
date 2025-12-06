@@ -1,10 +1,11 @@
-.container{
+.container {
     min-height: 100vh;
     display: flex;
+    justify-content: center;
 }
 
-@media (max-width: 991px){
-    .container{
+@media (max-width: 991px) {
+    .container {
         flex-direction: column;
     }
 }

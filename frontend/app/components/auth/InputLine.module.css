@@ -1,18 +1,33 @@
-.line{
+.line {
     display: flex;
     align-items: center;
     gap: 1rem;
 }
-.line span{
+
+.line span {
     width: 70px;
 }
 
-.input input{
+.input input {
     padding: 10px;
 }
 
-@media (max-width: 991px){
-    .input{
+@media (max-width: 991px) {
+    .input {
         width: calc(100% - 70px);
     }
+}
+
+.column {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+}
+
+.column span {
+    width: 100%;
+}
+
+.column .input {
+    width: 100%;
 }

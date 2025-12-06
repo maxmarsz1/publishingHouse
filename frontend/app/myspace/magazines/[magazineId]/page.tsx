@@ -34,7 +34,7 @@ const PublisherViewClient = () => {
   const [error, setError] = useState<string | null>(null);
 
   // Convert dueDate to readable string
-  const [dueDateReadable, setDueDateReadable] = useState<string>('Brak');
+  const [dueDateReadable, setDueDateReadable] = useState<string>('----------');
 
   useEffect(() => {
     if (isNaN(idAsNumber) || idAsNumber <= 0) {
@@ -59,7 +59,7 @@ const PublisherViewClient = () => {
               hour: '2-digit',
               minute: '2-digit',
             })
-            : 'Brak'
+            : '----------'
         );
 
         if (isStaff) {
