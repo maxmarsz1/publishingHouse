@@ -2,7 +2,7 @@
 
 import React from "react";
 import styles from "./ArticleReviewerInfo.module.css";
-import { Review, ReviewStatus, ReviewStatusDisplay } from "@/app/types/types";
+import { Review, ReviewStatus, ReviewStatusDisplay, reviewCriteriaDisplay } from "@/app/types/types";
 import { faCheckCircle, faEnvelope, faHourglassHalf, faTimesCircle, IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ArticleReviewInvited from "./ArticleReviewInvited";
@@ -23,8 +23,8 @@ const ArticleReviewerInfo = ({ review, reviewStatus, setReviewStatus }: ArticleR
       hour: "numeric",
       minute: "2-digit",
     }
-  ) : "Brak";
-    
+  ) : "-";
+
   const statusIcon: Record<ReviewStatus, IconDefinition> = {
     submitted: faCheckCircle,
     pending: faHourglassHalf,
@@ -48,22 +48,35 @@ const ArticleReviewerInfo = ({ review, reviewStatus, setReviewStatus }: ArticleR
       {reviewStatus == ReviewStatus.Invited &&
         <ArticleReviewInvited reviewId={review.id} setReviewStatus={setReviewStatus} />
       }
-      
+
       {(reviewStatus == ReviewStatus.Pending || reviewStatus == ReviewStatus.Sumbitted) &&
-      <div className={styles.grid}>
-        <div className={styles.header}>Komentarz</div>
-        <div className={styles.header}>Ocena</div>
-        <div className={styles.header}>Data recenzji</div>
-        <div>
-            {review.comment || "Brak komentarza"}
+        <div className={styles.infoGrid}>
+          <div className={styles.label}>Komentarz</div>
+          <div className={styles.value}>
+            {review.comment || "-"}
+          </div>
+
+          <div className={styles.label}>Ocena Średnia</div>
+          <div className={styles.value}>
+            {review.grade != null ? review.grade.toFixed(2) : "-"}
+          </div>
+
+          <div className={styles.label}>Data recenzji</div>
+          <div className={styles.value}>{reviewDateReadable}</div>
+
+          {Object.entries(reviewCriteriaDisplay).map(([key, label]) => {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const value = (review as any)[key];
+            return (
+              <React.Fragment key={key}>
+                <div className={styles.label}>{label}</div>
+                <div className={styles.value}>{value ?? '-'}</div>
+              </React.Fragment>
+            )
+          })}
         </div>
-        <div>
-            {review.grade != null ? review.grade : "Brak oceny"}
-        </div>
-        <div>{reviewDateReadable}</div>
-      </div>
       }
-      
+
     </div>
   );
 };

@@ -33,8 +33,7 @@ const ArticleData = ({ article }: Props) => {
       {isStaff && (
         <div className={styles.infoLine}>
           <strong>Autor: </strong>
-          {article.author.first_name} {article.author.last_name} (
-          {article.author.email})
+          {article.author.first_name} {article.author.last_name}
         </div>
       )}
       <div className={styles.infoLine}>
@@ -45,14 +44,16 @@ const ArticleData = ({ article }: Props) => {
         <strong>Abstract: </strong>
         {article.abstract}
       </div>
-      <div className={styles.infoLine}>
-        <strong>Status: </strong>
-        {getStatusDisplayText(article.status)}
-      </div>
+      {(isStaff || article.isAuthor) && (
+        <div className={styles.infoLine}>
+          <strong>Status: </strong>
+          {getStatusDisplayText(article.status)}
+        </div>
+      )}
       <div className={styles.infoLine}>
         <strong>Keywords: </strong>
         {article.keywords && article.keywords.trim() != "" ?
-          article.keywords:
+          article.keywords :
           "Brak"
         }
       </div>
@@ -60,13 +61,15 @@ const ArticleData = ({ article }: Props) => {
         <strong>Utworzony: </strong>
         {createdAtString}
       </div>
-      <div className={styles.infoLine}>
-        <strong>Komentarz: </strong>
-        {article.comment && article.comment.trim() != "" ?
-        article.comment:
-        "Brak"
-        }
-      </div>
+      {(isStaff || article.isAuthor) &&
+        <div className={styles.infoLine}>
+          <strong>Komentarz: </strong>
+          {article.comment && article.comment.trim() != "" ?
+            article.comment :
+            "Brak"
+          }
+        </div>
+      }
       <div className={styles.infoLine}>
         <strong>Typ artykułu: </strong>
         {ArticleTypeDisplay[article.articleType]}

@@ -40,11 +40,15 @@ class RaportListSerializer(serializers.ModelSerializer):
             "name": obj.publisher.name
         } if obj.publisher else None
 
-class AnonymizedReviewSerializer(serializers.ModelSerializer):
+class AnonymizedDetailedReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = RaportReview
-        fields = ['id', 'grade', 'review_date', 'status']
-        
+        fields = ['id', 'grade', 'review_date', 'status', 'comment',
+                  'content_consistency', 'goal_formulation', 'structure_correctness',
+                  'terminology_relevance', 'graphic_design', 'aesthetics',
+                  'literature_selection', 'conclusions_correctness', 'goal_achievement',
+                  'language_correctness']
+
 class ReviewerSerializer(serializers.ModelSerializer):
     class Meta:
         model = User  
@@ -76,7 +80,7 @@ class RaportReviewReviewerSerializer(serializers.ModelSerializer):
 
 class AuthorRaportSerializer(serializers.ModelSerializer):
     '''Used for author RaportView'''
-    reviews = AnonymizedReviewSerializer(source='raport_reviews', many=True)
+    reviews = AnonymizedDetailedReviewSerializer(source='raport_reviews', many=True)
     publisher = serializers.SerializerMethodField()
 
     class Meta:
@@ -98,7 +102,7 @@ class ReviewerRaportSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Raport
-        fields = ['id', 'title', 'abstract', 'status', 'created_at', 'category', 'raport_type', 'keywords', 'file', 'to_review', 'publisher', 'comment', 'review']
+        fields = ['id', 'title', 'abstract', 'created_at', 'category', 'raport_type', 'keywords', 'file', 'to_review', 'publisher', 'review']
     
     def get_to_review(self, obj):
         # Logic to determine if the raport is "to review" for the current user
@@ -119,13 +123,7 @@ class ReviewerRaportSerializer(serializers.ModelSerializer):
         if request:
             review = obj.raport_reviews.filter(reviewer=request.user).first()
             if review:
-                return {
-                    "id": review.id,
-                    "comment": review.comment,
-                    "grade": review.grade,
-                    "status": review.status,
-                    "review_date": review.review_date
-                }
+                return AnonymizedDetailedReviewSerializer(review).data
         return None
 
 
@@ -172,7 +170,7 @@ class CreateReviewSerializer(serializers.ModelSerializer):
     def validate_comment(self, value):
         word_count = len(value.split())
         if word_count < 100 or word_count > 1000:
-            raise serializers.ValidationError(f"Comment must be between 100 and 1000 words. Currently: {word_count} words.")
+            raise serializers.ValidationError(f"Komentarz musi mieć od 100 do 1000 słów.")
         return value
 
     def validate(self, data):
@@ -183,13 +181,13 @@ class CreateReviewSerializer(serializers.ModelSerializer):
         try:
             raport = Raport.objects.get(id=raport_id)
         except Raport.DoesNotExist:
-            raise serializers.ValidationError({"raport_id": "Raport does not exist"})
+            raise serializers.ValidationError({"raport_id": "Raport nie istnieje"})
 
         if user not in raport.reviewers.all():
-            raise serializers.ValidationError({"error": "User is not a reviewer for this raport"})
+            raise serializers.ValidationError({"error": "Użytkownik nie jest recenzentem tego raportu"})
 
         if raport.status in [Raport.RaportStatus.APPROVED, Raport.RaportStatus.PUBLISHED, Raport.RaportStatus.REJECTED]:
-            raise serializers.ValidationError({"error": "Reviews cannot be added to approved, rejected or published raports"})
+            raise serializers.ValidationError({"error": "Nie można dodać recenzji do zatwierdzonych, odrzuconych lub opublikowanych raportów"})
 
         return data
 

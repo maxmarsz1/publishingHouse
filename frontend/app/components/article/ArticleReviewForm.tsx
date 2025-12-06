@@ -25,6 +25,7 @@ const ArticleReviewForm: React.FC<ArticleReviewFormProps> = ({ articleId }) => {
   const [criteriaGrades, setCriteriaGrades] = useState<Record<string, number>>(
     Object.keys(reviewCriteriaDisplay).reduce((acc, key) => ({ ...acc, [key]: 2.5 }), {})
   );
+  const [errors, setErrors] = useState<Record<string, string[]>>({});
   const router = useRouter();
 
   const handleCriteriaChange = (key: string, value: number | null) => {
@@ -37,6 +38,7 @@ const ArticleReviewForm: React.FC<ArticleReviewFormProps> = ({ articleId }) => {
   };
 
   async function handleSubmit() {
+    setErrors({});
     if (grade) {
       try {
         await apiClient.post(`/raport/${articleId}/create-review/`, {
@@ -45,9 +47,14 @@ const ArticleReviewForm: React.FC<ArticleReviewFormProps> = ({ articleId }) => {
         });
         console.log("Review created successfully");
         router.push(`/myspace/articles/${articleId}`);
-      } catch (error) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (error: any) {
         console.error("Error creating review:", error);
-        throw new Error("Failed to create review");
+        if (error.response && error.response.data) {
+          setErrors(error.response.data);
+        } else {
+          setErrors({ non_field_errors: ["Wystąpił nieznany błąd."] });
+        }
       }
 
     } else {
@@ -59,6 +66,17 @@ const ArticleReviewForm: React.FC<ArticleReviewFormProps> = ({ articleId }) => {
 
   return (
     <form className={styles.form}>
+      {errors.non_field_errors && (
+        <div style={{ color: 'red', marginBottom: '1rem' }}>
+          {errors.non_field_errors.join(', ')}
+        </div>
+      )}
+      {errors.error && (
+        <div style={{ color: 'red', marginBottom: '1rem' }}>
+          {errors.error}
+        </div>
+      )}
+
       <TextField
         id="comment"
         label="Komentarz"
@@ -69,6 +87,8 @@ const ArticleReviewForm: React.FC<ArticleReviewFormProps> = ({ articleId }) => {
         onChange={(e) => setComment(e.target.value)}
         fullWidth
         className={styles.inputField}
+        error={!!errors.comment}
+        helperText={errors.comment ? errors.comment.join(', ') : ""}
       />
 
       <div className={styles.criteria}>

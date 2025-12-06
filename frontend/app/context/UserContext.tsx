@@ -3,7 +3,7 @@
 import { createContext, useState, ReactNode, useCallback, useContext } from "react";
 import { useRouter } from "next/navigation";
 import apiClient from "@/app/utils/api-client";
-import axios from "axios";
+
 
 type UserContextType = {
   isStaff: boolean;
@@ -14,9 +14,9 @@ type UserContextType = {
 
 export const UserContext = createContext<UserContextType>({
   isStaff: false,
-  setIsStaff: () => {},
-  revalidateUserStatus: async () => {},
-  logoutUser: () => {},
+  setIsStaff: () => { },
+  revalidateUserStatus: async () => { },
+  logoutUser: () => { },
 });
 
 export const useUser = () => {
@@ -36,22 +36,25 @@ export function UserProvider({ children, initialIsStaff }: UserProviderProps) {
   const [isStaff, setIsStaff] = useState<boolean>(initialIsStaff);
   const router = useRouter();
 
-  const logoutUser = useCallback(() => {
-    const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-    axios.post(`${API_BASE_URL}/auth/logout/`, {}, { withCredentials: true })
-        .catch(error => console.error("Logout API call failed, but clearing local state.", error));
-    setIsStaff(false);
-
-    router.push('/auth/login');
+  const logoutUser = useCallback(async () => {
+    try {
+      const response = await apiClient.post('/auth/logout/');
+      console.log("Wylogowano pomyślnie:", response);
+    } catch (error) {
+      console.error("Wylogowanie nie powiodło się", error);
+    } finally {
+      setIsStaff(false);
+      router.push('/auth/login');
+    }
   }, [router]);
 
   const revalidateUserStatus = useCallback(async () => {
     try {
       const response = await apiClient.get('/auth/is-staff/');
-      
+
       setIsStaff(response.data.is_staff);
     } catch (error) {
-      console.error("Failed to revalidate user status:", error);
+      console.error("Nie udało się zweryfikować statusu użytkownika:", error);
       logoutUser();
     }
   }, [logoutUser]);

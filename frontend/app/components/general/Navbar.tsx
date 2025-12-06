@@ -2,13 +2,10 @@
 
 import Link from 'next/link'
 import React, { useContext } from 'react'
-import { useRouter } from 'next/navigation'
 import styles from "./Navbar.module.css"
 import { Container } from '@mui/material'
 import Image from 'next/image'
 import MobileMenu from './MobileMenu'
-import api from '@/app/utils/api-client'
-import { AxiosError } from 'axios'
 import { UserContext } from '@/app/context/UserContext'
 
 const Navbar = () => {

@@ -66,7 +66,7 @@ class AdminViews:
                 membership.delete()
             except ObjectDoesNotExist:
                 return Response(
-                    {"error": "User or membership does not exist."}, 
+                    {"error": "Użytkownik lub członkostwo nie istnieje."}, 
                     status=status.HTTP_404_NOT_FOUND
                 )
             except Exception as e:
@@ -75,7 +75,7 @@ class AdminViews:
                     status=status.HTTP_500_INTERNAL_SERVER_ERROR
                 )
             return Response(
-                {"message": f"User {user.username} removed from publisher."}, 
+                {"message": f"Użytkownik {user.username} został usunięty z wydawnictwa."}, 
                 status=status.HTTP_200_OK
             )
 
@@ -93,7 +93,7 @@ class AdminViews:
                 members_serializer = self.serializer_class(members, many=True)
             except Exception as e:
                 return Response(
-                    {"error": "Could not retrieve members."}, 
+                    {"error": "Nie udało się pobrać członków."}, 
                     status=status.HTTP_500_INTERNAL_SERVER_ERROR
                 )
             
@@ -112,7 +112,7 @@ class AdminViews:
                 publisher.save()
             except ObjectDoesNotExist:
                 return Response(
-                    {"error": "Publisher does not exist."}, 
+                    {"error": "Wydawnictwo nie istnieje."}, 
                     status=status.HTTP_404_NOT_FOUND
                 )
             except Exception as e:
@@ -167,7 +167,7 @@ class UserViews:
                     serializer = ReviewerRaportSerializer(raport, context={'request': request})
                 else:
                     return Response(
-                        {"error": "You do not have permission to view this raport"},
+                        {"error": "Nie masz uprawnień do przeglądania tego raportu."},
                         status=status.HTTP_403_FORBIDDEN
                     )
 
@@ -175,7 +175,7 @@ class UserViews:
 
             except ObjectDoesNotExist:
                 return Response(
-                    {"error": "Raport does not exist"},
+                    {"error": "Raport nie istnieje."},
                     status=status.HTTP_404_NOT_FOUND
                 )
             except Exception as e:
@@ -192,19 +192,19 @@ class UserViews:
 
                 if user != raport.author:
                     return Response(
-                        {"error": "You do not have permission to update this raport."},
+                        {"error": "Nie masz uprawnień do edycji tego raportu."},
                         status=status.HTTP_403_FORBIDDEN
                     )
                     
                 if raport.publisher.due_date and raport.publisher.due_date < timezone.now().date():
                     return Response(
-                        {"error": "Cannot update this raport. The publisher's due date has passed."},
+                        {"error": "Nie można zaktualizować tego raportu. Termin wydawcy minął."},
                         status=status.HTTP_400_BAD_REQUEST
                     )
                 
                 if raport.status in [Raport.RaportStatus.APPROVED, Raport.RaportStatus.PUBLISHED, Raport.RaportStatus.REJECTED]:
                     return Response(
-                        {"error": "Cannot update this raport. Its status does not allow updates."},
+                        {"error": "Nie można zaktualizować tego raportu. Jego status nie pozwala na aktualizacje."},
                         status=status.HTTP_400_BAD_REQUEST
                     )
 
@@ -217,7 +217,7 @@ class UserViews:
 
             except ObjectDoesNotExist:
                 return Response(
-                    {"error": "Raport does not exist."},
+                    {"error": "Raport nie istnieje."},
                     status=status.HTTP_404_NOT_FOUND
                 )
             except Exception as e:
@@ -234,25 +234,25 @@ class UserViews:
 
                 if user != raport.author and not user.is_superuser:
                     return Response(
-                        {"error": "You do not have permission to delete this raport."},
+                        {"error": "Nie masz uprawnień do usunięcia tego raportu."},
                         status=status.HTTP_403_FORBIDDEN
                     )
                     
                 if raport.publisher.due_date and raport.publisher.due_date < timezone.now():
                     return Response(
-                        {"error": "Cannot delete a raport. The publisher's due date has passed."},
+                        {"error": "Nie można usunąć raportu. Termin wydawcy minął."},
                         status=status.HTTP_400_BAD_REQUEST
                     )
 
                 raport.delete()
                 return Response(
-                    {"message": "Raport deleted successfully."},
+                    {"message": "Raport usunięty pomyślnie."},
                     status=status.HTTP_200_OK
                 )
 
             except ObjectDoesNotExist:
                 return Response(
-                    {"error": "Raport does not exist."},
+                    {"error": "Raport nie istnieje."},
                     status=status.HTTP_404_NOT_FOUND
                 )
             except Exception as e:
@@ -270,14 +270,14 @@ class UserViews:
             try:
                 publisher = Publisher.objects.get(id=pk)
                 if not PublisherMembership.objects.filter(publisher_id=publisher.id, user=user).exists():
-                    return Response({"error": "You must be a member of the publisher to create a raport."}, status=status.HTTP_403_FORBIDDEN)
+                    return Response({"error": "Musisz być członkiem wydawnictwa, aby utworzyć raport."}, status=status.HTTP_403_FORBIDDEN)
 
                 if Raport.objects.filter(publisher_id=publisher.id, author=user).exists():
-                    return Response({"error": "You can only publish one raport for each publisher."}, status=status.HTTP_400_BAD_REQUEST)
+                    return Response({"error": "Możesz opublikować tylko jeden raport dla każdego wydawnictwa."}, status=status.HTTP_400_BAD_REQUEST)
                 
                 if publisher.due_date and publisher.due_date < timezone.now().date():
                     return Response(
-                        {"error": "Cannot create a raport. The publisher's due date has passed."},
+                        {"error": "Nie można utworzyć raportu. Termin wydawcy minął."},
                         status=status.HTTP_400_BAD_REQUEST
                     )
 
@@ -303,16 +303,16 @@ class UserViews:
                 user = request.user
                 
                 if not (user.is_staff or user == raport.author or user in raport.reviewers.all()):
-                    return Response({"error": "You do not have permission to download this raport."}, status=status.HTTP_403_FORBIDDEN)
+                    return Response({"error": "Nie masz uprawnień do pobrania tego raportu."}, status=status.HTTP_403_FORBIDDEN)
 
                 if not raport.file:
-                    return Response({"error": "No file associated with this raport."}, status=status.HTTP_404_NOT_FOUND)
+                    return Response({"error": "Brak pliku powiązanego z tym raportem."}, status=status.HTTP_404_NOT_FOUND)
 
                 response = FileResponse(raport.file.open(), as_attachment=True, filename=raport.file.name)
                 return response
 
             except Raport.DoesNotExist:
-                return Response({"error": "Raport not found."}, status=status.HTTP_404_NOT_FOUND)
+                return Response({"error": "Raport nie znaleziony."}, status=status.HTTP_404_NOT_FOUND)
             except Exception as e:
                 return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
@@ -327,19 +327,19 @@ class UserViews:
 
                 if review.reviewer != user:
                     return Response(
-                        {"error": "You do not have permission to update this review invite."},
+                        {"error": "Nie masz uprawnień do aktualizacji tego zaproszenia do recenzji."},
                         status=status.HTTP_403_FORBIDDEN
                     )
                 if review.status != RaportReview.RaportReviewStatus.INVITE_SENT:
                     return Response(
-                        {"error": "This review invite cannot be updated."},
+                        {"error": "Tego zaproszenia do recenzji nie można zaktualizować."},
                         status=status.HTTP_400_BAD_REQUEST
                     )
 
                 accept = request.data.get('accept')
                 if accept is None:
                     return Response(
-                        {"error": "accept field is required."},
+                        {"error": "Pole accept jest wymagane."},
                         status=status.HTTP_400_BAD_REQUEST
                     )
 
@@ -347,13 +347,13 @@ class UserViews:
                 review.save()
 
                 return Response(
-                    {"message": "Review invite status updated successfully."},
+                    {"message": "Status zaproszenia do recenzji zaktualizowany pomyślnie."},
                     status=status.HTTP_200_OK
                 )
 
             except ObjectDoesNotExist:
                 return Response(
-                    {"error": "Review does not exist."},
+                    {"error": "Recenzja nie istnieje."},
                     status=status.HTTP_404_NOT_FOUND
                 )
             except Exception as e:
@@ -412,13 +412,13 @@ class UserViews:
 
             except ObjectDoesNotExist:
                 return Response(
-                    {"error": "Publisher doesn't exist or you're not a member"},
+                    {"error": "Wydawnictwo nie istnieje lub nie jesteś jego członkiem"},
                     status.HTTP_404_NOT_FOUND
                     )
             except Exception as e:
                 return Response(
                     {"error": str(e)},
-                    status.HTTP_500_INTERNAL_SERVER_ERROR
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
                     )
 
             return Response(publisher_serializer.data)
@@ -435,7 +435,7 @@ class UserViews:
                 
                 if PublisherMembership.objects.filter(user_id=user.id, publisher_id=publisher.id).exists():
                     return Response(
-                        {"error": "You are already a member of this publisher."},
+                        {"error": "Jesteś już członkiem tego wydawnictwa."},
                         status=status.HTTP_400_BAD_REQUEST
                     )
                 
@@ -444,18 +444,18 @@ class UserViews:
                     
             except KeyError as e:
                 return Response(
-                    {"error": f"join_code must be provided ({str(e)})"},
-                    status.HTTP_500_INTERNAL_SERVER_ERROR
+                    {"error": f"join_code musi być podane ({str(e)})"},
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
                     )
             except ObjectDoesNotExist:
                 return Response(
-                    {"error": "invalid join code"},
-                    status.HTTP_404_NOT_FOUND
+                    {"error": "nieprawidłowy kod dołączenia"},
+                    status=status.HTTP_404_NOT_FOUND
                     )
             except Exception as e:
                 return Response(
                     {"error": str(e)},
-                    status.HTTP_500_INTERNAL_SERVER_ERROR
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
                     )
 
             return Response(
@@ -475,7 +475,7 @@ class UserViews:
                 serializer = CreateReviewSerializer(data=data, context={'request': request})
                 if serializer.is_valid():
                     serializer.save(reviewer=user)
-                    return Response({"message": "Review created successfully"}, status=status.HTTP_201_CREATED)
+                    return Response({"message": "Recenzja utworzona pomyślnie"}, status=status.HTTP_201_CREATED)
                 else:
                     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -530,7 +530,7 @@ class UserViews:
 
                 if not user.check_password(current_password):
                     return Response(
-                        {"error": "Current password is incorrect"},
+                        {"error": "Obecne hasło jest nieprawidłowe"},
                         status=status.HTTP_400_BAD_REQUEST
                     )
                     
@@ -547,7 +547,7 @@ class UserViews:
 
             except KeyError as e:
                 return Response(
-                    {"error": f"{str(e)} must be provided"},
+                    {"error": f"{str(e)} musi być podane"},
                     status=status.HTTP_500_INTERNAL_SERVER_ERROR
                     )
             except Exception as e:
@@ -556,7 +556,7 @@ class UserViews:
                     status=status.HTTP_500_INTERNAL_SERVER_ERROR
                     )
 
-            return Response({"message": "Password changed successfully"})
+            return Response({"message": "Hasło zmienione pomyślnie"})
 
     class CustomTokenObtainPairView(TokenObtainPairView):
         serializer_class = CustomTokenObtainPairSerializer
@@ -598,7 +598,7 @@ class UserViews:
             
             if not refresh_token:
                 return Response(
-                    {"detail": "Refresh token not found in cookies."},
+                    {"detail": "Nie znaleziono tokenu odświeżania w ciasteczkach."},
                     status=status.HTTP_401_UNAUTHORIZED
                 )
 
@@ -610,7 +610,7 @@ class UserViews:
                 serializer.is_valid(raise_exception=True)
             except Exception:
                 return Response(
-                    {"detail": "Token is invalid or expired."},
+                    {"detail": "Token jest nieprawidłowy lub wygasł."},
                     status=status.HTTP_401_UNAUTHORIZED
                 )
 
@@ -663,13 +663,13 @@ class UserViews:
             refresh_token = request.COOKIES.get('refreshToken')
         
             if not refresh_token:
-                return Response({"detail": "Refresh token not found in cookies."}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"detail": "Nie znaleziono tokenu odświeżania w ciasteczkach."}, status=status.HTTP_400_BAD_REQUEST)
                 
             try:
                 token = RefreshToken(refresh_token)
                 token.blacklist()
                 
-                response = Response({"detail": "Successfully logged out."}, status=status.HTTP_200_OK)
+                response = Response({"detail": "Wylogowano pomyślnie."}, status=status.HTTP_200_OK)
                 response.delete_cookie('accessToken')
                 response.delete_cookie('refreshToken')
 
@@ -677,6 +677,6 @@ class UserViews:
                 
             except TokenError:
                 return Response(
-                    {"detail": "Token is invalid or expired."},
+                    {"detail": "Token jest nieprawidłowy lub wygasł."},
                     status=status.HTTP_400_BAD_REQUEST
                 )
