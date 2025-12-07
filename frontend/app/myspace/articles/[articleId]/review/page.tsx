@@ -42,7 +42,7 @@ const ArticleReviewPage = () => {
     }, [articleIdParam])
 
     if (isLoading) {
-        return <div>Loading...</div>
+        return <div>Ładowanie...</div>
     }
 
     if (!article || !articleIdParam || Array.isArray(articleIdParam)) {

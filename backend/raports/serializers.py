@@ -80,12 +80,16 @@ class RaportReviewReviewerSerializer(serializers.ModelSerializer):
 
 class AuthorRaportSerializer(serializers.ModelSerializer):
     '''Used for author RaportView'''
-    reviews = AnonymizedDetailedReviewSerializer(source='raport_reviews', many=True)
+    reviews = serializers.SerializerMethodField()
     publisher = serializers.SerializerMethodField()
 
     class Meta:
         model = Raport
         fields = ['id', 'title', 'abstract', 'status', 'created_at', 'category', 'raport_type', 'keywords', 'file', 'reviews', 'publisher', 'comment']
+
+    def get_reviews(self, obj):
+        reviews = obj.raport_reviews.filter(status=RaportReview.RaportReviewStatus.APPROVED)
+        return AnonymizedDetailedReviewSerializer(reviews, many=True).data
 
     def get_publisher(self, obj):
         return {

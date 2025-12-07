@@ -27,3 +27,16 @@
 .formContainer {
     margin-bottom: 2rem;
 }
+
+.checkboxLabel {
+    color: var(--text) !important;
+}
+
+.checkboxLabel :global(.MuiRadio-root),
+.checkboxLabel :global(.MuiCheckbox-root) {
+    color: var(--text) !important;
+}
+
+.checkboxLabel :global(.MuiFormLabel-root) {
+    color: var(--text) !important;
+}

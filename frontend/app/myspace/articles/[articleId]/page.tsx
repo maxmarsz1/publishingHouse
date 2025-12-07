@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'next/navigation';
 
 import { Article, ReviewStatus } from '@/app/types/types';
@@ -17,11 +17,24 @@ const ArticleViewClientMerged = () => {
   const params = useParams();
   const articleId = params?.articleId;
   const idAsNumber = +articleId!;
-  
+
   const [article, setArticle] = useState<Article | null>(null);
   const [reviewStatus, setReviewStatus] = useState<ReviewStatus | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const loadData = useCallback(async () => {
+    try {
+      const fetchedArticle = await getArticleData(idAsNumber);
+      setArticle(fetchedArticle);
+      setReviewStatus(fetchedArticle.review?.status || null);
+    } catch (err) {
+      console.error(err);
+      setError('Wystąpił problem z wczytaniem artykułu.');
+    } finally {
+      setLoading(false);
+    }
+  }, [idAsNumber]);
 
   useEffect(() => {
     if (!articleId || isNaN(idAsNumber) || idAsNumber <= 0) {
@@ -30,21 +43,8 @@ const ArticleViewClientMerged = () => {
       return;
     }
 
-    async function loadData() {
-      try {
-        const fetchedArticle = await getArticleData(idAsNumber);
-        setArticle(fetchedArticle);
-        setReviewStatus(fetchedArticle.review?.status || null);
-      } catch (err) {
-        console.error(err);
-        setError('Wystąpił problem z wczytaniem artykułu.');
-      } finally {
-        setLoading(false);
-      }
-    }
-
     loadData();
-  }, [articleId, idAsNumber]);
+  }, [articleId, idAsNumber, loadData]);
 
   if (loading) return <p>Ładowanie...</p>;
   if (error) return <p>{error}</p>;
@@ -54,10 +54,10 @@ const ArticleViewClientMerged = () => {
     <>
       <h1 className={styles.title}>Przegląd raportu</h1>
 
-      <ArticleData article={article}/>
+      <ArticleData article={article} />
       <ArticleActions article={article} reviewStatus={reviewStatus} />
 
-      {article.reviews && <ArticleReviewsTable isAuthor={article.isAuthor} reviews={article.reviews} />}
+      {article.reviews && <ArticleReviewsTable isAuthor={article.isAuthor} reviews={article.reviews} onReviewApproved={loadData} />}
 
       {article.review && (
         <ArticleReviewerInfo

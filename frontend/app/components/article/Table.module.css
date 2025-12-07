@@ -9,8 +9,7 @@
     padding: 10px;
 }
 
-.table tbody tr:nth-child(4n-3),
-.table tbody tr:nth-child(4n-2) {
+.table tbody tr:nth-child(2n-1) {
     background-color: var(--background1);
 }
 
@@ -98,4 +97,9 @@
     cursor: pointer;
     font-size: 1.2em;
     padding: 4px 8px;
+}
+
+.expandedRow {
+    background-color: var(--background1);
+    border-bottom: 1px solid var(--text);
 }

@@ -2,17 +2,32 @@ import React, { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons'
 
-import { Review, ReviewStatusDisplay, reviewCriteriaDisplay } from '@/app/types/types'
+import { Review, ReviewStatus, ReviewStatusDisplay, reviewCriteriaDisplay } from '@/app/types/types'
+import { approveReview } from '@/app/utils/article-helper'
 import styles from './Table.module.css'
+import { Button } from '@mui/material'
 
 interface Props {
   isAuthor: boolean | undefined;
   reviews: Review[];
+  onReviewApproved?: () => void;
 }
 
-const ArticleReviewsTable = ({ isAuthor, reviews }: Props) => {
+const ArticleReviewsTable = ({ isAuthor, reviews, onReviewApproved }: Props) => {
   const showReviewer = typeof isAuthor === undefined || !isAuthor;
   const [expandedRows, setExpandedRows] = useState<number[]>([]);
+
+  const handleApprove = async (e: React.MouseEvent, reviewId: number) => {
+    e.stopPropagation();
+    try {
+      await approveReview(reviewId);
+      if (onReviewApproved) {
+        onReviewApproved();
+      }
+    } catch (error) {
+      console.error("Failed to approve review", error)
+    }
+  }
 
   const toggleRow = (index: number) => {
     setExpandedRows(prev =>
@@ -34,6 +49,7 @@ const ArticleReviewsTable = ({ isAuthor, reviews }: Props) => {
             }
             <th>Status recenzji</th>
             <th>Ocena Średnia</th>
+            {showReviewer && <th>Akcje</th>}
           </tr>
         </thead>
         <tbody>
@@ -54,10 +70,24 @@ const ArticleReviewsTable = ({ isAuthor, reviews }: Props) => {
                   }
                   <td className={styles.status}>{ReviewStatusDisplay[review.status]}</td>
                   <td className={styles.grade}>{(!review.grade ? "Brak" : review.grade.toFixed(2))}</td>
+                  {showReviewer &&
+                    <td>
+                      {review.status === ReviewStatus.Sumbitted &&
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          size="small"
+                          onClick={(e) => handleApprove(e, review.id)}
+                        >
+                          Zatwierdź
+                        </Button>
+                      }
+                    </td>
+                  }
                 </tr>
                 {isExpanded && (
                   <tr>
-                    <td colSpan={showReviewer ? 4 : 3}>
+                    <td colSpan={showReviewer ? 5 : 3} className={styles.expandedRow}>
                       <div className={styles.expandedContent}>
                         <div className={styles.commentSection}>
                           <strong>Komentarz:</strong>
@@ -84,7 +114,7 @@ const ArticleReviewsTable = ({ isAuthor, reviews }: Props) => {
           })}
           {reviews.length == 0 &&
             <tr>
-              <td colSpan={showReviewer ? 5 : 4}>Brak recenzji</td>
+              <td colSpan={showReviewer ? 6 : 4}>Brak recenzji</td>
             </tr>
           }
         </tbody>

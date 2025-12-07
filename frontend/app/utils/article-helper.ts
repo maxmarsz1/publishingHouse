@@ -14,7 +14,7 @@ export async function getAdminPublisherArticles(id: number): Promise<Article[]> 
   }
 }
 
-export async function getUserPublisherArticles(id: number): Promise<UserArticles>{
+export async function getUserPublisherArticles(id: number): Promise<UserArticles> {
   try {
     const response = await apiClient.get(`/publisher/${id}/raports/`);
     console.log("Fetched articles data:", response.data);
@@ -31,7 +31,7 @@ export async function getUserPublisherArticles(id: number): Promise<UserArticles
   }
 }
 
-export async function getUserArticles(): Promise<UserArticles>{
+export async function getUserArticles(): Promise<UserArticles> {
   try {
     const response = await apiClient.get(`/user/raports/`);
     console.log(response.data)
@@ -50,7 +50,7 @@ export async function getUserArticles(): Promise<UserArticles>{
   }
 }
 
-export async function getArticleData(id: number): Promise<Article>{
+export async function getArticleData(id: number): Promise<Article> {
   try {
     const response = await apiClient.get(`/raport/${id}/`);
     console.log(response.data)
@@ -155,10 +155,20 @@ export async function downloadArticle(articleId: number): Promise<Blob> {
 
 export async function answearReviewInvite(reviewId: number, accept: boolean): Promise<void> {
   try {
-    await apiClient.post(`/raport/${reviewId}/review-invite-response/`, {accept});
+    await apiClient.post(`/raport/${reviewId}/review-invite-response/`, { accept });
     console.log("Review invite response sent successfully");
   } catch (error) {
     console.error("Error sending review invite response:", error);
+    throw error;
+  }
+}
+
+export async function approveReview(reviewId: number): Promise<void> {
+  try {
+    await apiClient.post(`/review/${reviewId}/approve/`);
+    console.log("Review approved successfully");
+  } catch (error) {
+    console.error("Error approving review:", error);
     throw error;
   }
 }

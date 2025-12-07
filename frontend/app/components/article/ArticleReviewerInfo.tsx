@@ -3,7 +3,7 @@
 import React from "react";
 import styles from "./ArticleReviewerInfo.module.css";
 import { Review, ReviewStatus, ReviewStatusDisplay, reviewCriteriaDisplay } from "@/app/types/types";
-import { faCheckCircle, faEnvelope, faHourglassHalf, faTimesCircle, IconDefinition } from "@fortawesome/free-solid-svg-icons";
+import { faCancel, faCheckCircle, faEnvelope, faHourglassHalf, faTimesCircle, IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ArticleReviewInvited from "./ArticleReviewInvited";
 
@@ -30,6 +30,7 @@ const ArticleReviewerInfo = ({ review, reviewStatus, setReviewStatus }: ArticleR
     pending: faHourglassHalf,
     invited: faEnvelope,
     invite_rejected: faTimesCircle,
+    approved: faCheckCircle
   };
 
   return (
@@ -49,7 +50,7 @@ const ArticleReviewerInfo = ({ review, reviewStatus, setReviewStatus }: ArticleR
         <ArticleReviewInvited reviewId={review.id} setReviewStatus={setReviewStatus} />
       }
 
-      {(reviewStatus == ReviewStatus.Pending || reviewStatus == ReviewStatus.Sumbitted) &&
+      {(reviewStatus == ReviewStatus.Pending || reviewStatus == ReviewStatus.Sumbitted || reviewStatus == ReviewStatus.Approved) &&
         <div className={styles.infoGrid}>
           <div className={styles.label}>Komentarz</div>
           <div className={styles.value}>

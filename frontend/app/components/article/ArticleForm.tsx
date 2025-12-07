@@ -2,10 +2,12 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Button, TextField, MenuItem } from "@mui/material";
+import { Button, TextField, MenuItem, Radio, RadioGroup, FormControlLabel, FormControl, FormLabel, Checkbox } from "@mui/material";
 import { Article, ArticleType, ArticleTypeDisplay, ITArticleCategory, ITArticleCategoryDisplay } from "@/app/types/types";
 import { createArticle, updateArticle } from "@/app/utils/article-helper";
 import styles from "./ArticleForm.module.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUpload } from "@fortawesome/free-solid-svg-icons";
 
 const articleCategoryOptions = Object.values(ITArticleCategory).map((type) => ({
   value: type,
@@ -29,6 +31,9 @@ const NewArticle = ({ publisherId, article }: NewRaportProps) => {
   const [comment, setComment] = useState(article?.comment || "");
   const [keywords, setKeywords] = useState(article?.keywords || "");
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [selfAuthored, setSelfAuthored] = useState(false);
+  const [question1, setQuestion1] = useState("");
+  const [question2, setQuestion2] = useState("");
 
   const router = useRouter();
 
@@ -53,8 +58,14 @@ const NewArticle = ({ publisherId, article }: NewRaportProps) => {
   }
 
   async function handleSubmit() {
-    if (!title || !abstract || (!uploadedFile && !article?.file)) {
-      console.log("Proszę uzupełnić tytuł, abstrakt i przesłać plik.");
+    const isNewArticle = !article;
+    const isQuestion1Valid = !isNewArticle || question1 !== "";
+    const isQuestion2Valid = !isNewArticle || question2 !== "";
+    const isSelfAuthoredValid = !isNewArticle || selfAuthored;
+    const isFileValid = uploadedFile || article?.file;
+
+    if (!title || !abstract || !isFileValid || !isQuestion1Valid || !isQuestion2Valid || !isSelfAuthoredValid) {
+      console.log("Proszę uzupełnić wszystkie wymagane pola.");
       return;
     }
 
@@ -102,17 +113,19 @@ const NewArticle = ({ publisherId, article }: NewRaportProps) => {
         label="Pełen tytuł"
         variant="outlined"
         fullWidth
+        required
         className={styles.inputField}
       />
 
       <TextField
         id="abstract"
-        label="Abstract"
+        label="Abstrakt"
         multiline
         rows={5}
         value={abstract}
         onChange={(e) => setAbstract(e.target.value)}
         fullWidth
+        required
         className={styles.inputField}
       />
 
@@ -171,6 +184,7 @@ const NewArticle = ({ publisherId, article }: NewRaportProps) => {
         component="label"
         className={styles.uploadButton}
       >
+        <FontAwesomeIcon icon={faUpload} />&nbsp;
         Prześlij plik
         <input
           type="file"
@@ -182,13 +196,44 @@ const NewArticle = ({ publisherId, article }: NewRaportProps) => {
           }}
         />
       </Button>
-      {uploadedFile && <p style={{marginBottom: '1rem'}}>Wybrano plik: {uploadedFile.name}</p>}
+      {uploadedFile && <p style={{ marginBottom: '2rem', fontSize: '12px' }}>Wybrano plik: {uploadedFile.name}</p>}
+
+      {!article &&
+        <>
+          <FormControl component="fieldset" style={{ marginBottom: '1rem', display: 'block' }}>
+            <FormLabel component="legend" className={styles.checkboxLabel} required>Czy artykuł został wcześniej przesłany do jakiejkolwiek innej publikacji?</FormLabel>
+            <RadioGroup row aria-label="question1" name="question1" value={question1} onChange={(e) => setQuestion1(e.target.value)}>
+              <FormControlLabel className={styles.checkboxLabel} value="yes" control={<Radio />} label="Tak" />
+              <FormControlLabel className={styles.checkboxLabel} value="no" control={<Radio />} label="Nie" />
+            </RadioGroup>
+          </FormControl>
+
+          <FormControl component="fieldset" style={{ marginBottom: '1rem', display: 'block' }}>
+            <FormLabel component="legend" className={styles.checkboxLabel} required>Prosimy o potwierdzenie, że manuskrypt jest przesyłany wyłącznie do tego czasopisma i nie został opublikowany w prasie ani przesłany gdzie indziej.</FormLabel>
+            <RadioGroup row aria-label="question2" name="question2" value={question2} onChange={(e) => setQuestion2(e.target.value)}>
+              <FormControlLabel className={styles.checkboxLabel} value="yes" control={<Radio />} label="Tak" />
+              <FormControlLabel className={styles.checkboxLabel} value="no" control={<Radio />} label="Nie" />
+            </RadioGroup>
+          </FormControl>
+
+          <FormControl component="fieldset" style={{ marginBottom: '1rem', display: 'block' }}>
+            <FormControlLabel className={styles.checkboxLabel} required control={<Checkbox checked={selfAuthored} onChange={(e) => setSelfAuthored(e.target.checked)} />} label="Oświadczam, że przekładana praca została napisana przeze mnie samodzielnie." />
+          </FormControl>
+        </>
+      }
+
 
       <Button
         variant="contained"
         color="primary"
         onClick={handleSubmit}
         className={styles.submitButton}
+        disabled={
+          !title ||
+          !abstract ||
+          (!uploadedFile && !article?.file) ||
+          (!article && (!selfAuthored || !question1 || !question2))
+        }
       >
         {article ? "Zapisz zmiany" : "Utwórz raport"}
       </Button>

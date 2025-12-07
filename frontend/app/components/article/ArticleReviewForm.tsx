@@ -79,7 +79,7 @@ const ArticleReviewForm: React.FC<ArticleReviewFormProps> = ({ articleId }) => {
 
       <TextField
         id="comment"
-        label="Komentarz"
+        label="Komentarz (100-1000 słów)"
         value={comment}
         multiline
         rows={5}

@@ -5,7 +5,8 @@
     "fields": {
       "name": "Czasopismo Politechniki",
       "description": "Czasopismo skupiające się na publikacjach naukowych i technicznych.",
-      "members": []
+      "members": [],
+      "created_at": "2023-01-01T12:00:00Z"
     }
   },
   {
@@ -14,7 +15,8 @@
     "fields": {
       "name": "Innowacje IT Polska",
       "description": "Najnowsze trendy w świecie technologii informatycznych.",
-      "members": []
+      "members": [],
+      "created_at": "2023-01-01T12:00:00Z"
     }
   },
   {
@@ -23,7 +25,8 @@
     "fields": {
       "name": "Medycyna Przyszłości",
       "description": "Publikacje medyczne i badania kliniczne.",
-      "members": []
+      "members": [],
+      "created_at": "2023-01-01T12:00:00Z"
     }
   },
   {
@@ -32,7 +35,8 @@
     "fields": {
       "name": "Ekonomia i Rynek",
       "description": "Analizy rynkowe, raporty ekonomiczne i finanse.",
-      "members": []
+      "members": [],
+      "created_at": "2023-01-01T12:00:00Z"
     }
   },
   {
@@ -41,7 +45,8 @@
     "fields": {
       "name": "Sztuka i Design",
       "description": "Wydawnictwo poświęcone sztuce współczesnej i designowi.",
-      "members": []
+      "members": [],
+      "created_at": "2023-01-01T12:00:00Z"
     }
   },
   {

@@ -60,7 +60,9 @@ const RegisterPanel = () => {
 
     return (
         <div className={styles.panel}>
-            <Image src="/logo.webp" alt="Logo" width={256} height={88} />
+            <Link href="/">
+                <Image src="/logo.webp" alt="Logo" width={256} height={88} />
+            </Link>
             <h2 className={styles.title}>Rejestracja</h2>
 
             {errors.non_field_errors && (

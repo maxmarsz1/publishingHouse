@@ -35,8 +35,8 @@ const NewMagazineModal = ({
       const response = await createPublisher({ name, description });
       console.log(response);
       setPublishersState((prevPublishers: Publisher[]) => [
-        ...prevPublishers,
         response,
+        ...prevPublishers,
       ]);
       setShowModal(false);
     } catch (error) {

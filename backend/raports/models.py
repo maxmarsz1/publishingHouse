@@ -95,6 +95,7 @@ class RaportReview(models.Model):
     class RaportReviewStatus(models.TextChoices):
         PENDING = 'pending', 'Pending Review'
         SUBMITTED = 'submitted', 'Submitted Review'
+        APPROVED = 'approved', 'Approved'
         INVITE_SENT = 'invited', 'Reviewer Invited'
         INVITE_REJECTED = 'invite_rejected', 'Invite rejected'
 

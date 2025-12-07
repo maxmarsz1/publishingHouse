@@ -2,8 +2,8 @@
 import { createTheme } from '@mui/material/styles';
 
 const theme = createTheme({
-  palette:{
-    primary:{
+  palette: {
+    primary: {
       main: "#EB5E28"
     }
   },
@@ -35,6 +35,20 @@ const theme = createTheme({
             color: 'rgba(255, 255, 255, 0.7)',
             opacity: 1,
           },
+        },
+      },
+    },
+    MuiFormLabel: {
+      styleOverrides: {
+        asterisk: {
+          color: 'red',
+        },
+      },
+    },
+    MuiFormControlLabel: {
+      styleOverrides: {
+        asterisk: {
+          color: 'red',
         },
       },
     },

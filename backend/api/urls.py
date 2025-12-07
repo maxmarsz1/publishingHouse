@@ -11,7 +11,7 @@ from .views import AdminViews, UserViews
 
 router = DefaultRouter()
 router.register(r'raports', AdminViews.RaportViewSet)
-router.register(r'raportreviews', AdminViews.RaportReviewViewSet)
+router.register(r'review', AdminViews.RaportReviewViewSet)
 router.register(r'users', AdminViews.UserViewSet)
 router.register(r'publishers', AdminViews.PublisherViewSet)
 router.register(r'publishermemberships', AdminViews.PublisherMembershipViewSet)

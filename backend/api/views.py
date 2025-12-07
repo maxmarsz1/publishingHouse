@@ -1,4 +1,5 @@
 from rest_framework import viewsets, status, generics
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
@@ -37,6 +38,19 @@ class AdminViews:
         permission_classes = [IsAdminUser]
         queryset = RaportReview.objects.all()
         serializer_class = RaportReviewSerializer
+        
+        @action(detail=True, methods=['post'])
+        def approve(self, request, pk=None):
+            review = self.get_object()
+            if review.status != RaportReview.RaportReviewStatus.SUBMITTED:
+                return Response(
+                    {"error": "Tylko przesłane recenzje mogą zostać zatwierdzone."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            
+            review.status = RaportReview.RaportReviewStatus.APPROVED
+            review.save()
+            return Response({'status': 'review approved'}, status=status.HTTP_200_OK)
         
     class UserViewSet(viewsets.ModelViewSet):
         permission_classes = [IsAdminUser]
@@ -393,7 +407,7 @@ class UserViews:
         def get_queryset(self):
             user = self.request.user
             if user.is_staff:
-                return Publisher.objects.all()
+                return Publisher.objects.all().order_by('-created_at')
             return Publisher.objects.filter(members=user)
         
     class PublisherDetailView(APIView):

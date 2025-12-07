@@ -3,14 +3,6 @@ import random, string
 
 from users.models import User
 
-
-# def generate_unique_join_code(length=10):
-#     characters = string.ascii_uppercase + string.digits
-#     while True:
-#         code = ''.join(random.choice(characters) for _ in range(length))
-#         if not Publisher.objects.filter(join_code=code).exists():
-#             return code
-
 class Publisher(models.Model):
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField(blank=True, null=True)
@@ -22,6 +14,7 @@ class Publisher(models.Model):
         related_name='publishers',
         blank=True
     )
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name

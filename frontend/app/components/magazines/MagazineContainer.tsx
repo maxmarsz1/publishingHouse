@@ -8,7 +8,7 @@ import JoinMagazineBtn from './JoinMagazineBtn'
 import NewMagazineBtn from './NewMagazineBtn'
 import { UserContext } from '@/app/context/UserContext'
 
-const MagazineContainer = ({publishers}: {publishers: Publisher[]}) => {
+const MagazineContainer = ({ publishers }: { publishers: Publisher[] }) => {
   const { isStaff } = useContext(UserContext);
   const [publishersState, setPublishersState] = useState<Publisher[]>(publishers);
   const headerText = isStaff ? "Wszystkie czasopisma" : "Twoje czasopisma"
@@ -17,9 +17,9 @@ const MagazineContainer = ({publishers}: {publishers: Publisher[]}) => {
       <h1>{headerText}</h1>
       <div className={styles.publishersContainer}>
         {isStaff ? <NewMagazineBtn setPublishersState={setPublishersState} /> : <JoinMagazineBtn setPublishersState={setPublishersState} />}
-        
+
         {publishersState.map((publisher) => (
-          <MagazineCard key={publisher.id} publisher={publisher}/>
+          <MagazineCard key={publisher.id} publisher={publisher} />
         ))}
       </div>
     </>

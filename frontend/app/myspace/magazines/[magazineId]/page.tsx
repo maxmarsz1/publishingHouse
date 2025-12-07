@@ -4,7 +4,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { useParams } from 'next/navigation';
 import { Button } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClock, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faClock, faInfoCircle, faPlus } from '@fortawesome/free-solid-svg-icons';
 import Link from 'next/link';
 
 import { getPublisherData } from '@/app/utils/publisher-helper';
@@ -17,7 +17,7 @@ import MagazineName from '@/app/components/magazines/MagazineName';
 import MagazineDescription from '@/app/components/magazines/MagazineDescription';
 import styles from './page.module.css';
 
-import { Publisher, Article, UserArticles } from '@/app/types/types';
+import { Publisher, Article, UserArticles, User } from '@/app/types/types';
 import { UserContext } from '@/app/context/UserContext';
 
 const PublisherViewClient = () => {
@@ -35,6 +35,8 @@ const PublisherViewClient = () => {
 
   // Convert dueDate to readable string
   const [dueDateReadable, setDueDateReadable] = useState<string>('----------');
+
+  const [members, setMembers] = useState<User[] | null>(null);
 
   useEffect(() => {
     if (isNaN(idAsNumber) || idAsNumber <= 0) {
@@ -117,18 +119,34 @@ const PublisherViewClient = () => {
         </div>
 
         {!pastDue && !isStaff && (
-          <Button
-            style={{ gap: '8px' }}
-            variant="contained"
-            href={`/myspace/magazines/${publisher.id}/new-article`}
-            component={Link}
-          >
-            Przeslij raport
-            <FontAwesomeIcon icon={faPlus} />
-          </Button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+            <span style={{ cursor: regularUserArticles?.authored_articles.length !== 0 ? 'not-allowed' : 'pointer' }}>
+              <Button
+                style={{ gap: '8px' }}
+                variant="contained"
+                href={`/myspace/magazines/${publisher.id}/new-article`}
+                component={Link}
+                disabled={regularUserArticles?.authored_articles.length !== 0}
+              >
+                Przeslij raport
+                <FontAwesomeIcon icon={faPlus} />
+              </Button>
+            </span>
+            {regularUserArticles?.authored_articles.length !== 0 && (
+              <span style={{ color: 'red', fontSize: '12px' }}>
+                <FontAwesomeIcon icon={faInfoCircle} />&nbsp;
+                Możesz przesłać tylko jeden raport w ramach tego czasopisma.
+              </span>
+            )}
+          </div>
         )}
 
-        {isStaff && <AdminActions publisher={publisher} onDueDateUpdate={updateDueDate} />}
+        {isStaff && <AdminActions
+          publisher={publisher}
+          onDueDateUpdate={updateDueDate}
+          members={members}
+          setMembers={setMembers}
+        />}
       </div>
 
       {adminArticles && <ArticleTable title="Wszystkie raporty" articles={adminArticles} admin />}
