@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons'
+import { faCheck, faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons'
 
 import { Review, ReviewStatus, ReviewStatusDisplay, reviewCriteriaDisplay } from '@/app/types/types'
 import { approveReview } from '@/app/utils/article-helper'
@@ -47,8 +47,8 @@ const ArticleReviewsTable = ({ isAuthor, reviews, onReviewApproved }: Props) => 
             {showReviewer &&
               <th>Recenzent</th>
             }
-            <th>Status recenzji</th>
-            <th>Ocena Średnia</th>
+            <th>Status</th>
+            <th>Ocena</th>
             {showReviewer && <th>Akcje</th>}
           </tr>
         </thead>
@@ -78,8 +78,9 @@ const ArticleReviewsTable = ({ isAuthor, reviews, onReviewApproved }: Props) => 
                           color="primary"
                           size="small"
                           onClick={(e) => handleApprove(e, review.id)}
+                          className={styles.approveButton}
                         >
-                          Zatwierdź
+                          <FontAwesomeIcon icon={faCheck} />
                         </Button>
                       }
                     </td>
@@ -114,7 +115,8 @@ const ArticleReviewsTable = ({ isAuthor, reviews, onReviewApproved }: Props) => 
           })}
           {reviews.length == 0 &&
             <tr>
-              <td colSpan={showReviewer ? 6 : 4}>Brak recenzji</td>
+              <td style={{ width: '40px' }}></td>
+              <td colSpan={showReviewer ? 5 : 3}>Brak recenzji</td>
             </tr>
           }
         </tbody>

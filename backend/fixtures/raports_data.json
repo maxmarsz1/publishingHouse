@@ -7,7 +7,7 @@
       "author": 3,
       "reviewers": [],
       "publisher": 1,
-      "status": "published",
+      "status": "pending",
       "raport_type": "original_research",
       "category": "software_engineering",
       "abstract": "Przegląd najnowszych metodyk zwinnych i ich zastosowanie w dużych projektach komercyjnych.",
@@ -364,6 +364,346 @@
       "conclusions_correctness": null,
       "goal_achievement": null,
       "language_correctness": null
+    }
+  },
+  {
+    "model": "raports.raport",
+    "pk": 11,
+    "fields": {
+      "title": "Badanie wygenerowane 11",
+      "author": 11,
+      "publisher": 1,
+      "status": "pending",
+      "raport_type": "original_research",
+      "category": "software_engineering",
+      "abstract": "Abstrakt raportu wygenerowanego numer 11.",
+      "file": "raports/files/sample.pdf",
+      "keywords": "generated",
+      "created_at": "2025-01-05T12:00:00Z",
+      "comment": null
+    }
+  },
+  {
+    "model": "raports.raport",
+    "pk": 12,
+    "fields": {
+      "title": "Badanie wygenerowane 12",
+      "author": 12,
+      "publisher": 1,
+      "status": "pending",
+      "raport_type": "original_research",
+      "category": "software_engineering",
+      "abstract": "Abstrakt raportu wygenerowanego numer 12.",
+      "file": "raports/files/sample.pdf",
+      "keywords": "generated",
+      "created_at": "2025-01-05T12:00:00Z",
+      "comment": null
+    }
+  },
+  {
+    "model": "raports.raport",
+    "pk": 13,
+    "fields": {
+      "title": "Badanie wygenerowane 13",
+      "author": 13,
+      "publisher": 1,
+      "status": "pending",
+      "raport_type": "original_research",
+      "category": "software_engineering",
+      "abstract": "Abstrakt raportu wygenerowanego numer 13.",
+      "file": "raports/files/sample.pdf",
+      "keywords": "generated",
+      "created_at": "2025-01-05T12:00:00Z",
+      "comment": null
+    }
+  },
+  {
+    "model": "raports.raport",
+    "pk": 14,
+    "fields": {
+      "title": "Badanie wygenerowane 14",
+      "author": 14,
+      "publisher": 1,
+      "status": "pending",
+      "raport_type": "original_research",
+      "category": "software_engineering",
+      "abstract": "Abstrakt raportu wygenerowanego numer 14.",
+      "file": "raports/files/sample.pdf",
+      "keywords": "generated",
+      "created_at": "2025-01-05T12:00:00Z",
+      "comment": null
+    }
+  },
+  {
+    "model": "raports.raport",
+    "pk": 15,
+    "fields": {
+      "title": "Badanie wygenerowane 15",
+      "author": 15,
+      "publisher": 1,
+      "status": "pending",
+      "raport_type": "original_research",
+      "category": "software_engineering",
+      "abstract": "Abstrakt raportu wygenerowanego numer 15.",
+      "file": "raports/files/sample.pdf",
+      "keywords": "generated",
+      "created_at": "2025-01-05T12:00:00Z",
+      "comment": null
+    }
+  },
+  {
+    "model": "raports.raport",
+    "pk": 16,
+    "fields": {
+      "title": "Badanie wygenerowane 16",
+      "author": 16,
+      "publisher": 1,
+      "status": "pending",
+      "raport_type": "original_research",
+      "category": "software_engineering",
+      "abstract": "Abstrakt raportu wygenerowanego numer 16.",
+      "file": "raports/files/sample.pdf",
+      "keywords": "generated",
+      "created_at": "2025-01-05T12:00:00Z",
+      "comment": null
+    }
+  },
+  {
+    "model": "raports.raport",
+    "pk": 17,
+    "fields": {
+      "title": "Badanie wygenerowane 17",
+      "author": 17,
+      "publisher": 1,
+      "status": "pending",
+      "raport_type": "original_research",
+      "category": "software_engineering",
+      "abstract": "Abstrakt raportu wygenerowanego numer 17.",
+      "file": "raports/files/sample.pdf",
+      "keywords": "generated",
+      "created_at": "2025-01-05T12:00:00Z",
+      "comment": null
+    }
+  },
+  {
+    "model": "raports.raport",
+    "pk": 18,
+    "fields": {
+      "title": "Badanie wygenerowane 18",
+      "author": 18,
+      "publisher": 1,
+      "status": "pending",
+      "raport_type": "original_research",
+      "category": "software_engineering",
+      "abstract": "Abstrakt raportu wygenerowanego numer 18.",
+      "file": "raports/files/sample.pdf",
+      "keywords": "generated",
+      "created_at": "2025-01-05T12:00:00Z",
+      "comment": null
+    }
+  },
+  {
+    "model": "raports.raport",
+    "pk": 19,
+    "fields": {
+      "title": "Badanie wygenerowane 19",
+      "author": 19,
+      "publisher": 1,
+      "status": "pending",
+      "raport_type": "original_research",
+      "category": "software_engineering",
+      "abstract": "Abstrakt raportu wygenerowanego numer 19.",
+      "file": "raports/files/sample.pdf",
+      "keywords": "generated",
+      "created_at": "2025-01-05T12:00:00Z",
+      "comment": null
+    }
+  },
+  {
+    "model": "raports.raport",
+    "pk": 20,
+    "fields": {
+      "title": "Badanie wygenerowane 20",
+      "author": 20,
+      "publisher": 1,
+      "status": "pending",
+      "raport_type": "original_research",
+      "category": "software_engineering",
+      "abstract": "Abstrakt raportu wygenerowanego numer 20.",
+      "file": "raports/files/sample.pdf",
+      "keywords": "generated",
+      "created_at": "2025-01-05T12:00:00Z",
+      "comment": null
+    }
+  },
+  {
+    "model": "raports.raport",
+    "pk": 21,
+    "fields": {
+      "title": "Badanie wygenerowane 21",
+      "author": 21,
+      "publisher": 1,
+      "status": "pending",
+      "raport_type": "original_research",
+      "category": "software_engineering",
+      "abstract": "Abstrakt raportu wygenerowanego numer 21.",
+      "file": "raports/files/sample.pdf",
+      "keywords": "generated",
+      "created_at": "2025-01-05T12:00:00Z",
+      "comment": null
+    }
+  },
+  {
+    "model": "raports.raport",
+    "pk": 22,
+    "fields": {
+      "title": "Badanie wygenerowane 22",
+      "author": 22,
+      "publisher": 1,
+      "status": "pending",
+      "raport_type": "original_research",
+      "category": "software_engineering",
+      "abstract": "Abstrakt raportu wygenerowanego numer 22.",
+      "file": "raports/files/sample.pdf",
+      "keywords": "generated",
+      "created_at": "2025-01-05T12:00:00Z",
+      "comment": null
+    }
+  },
+  {
+    "model": "raports.raport",
+    "pk": 23,
+    "fields": {
+      "title": "Badanie wygenerowane 23",
+      "author": 23,
+      "publisher": 1,
+      "status": "pending",
+      "raport_type": "original_research",
+      "category": "software_engineering",
+      "abstract": "Abstrakt raportu wygenerowanego numer 23.",
+      "file": "raports/files/sample.pdf",
+      "keywords": "generated",
+      "created_at": "2025-01-05T12:00:00Z",
+      "comment": null
+    }
+  },
+  {
+    "model": "raports.raport",
+    "pk": 24,
+    "fields": {
+      "title": "Badanie wygenerowane 24",
+      "author": 24,
+      "publisher": 1,
+      "status": "pending",
+      "raport_type": "original_research",
+      "category": "software_engineering",
+      "abstract": "Abstrakt raportu wygenerowanego numer 24.",
+      "file": "raports/files/sample.pdf",
+      "keywords": "generated",
+      "created_at": "2025-01-05T12:00:00Z",
+      "comment": null
+    }
+  },
+  {
+    "model": "raports.raport",
+    "pk": 25,
+    "fields": {
+      "title": "Badanie wygenerowane 25",
+      "author": 25,
+      "publisher": 1,
+      "status": "pending",
+      "raport_type": "original_research",
+      "category": "software_engineering",
+      "abstract": "Abstrakt raportu wygenerowanego numer 25.",
+      "file": "raports/files/sample.pdf",
+      "keywords": "generated",
+      "created_at": "2025-01-05T12:00:00Z",
+      "comment": null
+    }
+  },
+  {
+    "model": "raports.raport",
+    "pk": 26,
+    "fields": {
+      "title": "Badanie wygenerowane 26",
+      "author": 26,
+      "publisher": 1,
+      "status": "pending",
+      "raport_type": "original_research",
+      "category": "software_engineering",
+      "abstract": "Abstrakt raportu wygenerowanego numer 26.",
+      "file": "raports/files/sample.pdf",
+      "keywords": "generated",
+      "created_at": "2025-01-05T12:00:00Z",
+      "comment": null
+    }
+  },
+  {
+    "model": "raports.raport",
+    "pk": 27,
+    "fields": {
+      "title": "Badanie wygenerowane 27",
+      "author": 27,
+      "publisher": 1,
+      "status": "pending",
+      "raport_type": "original_research",
+      "category": "software_engineering",
+      "abstract": "Abstrakt raportu wygenerowanego numer 27.",
+      "file": "raports/files/sample.pdf",
+      "keywords": "generated",
+      "created_at": "2025-01-05T12:00:00Z",
+      "comment": null
+    }
+  },
+  {
+    "model": "raports.raport",
+    "pk": 28,
+    "fields": {
+      "title": "Badanie wygenerowane 28",
+      "author": 28,
+      "publisher": 1,
+      "status": "pending",
+      "raport_type": "original_research",
+      "category": "software_engineering",
+      "abstract": "Abstrakt raportu wygenerowanego numer 28.",
+      "file": "raports/files/sample.pdf",
+      "keywords": "generated",
+      "created_at": "2025-01-05T12:00:00Z",
+      "comment": null
+    }
+  },
+  {
+    "model": "raports.raport",
+    "pk": 29,
+    "fields": {
+      "title": "Badanie wygenerowane 29",
+      "author": 29,
+      "publisher": 1,
+      "status": "pending",
+      "raport_type": "original_research",
+      "category": "software_engineering",
+      "abstract": "Abstrakt raportu wygenerowanego numer 29.",
+      "file": "raports/files/sample.pdf",
+      "keywords": "generated",
+      "created_at": "2025-01-05T12:00:00Z",
+      "comment": null
+    }
+  },
+  {
+    "model": "raports.raport",
+    "pk": 30,
+    "fields": {
+      "title": "Badanie wygenerowane 30",
+      "author": 30,
+      "publisher": 1,
+      "status": "pending",
+      "raport_type": "original_research",
+      "category": "software_engineering",
+      "abstract": "Abstrakt raportu wygenerowanego numer 30.",
+      "file": "raports/files/sample.pdf",
+      "keywords": "generated",
+      "created_at": "2025-01-05T12:00:00Z",
+      "comment": null
     }
   }
 ]

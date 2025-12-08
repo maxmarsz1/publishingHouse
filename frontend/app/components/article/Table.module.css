@@ -103,3 +103,9 @@
     background-color: var(--background1);
     border-bottom: 1px solid var(--text);
 }
+
+.approveButton {
+    min-width: 0 !important;
+    width: 32px;
+    height: 24px;
+}

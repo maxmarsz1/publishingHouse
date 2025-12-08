@@ -52,7 +52,7 @@ const ArticleViewClientMerged = () => {
 
   return (
     <>
-      <h1 className={styles.title}>Przegląd raportu</h1>
+      {/* <h1 className={styles.title}>Przegląd raportu</h1> */}
 
       <ArticleData article={article} />
       <ArticleActions article={article} reviewStatus={reviewStatus} />

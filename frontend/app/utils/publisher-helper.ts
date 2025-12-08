@@ -1,7 +1,7 @@
-import apiClient  from "@/app/utils/api-client";
-import { Publisher, User } from "@/app/types/types"; 
+import apiClient from "@/app/utils/api-client";
+import { Publisher, User } from "@/app/types/types";
 
-export async function getPublisherData(id: number): Promise<Publisher>{
+export async function getPublisherData(id: number): Promise<Publisher> {
     try {
         console.log(`Fetching ${id} publisher data`);
         const response = await apiClient.get(`/publisher/${id}/`);
@@ -48,7 +48,7 @@ export async function createPublisher(publisher: { name: string; description?: s
 
 export async function updatePublisher(publisher: Partial<Publisher> & { id: number }): Promise<Publisher> {
     try {
-        const data: Record<string, any> = {}; 
+        const data: Record<string, any> = {};
 
         if (publisher.name !== undefined) data.name = publisher.name;
         if (publisher.description !== undefined) data.description = publisher.description;
@@ -72,7 +72,7 @@ export async function deletePublisher(publisher_id: number): Promise<void> {
     catch (error) {
         console.error("Error deleting publisher:", error);
         throw error;
-    } 
+    }
 }
 
 export async function generateNewJoinCode(publisher_id: number): Promise<string> {
@@ -83,7 +83,7 @@ export async function generateNewJoinCode(publisher_id: number): Promise<string>
     catch (error) {
         console.error("Error generating new join code:", error);
         throw error;
-    } 
+    }
 }
 
 export async function getPublisherMembers(publisher_id: number): Promise<User[]> {
@@ -113,6 +113,16 @@ export async function joinPublisher(join_code: string): Promise<Publisher> {
         return response.data;
     } catch (error) {
         console.error("Error joining publisher:", error);
+        throw error;
+    }
+}
+
+export async function distributeReviews(publisher_id: number): Promise<{ message: string }> {
+    try {
+        const response = await apiClient.post(`/publisher/${publisher_id}/distribute-reviews/`);
+        return response.data;
+    } catch (error) {
+        console.error("Error distributing reviews:", error);
         throw error;
     }
 }

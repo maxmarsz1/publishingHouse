@@ -3,7 +3,8 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button, TextField, MenuItem, Radio, RadioGroup, FormControlLabel, FormControl, FormLabel, Checkbox } from "@mui/material";
-import { Article, ArticleType, ArticleTypeDisplay, ITArticleCategory, ITArticleCategoryDisplay } from "@/app/types/types";
+import { Article, ArticleType, ITArticleCategory } from "@/app/types/types";
+import { getArticleTypeDisplayText, getArticleCategoryDisplayText } from "@/app/utils/article-display-helper";
 import { createArticle, updateArticle } from "@/app/utils/article-helper";
 import styles from "./ArticleForm.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -139,7 +140,7 @@ const NewArticle = ({ publisherId, article }: NewRaportProps) => {
       >
         {Object.values(ArticleType).map((type) => (
           <MenuItem key={type} value={type}>
-            {ArticleTypeDisplay[type]}
+            {getArticleTypeDisplayText(type)}
           </MenuItem>
         ))}
       </TextField>
@@ -154,7 +155,7 @@ const NewArticle = ({ publisherId, article }: NewRaportProps) => {
       >
         {articleCategoryOptions.map((option) => (
           <MenuItem key={option.value} value={option.value}>
-            {ITArticleCategoryDisplay[option.label]}
+            {getArticleCategoryDisplayText(option.label)}
           </MenuItem>
         ))}
       </TextField>

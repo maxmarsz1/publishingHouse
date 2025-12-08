@@ -5,6 +5,7 @@ import { Publisher, User } from "@/app/types/types";
 import styles from "./AdminActions.module.css";
 import JoinCode from "./JoinCode";
 import MembersBtn from "./MembersBtn";
+import DistributeReviewsBtn from "./DistributeReviewsBtn";
 
 const AdminActions = ({
   publisher,
@@ -26,6 +27,7 @@ const AdminActions = ({
           members={members}
           setMembers={setMembers}
         />
+        {publisher.id && <DistributeReviewsBtn publisherId={publisher.id} />}
         {publisher.id && <DeleteMagazineBtn publisherId={publisher.id} />}
       </div>
       <JoinCode publisher={publisher} />

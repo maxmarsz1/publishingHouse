@@ -1,15 +1,11 @@
 import React, { useContext } from "react";
 
-import {
-  Article,
-  ArticleTypeDisplay,
-  ITArticleCategoryDisplay,
-} from "@/app/types/types";
+import { Article } from "@/app/types/types";
+import { getArticleTypeDisplayText, getArticleCategoryDisplayText } from "@/app/utils/article-display-helper";
 import styles from "./ArticleData.module.css";
-import { getStatusDisplayText } from "@/app/utils/status-helper";
+import { getStatusDisplayText, getStatusIcon } from "@/app/utils/status-helper";
 import Link from "next/link";
 import { UserContext } from "@/app/context/UserContext";
-
 interface Props {
   article: Article;
 }
@@ -24,42 +20,29 @@ const ArticleData = ({ article }: Props) => {
     month: "long",
     day: "numeric",
   });
+  const keywords = article.keywords.split(",").map((keyword) => keyword.trim());
+  const status = getStatusDisplayText(article.status);
+  const statusIcon = getStatusIcon(article.status);
+
   return (
     <>
-      <div className={styles.infoLine}>
-        <strong>Tytuł: </strong>
-        {article.title}
+      <div className={styles.topContainer}>
+        <h1 className={styles.title}>{article.title}</h1>
+        {(isStaff || article.isAuthor) && (
+          <div className={styles.status}>
+            {statusIcon} {status}
+          </div>
+        )}
       </div>
-      {isStaff && (
-        <div className={styles.infoLine}>
-          <strong>Autor: </strong>
-          {article.author.first_name} {article.author.last_name}
-        </div>
-      )}
-      <div className={styles.infoLine}>
-        <strong>Czasopismo: </strong>
-        <Link href={`/myspace/magazines/${article.publisher.id}`}>{article.publisher.name}</Link>
+      <div className={styles.dateAuthorMagazine}>
+        <span>{createdAtString}</span>
+        {isStaff && (<><span>-</span><span>{article.author.first_name} {article.author.last_name}</span></>)}
+        <span>-</span>
+        <span><Link href={`/myspace/magazines/${article.publisher.id}`}>{article.publisher.name}</Link></span>
       </div>
       <div className={styles.infoLine}>
-        <strong>Abstract: </strong>
+        <strong>Abstrakt: </strong>
         {article.abstract}
-      </div>
-      {(isStaff || article.isAuthor) && (
-        <div className={styles.infoLine}>
-          <strong>Status: </strong>
-          {getStatusDisplayText(article.status)}
-        </div>
-      )}
-      <div className={styles.infoLine}>
-        <strong>Keywords: </strong>
-        {article.keywords && article.keywords.trim() != "" ?
-          article.keywords :
-          "Brak"
-        }
-      </div>
-      <div className={styles.infoLine}>
-        <strong>Utworzony: </strong>
-        {createdAtString}
       </div>
       {(isStaff || article.isAuthor) &&
         <div className={styles.infoLine}>
@@ -72,11 +55,19 @@ const ArticleData = ({ article }: Props) => {
       }
       <div className={styles.infoLine}>
         <strong>Typ artykułu: </strong>
-        {ArticleTypeDisplay[article.articleType]}
+        {getArticleTypeDisplayText(article.articleType)}
       </div>
       <div className={styles.infoLine}>
         <strong>Kategoria artykułu: </strong>
-        {ITArticleCategoryDisplay[article.articleCategory]}
+        {getArticleCategoryDisplayText(article.articleCategory)}
+      </div>
+
+      <div className={styles.keywords}>
+        <div className={styles.keywordsList}>
+          {keywords.map((keyword, index) => (
+            <span key={index}>{keyword}</span>
+          ))}
+        </div>
       </div>
     </>
   );
