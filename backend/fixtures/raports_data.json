@@ -705,5 +705,260 @@
       "created_at": "2025-01-05T12:00:00Z",
       "comment": null
     }
+  },
+  {
+    "model": "raports.raport",
+    "pk": 31,
+    "fields": {
+      "title": "Raport Testowy 31",
+      "author": 31,
+      "publisher": 6,
+      "status": "pending",
+      "raport_type": "original_research",
+      "category": "software_engineering",
+      "abstract": "Abstrakt raportu testowego numer 31.",
+      "file": "raports/files/sample.pdf",
+      "keywords": "test",
+      "created_at": "2025-02-05T12:00:00Z",
+      "comment": null
+    }
+  },
+  {
+    "model": "raports.raport",
+    "pk": 32,
+    "fields": {
+      "title": "Raport Testowy 32",
+      "author": 32,
+      "publisher": 6,
+      "status": "pending",
+      "raport_type": "original_research",
+      "category": "software_engineering",
+      "abstract": "Abstrakt raportu testowego numer 32.",
+      "file": "raports/files/sample.pdf",
+      "keywords": "test",
+      "created_at": "2025-02-05T12:00:00Z",
+      "comment": null
+    }
+  },
+  {
+    "model": "raports.raport",
+    "pk": 33,
+    "fields": {
+      "title": "Raport Testowy 33",
+      "author": 33,
+      "publisher": 6,
+      "status": "pending",
+      "raport_type": "original_research",
+      "category": "software_engineering",
+      "abstract": "Abstrakt raportu testowego numer 33.",
+      "file": "raports/files/sample.pdf",
+      "keywords": "test",
+      "created_at": "2025-02-05T12:00:00Z",
+      "comment": null
+    }
+  },
+  {
+    "model": "raports.raport",
+    "pk": 34,
+    "fields": {
+      "title": "Raport Testowy 34",
+      "author": 34,
+      "publisher": 6,
+      "status": "pending",
+      "raport_type": "original_research",
+      "category": "software_engineering",
+      "abstract": "Abstrakt raportu testowego numer 34.",
+      "file": "raports/files/sample.pdf",
+      "keywords": "test",
+      "created_at": "2025-02-05T12:00:00Z",
+      "comment": null
+    }
+  },
+  {
+    "model": "raports.raport",
+    "pk": 35,
+    "fields": {
+      "title": "Raport Testowy 35",
+      "author": 35,
+      "publisher": 6,
+      "status": "pending",
+      "raport_type": "original_research",
+      "category": "software_engineering",
+      "abstract": "Abstrakt raportu testowego numer 35.",
+      "file": "raports/files/sample.pdf",
+      "keywords": "test",
+      "created_at": "2025-02-05T12:00:00Z",
+      "comment": null
+    }
+  },
+  {
+    "model": "raports.raport",
+    "pk": 36,
+    "fields": {
+      "title": "Raport Testowy 36",
+      "author": 36,
+      "publisher": 6,
+      "status": "pending",
+      "raport_type": "original_research",
+      "category": "software_engineering",
+      "abstract": "Abstrakt raportu testowego numer 36.",
+      "file": "raports/files/sample.pdf",
+      "keywords": "test",
+      "created_at": "2025-02-05T12:00:00Z",
+      "comment": null
+    }
+  },
+  {
+    "model": "raports.raport",
+    "pk": 37,
+    "fields": {
+      "title": "Raport Testowy 37",
+      "author": 37,
+      "publisher": 6,
+      "status": "pending",
+      "raport_type": "original_research",
+      "category": "software_engineering",
+      "abstract": "Abstrakt raportu testowego numer 37.",
+      "file": "raports/files/sample.pdf",
+      "keywords": "test",
+      "created_at": "2025-02-05T12:00:00Z",
+      "comment": null
+    }
+  },
+  {
+    "model": "raports.raport",
+    "pk": 38,
+    "fields": {
+      "title": "Raport Testowy 38",
+      "author": 38,
+      "publisher": 6,
+      "status": "pending",
+      "raport_type": "original_research",
+      "category": "software_engineering",
+      "abstract": "Abstrakt raportu testowego numer 38.",
+      "file": "raports/files/sample.pdf",
+      "keywords": "test",
+      "created_at": "2025-02-05T12:00:00Z",
+      "comment": null
+    }
+  },
+  {
+    "model": "raports.raport",
+    "pk": 39,
+    "fields": {
+      "title": "Raport Testowy 39",
+      "author": 39,
+      "publisher": 6,
+      "status": "pending",
+      "raport_type": "original_research",
+      "category": "software_engineering",
+      "abstract": "Abstrakt raportu testowego numer 39.",
+      "file": "raports/files/sample.pdf",
+      "keywords": "test",
+      "created_at": "2025-02-05T12:00:00Z",
+      "comment": null
+    }
+  },
+  {
+    "model": "raports.raport",
+    "pk": 40,
+    "fields": {
+      "title": "Raport Testowy 40",
+      "author": 40,
+      "publisher": 6,
+      "status": "pending",
+      "raport_type": "original_research",
+      "category": "software_engineering",
+      "abstract": "Abstrakt raportu testowego numer 40.",
+      "file": "raports/files/sample.pdf",
+      "keywords": "test",
+      "created_at": "2025-02-05T12:00:00Z",
+      "comment": null
+    }
+  },
+  {
+    "model": "raports.raport",
+    "pk": 41,
+    "fields": {
+      "title": "Raport Testowy 41",
+      "author": 41,
+      "publisher": 6,
+      "status": "pending",
+      "raport_type": "original_research",
+      "category": "software_engineering",
+      "abstract": "Abstrakt raportu testowego numer 41.",
+      "file": "raports/files/sample.pdf",
+      "keywords": "test",
+      "created_at": "2025-02-05T12:00:00Z",
+      "comment": null
+    }
+  },
+  {
+    "model": "raports.raport",
+    "pk": 42,
+    "fields": {
+      "title": "Raport Testowy 42",
+      "author": 42,
+      "publisher": 6,
+      "status": "pending",
+      "raport_type": "original_research",
+      "category": "software_engineering",
+      "abstract": "Abstrakt raportu testowego numer 42.",
+      "file": "raports/files/sample.pdf",
+      "keywords": "test",
+      "created_at": "2025-02-05T12:00:00Z",
+      "comment": null
+    }
+  },
+  {
+    "model": "raports.raport",
+    "pk": 43,
+    "fields": {
+      "title": "Raport Testowy 43",
+      "author": 43,
+      "publisher": 6,
+      "status": "pending",
+      "raport_type": "original_research",
+      "category": "software_engineering",
+      "abstract": "Abstrakt raportu testowego numer 43.",
+      "file": "raports/files/sample.pdf",
+      "keywords": "test",
+      "created_at": "2025-02-05T12:00:00Z",
+      "comment": null
+    }
+  },
+  {
+    "model": "raports.raport",
+    "pk": 44,
+    "fields": {
+      "title": "Raport Testowy 44",
+      "author": 44,
+      "publisher": 6,
+      "status": "pending",
+      "raport_type": "original_research",
+      "category": "software_engineering",
+      "abstract": "Abstrakt raportu testowego numer 44.",
+      "file": "raports/files/sample.pdf",
+      "keywords": "test",
+      "created_at": "2025-02-05T12:00:00Z",
+      "comment": null
+    }
+  },
+  {
+    "model": "raports.raport",
+    "pk": 45,
+    "fields": {
+      "title": "Raport Testowy 45",
+      "author": 45,
+      "publisher": 6,
+      "status": "pending",
+      "raport_type": "original_research",
+      "category": "software_engineering",
+      "abstract": "Abstrakt raportu testowego numer 45.",
+      "file": "raports/files/sample.pdf",
+      "keywords": "test",
+      "created_at": "2025-02-05T12:00:00Z",
+      "comment": null
+    }
   }
 ]

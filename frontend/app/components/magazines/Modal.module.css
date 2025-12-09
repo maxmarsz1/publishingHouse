@@ -8,7 +8,6 @@
     transform: translate(-50%, -50%);
     z-index: 20;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-
 }
 
 .modal h2 {
@@ -55,7 +54,15 @@
     margin-bottom: 2rem;
     background-color: var(--background1);
     border-radius: 1rem;
+    max-height: 40vh;
+    overflow-y: auto;
+    scrollbar-width: thin;
 }
+
+.memberList::-webkit-scrollbar {
+    width: 1px;
+}
+
 
 .memberFullname {
     text-align: left;

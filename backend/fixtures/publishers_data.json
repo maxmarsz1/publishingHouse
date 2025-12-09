@@ -50,6 +50,16 @@
     }
   },
   {
+    "model": "publishers.publisher",
+    "pk": 6,
+    "fields": {
+      "name": "Wydawnictwo Testowe Recenzji 6",
+      "description": "Wydawnictwo do testowania algorytmu autorskiego rozdziału recenzji.",
+      "members": [],
+      "created_at": "2025-02-01T12:00:00Z"
+    }
+  },
+  {
     "model": "publishers.publishermembership",
     "pk": 1,
     "fields": {
@@ -347,6 +357,156 @@
       "publisher": 1,
       "role": "member",
       "date_joined": "2025-01-01T10:00:00Z"
+    }
+  },
+  {
+    "model": "publishers.publishermembership",
+    "pk": 31,
+    "fields": {
+      "user": 31,
+      "publisher": 6,
+      "role": "member",
+      "date_joined": "2025-02-01T10:00:00Z"
+    }
+  },
+  {
+    "model": "publishers.publishermembership",
+    "pk": 32,
+    "fields": {
+      "user": 32,
+      "publisher": 6,
+      "role": "member",
+      "date_joined": "2025-02-01T10:00:00Z"
+    }
+  },
+  {
+    "model": "publishers.publishermembership",
+    "pk": 33,
+    "fields": {
+      "user": 33,
+      "publisher": 6,
+      "role": "member",
+      "date_joined": "2025-02-01T10:00:00Z"
+    }
+  },
+  {
+    "model": "publishers.publishermembership",
+    "pk": 34,
+    "fields": {
+      "user": 34,
+      "publisher": 6,
+      "role": "member",
+      "date_joined": "2025-02-01T10:00:00Z"
+    }
+  },
+  {
+    "model": "publishers.publishermembership",
+    "pk": 35,
+    "fields": {
+      "user": 35,
+      "publisher": 6,
+      "role": "member",
+      "date_joined": "2025-02-01T10:00:00Z"
+    }
+  },
+  {
+    "model": "publishers.publishermembership",
+    "pk": 36,
+    "fields": {
+      "user": 36,
+      "publisher": 6,
+      "role": "member",
+      "date_joined": "2025-02-01T10:00:00Z"
+    }
+  },
+  {
+    "model": "publishers.publishermembership",
+    "pk": 37,
+    "fields": {
+      "user": 37,
+      "publisher": 6,
+      "role": "member",
+      "date_joined": "2025-02-01T10:00:00Z"
+    }
+  },
+  {
+    "model": "publishers.publishermembership",
+    "pk": 38,
+    "fields": {
+      "user": 38,
+      "publisher": 6,
+      "role": "member",
+      "date_joined": "2025-02-01T10:00:00Z"
+    }
+  },
+  {
+    "model": "publishers.publishermembership",
+    "pk": 39,
+    "fields": {
+      "user": 39,
+      "publisher": 6,
+      "role": "member",
+      "date_joined": "2025-02-01T10:00:00Z"
+    }
+  },
+  {
+    "model": "publishers.publishermembership",
+    "pk": 40,
+    "fields": {
+      "user": 40,
+      "publisher": 6,
+      "role": "member",
+      "date_joined": "2025-02-01T10:00:00Z"
+    }
+  },
+  {
+    "model": "publishers.publishermembership",
+    "pk": 41,
+    "fields": {
+      "user": 41,
+      "publisher": 6,
+      "role": "member",
+      "date_joined": "2025-02-01T10:00:00Z"
+    }
+  },
+  {
+    "model": "publishers.publishermembership",
+    "pk": 42,
+    "fields": {
+      "user": 42,
+      "publisher": 6,
+      "role": "member",
+      "date_joined": "2025-02-01T10:00:00Z"
+    }
+  },
+  {
+    "model": "publishers.publishermembership",
+    "pk": 43,
+    "fields": {
+      "user": 43,
+      "publisher": 6,
+      "role": "member",
+      "date_joined": "2025-02-01T10:00:00Z"
+    }
+  },
+  {
+    "model": "publishers.publishermembership",
+    "pk": 44,
+    "fields": {
+      "user": 44,
+      "publisher": 6,
+      "role": "member",
+      "date_joined": "2025-02-01T10:00:00Z"
+    }
+  },
+  {
+    "model": "publishers.publishermembership",
+    "pk": 45,
+    "fields": {
+      "user": 45,
+      "publisher": 6,
+      "role": "member",
+      "date_joined": "2025-02-01T10:00:00Z"
     }
   }
 ]

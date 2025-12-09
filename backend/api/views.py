@@ -16,7 +16,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.settings import api_settings
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
-import pytz
+import pytz, random
 
 
 from raports.models import Raport, RaportReview
@@ -149,43 +149,71 @@ class AdminViews:
             try:
                 publisher = Publisher.objects.get(id=publisher_id)
                 
-                # Get all pending raports for this publisher
-                pending_raports = Raport.objects.filter(publisher=publisher, status=Raport.RaportStatus.PENDING)
+                pending_raports = list(Raport.objects.filter(publisher=publisher, status=Raport.RaportStatus.PENDING).select_related('author'))
                 
-                # Get all members of the publisher
                 memberships = PublisherMembership.objects.filter(publisher=publisher)
                 member_user_ids = memberships.values_list('user', flat=True)
-                members = User.objects.filter(id__in=member_user_ids)
-                
-                import random
+                members = list(User.objects.filter(id__in=member_user_ids))
                 
                 invites_sent_count = 0
                 
+                # Filter to only members who HAVE a pending report to ensure the N users <-> N reports mapping for circular shift
+                # Ideally, we create a list of (Member, Report) pairs.
+                # If a member has multiple reports or no reports, this simple circle might need adjustment, 
+                # For robustness, we will map users to their primary pending report.
+                
+                pairs = []
+                used_reports = set()
+                
                 for member in members:
-                    # Filter reports that are NOT authored by this member
-                    eligible_raports = [r for r in pending_raports if r.author != member]
+                    # Find a pending report by this member
+                    member_reports = [
+                        r for r in pending_raports 
+                        if r.author_id == member.id 
+                        and r.id not in used_reports 
+                        and not r.raport_reviews.exists()
+                    ]
+                    if member_reports:
+                        pairs.append({'member': member, 'report': member_reports[0]})
+                        used_reports.add(member_reports[0].id)
+                
+                n = len(pairs)
+                if n < 3:
+                     # Fallback or error if not enough participants for circular shift without self-review issues (though n=2 works with swap)
+                     # But n=15 is expected.
+                     if n == 0:
+                         return Response({"message": "Brak par użytkownik-raport do rozdziału."}, status=status.HTTP_200_OK)
+                
+                random.shuffle(pairs)
+                
+                for i in range(n):
+                    reviewer = pairs[i]['member']
                     
-                    # Filter reports that this member is NOT already invited to or reviewing
-                    existing_reviews = RaportReview.objects.filter(reviewer=member, raport__in=eligible_raports)
-                    reviewed_raport_ids = existing_reviews.values_list('raport_id', flat=True)
+                    # Target indices in the circle
+                    idx1 = (i + 1) % n
+                    idx2 = (i + 2) % n
                     
-                    truly_eligible = [r for r in eligible_raports if r.id not in reviewed_raport_ids]
+                    # If n is small (e.g. 2), idx2 might be same as i (self-review).
+                    # For n=2: i=0 gets 1, 0(self). i=1 gets 0, 1(self).
+                    # So we ensure we don't assign self.
                     
-                    # Select 2 random
-                    if len(truly_eligible) >= 2:
-                        selected = random.sample(truly_eligible, 2)
-                    else:
-                        selected = truly_eligible
+                    targets = []
+                    if pairs[idx1]['member'].id != reviewer.id:
+                        targets.append(pairs[idx1]['report'])
                     
-                    for raport in selected:
-                        RaportReview.objects.create(
-                            raport=raport,
-                            reviewer=member,
-                            status=RaportReview.RaportReviewStatus.INVITE_SENT
-                        )
-                        invites_sent_count += 1
-                        
-                return Response({"message": f"Rozdzielono recenzje. Wysłano {invites_sent_count} zaproszeń."}, status=status.HTTP_200_OK)
+                    if pairs[idx2]['member'].id != reviewer.id and idx2 != idx1: # Avoid duplicate if n=1?
+                        targets.append(pairs[idx2]['report'])
+
+                    for raport in targets:
+                        if not RaportReview.objects.filter(raport=raport, reviewer=reviewer).exists():
+                            RaportReview.objects.create(
+                                raport=raport,
+                                reviewer=reviewer,
+                                status=RaportReview.RaportReviewStatus.INVITE_SENT
+                            )
+                            invites_sent_count += 1
+
+                return Response({"message": f"Rozdzielono recenzje. Wysłano {invites_sent_count} zaproszeń dla {n} uczestników."}, status=status.HTTP_200_OK)
 
             except Publisher.DoesNotExist:
                  return Response({"error": "Wydawnictwo nie istnieje."}, status=status.HTTP_404_NOT_FOUND)
