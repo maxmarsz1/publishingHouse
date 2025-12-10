@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheck, faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons'
 
-import { Review, ReviewStatus, ReviewStatusDisplay, reviewCriteriaDisplay } from '@/app/types/types'
+import { Review, ReviewStatus, ReviewStatusDisplay, reviewCriteriaDisplay, ReviewDecisionDisplay } from '@/app/types/types'
 import { approveReview } from '@/app/utils/article-helper'
 import styles from './Table.module.css'
 import { Button } from '@mui/material'
@@ -48,6 +48,7 @@ const ArticleReviewsTable = ({ isAuthor, reviews, onReviewApproved }: Props) => 
               <th>Recenzent</th>
             }
             <th>Status</th>
+            <th>Decyzja</th>
             <th>Ocena</th>
             {showReviewer && <th>Akcje</th>}
           </tr>
@@ -69,6 +70,9 @@ const ArticleReviewsTable = ({ isAuthor, reviews, onReviewApproved }: Props) => 
                     </td>
                   }
                   <td className={styles.status}>{ReviewStatusDisplay[review.status]}</td>
+                  <td className={styles.decision}>
+                    {review.decision ? ReviewDecisionDisplay[review.decision] : "-"}
+                  </td>
                   <td className={styles.grade}>{(!review.grade ? "Brak" : review.grade.toFixed(2))}</td>
                   {showReviewer &&
                     <td>
@@ -86,30 +90,32 @@ const ArticleReviewsTable = ({ isAuthor, reviews, onReviewApproved }: Props) => 
                     </td>
                   }
                 </tr>
-                {isExpanded && (
-                  <tr>
-                    <td colSpan={showReviewer ? 5 : 3} className={styles.expandedRow}>
-                      <div className={styles.expandedContent}>
-                        <div className={styles.commentSection}>
-                          <strong>Komentarz:</strong>
-                          <p>{!review.comment ? "Brak" : review.comment}</p>
-                        </div>
-                        <div className={styles.criteriaGrid}>
-                          {Object.entries(reviewCriteriaDisplay).map(([key, label]) => {
-                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                            const value = (review as any)[key];
-                            return (
-                              <React.Fragment key={key}>
-                                <div className={styles.criteriaLabel}>{label}</div>
-                                <div className={styles.criteriaValue}>{value ?? '-'}</div>
-                              </React.Fragment>
-                            )
-                          })}
+                <tr>
+                  <td colSpan={showReviewer ? 6 : 4} className={styles.expandedRowContainer}>
+                    <div className={`${styles.expandableContent} ${isExpanded ? styles.expanded : ''}`}>
+                      <div className={styles.overflowHidden}>
+                        <div className={styles.expandedContent}>
+                          <div className={styles.commentSection}>
+                            <strong>Komentarz:</strong>
+                            <p>{!review.comment ? "Brak" : review.comment}</p>
+                          </div>
+                          <div className={styles.criteriaGrid}>
+                            {Object.entries(reviewCriteriaDisplay).map(([key, label]) => {
+                              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                              const value = (review as any)[key];
+                              return (
+                                <React.Fragment key={key}>
+                                  <div className={styles.criteriaLabel}>{label}</div>
+                                  <div className={styles.criteriaValue}>{value ?? '-'}</div>
+                                </React.Fragment>
+                              )
+                            })}
+                          </div>
                         </div>
                       </div>
-                    </td>
-                  </tr>
-                )}
+                    </div>
+                  </td>
+                </tr>
               </React.Fragment>
             );
           })}

@@ -99,6 +99,12 @@ class RaportReview(models.Model):
         INVITE_SENT = 'invited', 'Reviewer Invited'
         INVITE_REJECTED = 'invite_rejected', 'Invite rejected'
 
+    class ReviewDecision(models.TextChoices):
+        ACCEPT = 'accept', 'Accept'
+        MINOR_REVISION = 'minor_revision', 'Minor Revision'
+        MAJOR_REVISION = 'major_revision', 'Major Revision'
+        REJECT = 'reject', 'Reject'
+
 
     raport = models.ForeignKey(Raport, on_delete=models.CASCADE, related_name='raport_reviews')
     reviewer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_reviews')
@@ -121,6 +127,13 @@ class RaportReview(models.Model):
         max_length=20,
         choices=RaportReviewStatus.choices,
         default=RaportReviewStatus.INVITE_SENT
+    )
+
+    decision = models.CharField(
+        max_length=20,
+        choices=ReviewDecision.choices,
+        null=True,
+        blank=True
     )
 
     class Meta:

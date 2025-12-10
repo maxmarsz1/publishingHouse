@@ -1,11 +1,10 @@
 import React from "react";
-import NewDueDateBtn from "./NewDueDateBtn";
-import DeleteMagazineBtn from "./DeleteMagazineBtn";
 import { Publisher, User } from "@/app/types/types";
 import styles from "./AdminActions.module.css";
 import JoinCode from "./JoinCode";
-import MembersBtn from "./MembersBtn";
 import DistributeReviewsBtn from "./DistributeReviewsBtn";
+import AcceptAllReviewsBtn from "./AcceptAllReviewsBtn";
+import ManageBtn from "./ManageBtn";
 
 const AdminActions = ({
   publisher,
@@ -21,14 +20,14 @@ const AdminActions = ({
   return (
     <div className={styles.container}>
       <div className={styles.left}>
-        <NewDueDateBtn publisher={publisher} onDueDateUpdate={onDueDateUpdate} />
-        <MembersBtn
+        <ManageBtn
           publisher={publisher}
+          onDueDateUpdate={onDueDateUpdate}
           members={members}
           setMembers={setMembers}
         />
-        {publisher.id && <DistributeReviewsBtn publisherId={publisher.id} />}
-        {publisher.id && <DeleteMagazineBtn publisherId={publisher.id} />}
+        <DistributeReviewsBtn publisherId={publisher.id} />
+        <AcceptAllReviewsBtn publisherId={publisher.id} />
       </div>
       <JoinCode publisher={publisher} />
     </div>

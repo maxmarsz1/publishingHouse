@@ -30,13 +30,10 @@ const PublisherViewClient = () => {
   const [adminArticles, setAdminArticles] = useState<Article[] | null>(null);
   const [regularUserArticles, setRegularUserArticles] = useState<UserArticles | null>(null);
   const [dueDate, setDueDate] = useState<Date | null>(null);
+  const [dueDateReadable, setDueDateReadable] = useState<string>('----------');
+  const [members, setMembers] = useState<User[] | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  // Convert dueDate to readable string
-  const [dueDateReadable, setDueDateReadable] = useState<string>('----------');
-
-  const [members, setMembers] = useState<User[] | null>(null);
 
   useEffect(() => {
     if (isNaN(idAsNumber) || idAsNumber <= 0) {
@@ -66,12 +63,10 @@ const PublisherViewClient = () => {
 
         if (isStaff) {
           const admin = await getAdminPublisherArticles(idAsNumber);
-          console.log("all raports: ", admin)
           setAdminArticles(admin);
         } else {
           const userArticles = await getUserPublisherArticles(idAsNumber);
           setRegularUserArticles(userArticles);
-          console.log("user raports: ", userArticles)
         }
       } catch (err) {
         console.error(err);

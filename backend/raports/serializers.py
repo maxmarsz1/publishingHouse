@@ -43,7 +43,7 @@ class RaportListSerializer(serializers.ModelSerializer):
 class AnonymizedDetailedReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = RaportReview
-        fields = ['id', 'grade', 'review_date', 'status', 'comment',
+        fields = ['id', 'grade', 'review_date', 'status', 'comment', 'decision',
                   'content_consistency', 'goal_formulation', 'structure_correctness',
                   'terminology_relevance', 'graphic_design', 'aesthetics',
                   'literature_selection', 'conclusions_correctness', 'goal_achievement',
@@ -59,7 +59,7 @@ class RaportReviewSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = RaportReview
-        fields = ['id', 'raport', 'reviewer', 'comment', 'status', 'review_date', 'grade', 
+        fields = ['id', 'raport', 'reviewer', 'comment', 'status', 'review_date', 'grade', 'decision',
                   'content_consistency', 'goal_formulation', 'structure_correctness', 
                   'terminology_relevance', 'graphic_design', 'aesthetics', 
                   'literature_selection', 'conclusions_correctness', 'goal_achievement', 
@@ -154,7 +154,7 @@ class CreateReviewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = RaportReview
-        fields = ['raport_id', 'comment', 'content_consistency', 'goal_formulation', 
+        fields = ['raport_id', 'comment', 'decision', 'content_consistency', 'goal_formulation', 
                   'structure_correctness', 'terminology_relevance', 'graphic_design', 
                   'aesthetics', 'literature_selection', 'conclusions_correctness', 
                   'goal_achievement', 'language_correctness']
@@ -169,6 +169,7 @@ class CreateReviewSerializer(serializers.ModelSerializer):
             'conclusions_correctness': {'required': True, 'allow_null': False},
             'goal_achievement': {'required': True, 'allow_null': False},
             'language_correctness': {'required': True, 'allow_null': False},
+            'decision': {'required': True, 'allow_null': False},
         }
 
     def validate_comment(self, value):
@@ -203,6 +204,7 @@ class CreateReviewSerializer(serializers.ModelSerializer):
 
         review, created = RaportReview.objects.get_or_create(raport=raport, reviewer=user)
         review.comment = validated_data.get('comment')
+        review.decision = validated_data.get('decision')
         
         review.content_consistency = validated_data.get('content_consistency')
         review.goal_formulation = validated_data.get('goal_formulation')

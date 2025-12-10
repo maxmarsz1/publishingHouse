@@ -1,7 +1,7 @@
 .table th {
     border-bottom: 1px solid var(--text);
     text-align: left;
-    font-weight: 400;
+    font-weight: 300;
 }
 
 .table th,
@@ -47,15 +47,7 @@
     width: 15%;
 }
 
-.expandedContent {
-    background-color: var(--background2);
-    padding: 16px;
-    border-radius: 8px;
-    margin-top: 8px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
+
 
 .commentSection {
     padding-bottom: 16px;
@@ -99,9 +91,36 @@
     padding: 4px 8px;
 }
 
-.expandedRow {
-    background-color: var(--background1);
-    border-bottom: 1px solid var(--text);
+.expandedRowContainer {
+    padding: 0 !important;
+    border-bottom: none !important;
+}
+
+.expandableContent {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.3s ease-out;
+}
+
+.expandableContent.expanded {
+    grid-template-rows: 1fr;
+}
+
+.overflowHidden {
+    overflow: hidden;
+}
+
+.expandedContent {
+    background-color: var(--background2);
+    padding: 16px;
+    border-radius: 8px;
+    margin: 8px 10px 16px 10px;
+    /* Adjusted margins to look good when expanded */
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-height: 0;
+    /* Important for grid transition */
 }
 
 .approveButton {

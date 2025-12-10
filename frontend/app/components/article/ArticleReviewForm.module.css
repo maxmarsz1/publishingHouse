@@ -4,8 +4,7 @@
 }
 
 .submitBtn {
-    align-self: flex-end;
-    margin-top: 1rem !important;
+    margin-left: 1rem !important;
 }
 
 .inputField {
@@ -26,4 +25,16 @@
     flex-direction: column;
     gap: 10px;
     margin: 20px 0;
+}
+
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: stretch;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.decisionSelect {
+    max-width: 200px;
 }

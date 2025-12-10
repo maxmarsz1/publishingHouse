@@ -23,6 +23,7 @@ urlpatterns = [
     path("publisher/<int:publisher_id>/members/<int:user_id>/", AdminViews.DeleteMemberView.as_view(), name="delete-member"),
     path("publisher/<int:pk>/generate-join-code/", AdminViews.GeneratePublisherJoinCode.as_view(), name="generate-join-code"),
     path("publisher/<int:pk>/distribute-reviews/", AdminViews.DistributeReviewsView.as_view(), name="distribute-reviews"),
+    path("publisher/<int:pk>/accept-all-reviews/", AdminViews.AcceptAllReviewsView.as_view(), name="accept-all-reviews"),
     
     path("publisher/join/", UserViews.JoinPublisherView.as_view(), name='join-publisher'),
     path('publisher/<int:pk>/', UserViews.PublisherDetailView.as_view(), name='publisher-detail'),

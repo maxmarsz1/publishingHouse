@@ -59,6 +59,7 @@ export interface Review {
     raport?: Article,
     reviewer?: User,
     comment: string,
+    decision?: ReviewDecision,
     review_date: string,
     status: ReviewStatus,
     grade: number,
@@ -88,6 +89,20 @@ export const ReviewStatusDisplay: Record<ReviewStatus, string> = {
     [ReviewStatus.Approved]: "Zatwierdzona",
     [ReviewStatus.Invited]: "Zaproszony(a) do recenzji",
     [ReviewStatus.InviteRejected]: "Zaproszenie odrzucone",
+}
+
+export enum ReviewDecision {
+    Accept = "accept",
+    MinorRevision = "minor_revision",
+    MajorRevision = "major_revision",
+    Reject = "reject",
+}
+
+export const ReviewDecisionDisplay: Record<ReviewDecision, string> = {
+    [ReviewDecision.Accept]: "Akceptacja",
+    [ReviewDecision.MinorRevision]: "Drobne poprawki",
+    [ReviewDecision.MajorRevision]: "Znaczne poprawki",
+    [ReviewDecision.Reject]: "Odrzucenie",
 }
 
 export enum Status {

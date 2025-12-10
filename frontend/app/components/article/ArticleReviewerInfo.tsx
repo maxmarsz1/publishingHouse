@@ -2,8 +2,8 @@
 
 import React from "react";
 import styles from "./ArticleReviewerInfo.module.css";
-import { Review, ReviewStatus, ReviewStatusDisplay, reviewCriteriaDisplay } from "@/app/types/types";
-import { faCancel, faCheckCircle, faEnvelope, faHourglassHalf, faTimesCircle, IconDefinition } from "@fortawesome/free-solid-svg-icons";
+import { Review, ReviewStatus, ReviewStatusDisplay, reviewCriteriaDisplay, ReviewDecisionDisplay } from "@/app/types/types";
+import { faCheckCircle, faEnvelope, faHourglassHalf, faTimesCircle, IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ArticleReviewInvited from "./ArticleReviewInvited";
 
@@ -55,6 +55,11 @@ const ArticleReviewerInfo = ({ review, reviewStatus, setReviewStatus }: ArticleR
           <div className={styles.label}>Komentarz</div>
           <div className={styles.value}>
             {review.comment || "-"}
+          </div>
+
+          <div className={styles.label}>Decyzja</div>
+          <div className={styles.value}>
+            {review.decision ? ReviewDecisionDisplay[review.decision] : "-"}
           </div>
 
           <div className={styles.label}>Ocena Średnia</div>

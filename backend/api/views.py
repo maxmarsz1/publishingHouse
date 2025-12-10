@@ -92,6 +92,43 @@ class AdminViews:
                 {"message": f"Użytkownik {user.username} został usunięty z wydawnictwa."}, 
                 status=status.HTTP_200_OK
             )
+            
+    class AcceptAllReviewsView(APIView):
+        permission_classes = [IsAuthenticated]
+
+        def post(self, request, pk):
+            try:
+                publisher = Publisher.objects.get(id=pk)
+                
+                # Check if user is admin/owner/member with permissions. 
+                # Ideally, check if user is in members of the publisher.
+                # Assuming simple check for now or based on IsAdminUser in ViewSet
+                # Reusing similar logic to DistributeReviewsView which doesn't seem to explicitly check 'is_owner' but relies on membership or being staff.
+                
+                # Let's enforce that the user is a member of the publisher or staff
+                if not request.user.is_staff and not publisher.members.filter(id=request.user.id).exists():
+                     return Response({"error": "Brak uprawnień."}, status=status.HTTP_403_FORBIDDEN)
+
+                raports = Raport.objects.filter(publisher=publisher)
+                reviews = RaportReview.objects.filter(
+                    raport__in=raports,
+                    status=RaportReview.RaportReviewStatus.SUBMITTED
+                )
+                
+                count = reviews.count()
+                if count == 0:
+                     return Response({"message": "Brak recenzji do zatwierdzenia."}, status=status.HTTP_200_OK)
+
+                reviews.update(status=RaportReview.RaportReviewStatus.APPROVED)
+                
+                return Response(
+                    {"message": f"Zatwierdzono {count} recenzji."}, 
+                    status=status.HTTP_200_OK
+                )
+            except Publisher.DoesNotExist:
+                 return Response({"error": "Wydawnictwo nie istnieje."}, status=status.HTTP_404_NOT_FOUND)
+            except Exception as e:
+                return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     class ListMembersView(APIView):
         serializer_class = UserSerializer

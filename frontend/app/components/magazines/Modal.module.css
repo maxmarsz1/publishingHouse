@@ -84,7 +84,7 @@
 .memberActions,
 .memberListHeader {
     padding: 1rem;
-    border-bottom: 1px solid var(--text);
+    border-bottom: 1px solid var(--background);
 }
 
 .memberListHeader {
@@ -95,12 +95,13 @@
 .memberFullname,
 .memberEmail,
 .memberListHeader:not(:nth-child(2)) {
-    border-right: 1px solid var(--text);
+    border-right: 1px solid var(--background);
 }
 
+/* 
 .memberList> :nth-last-child(-n+2) {
     border-bottom: none;
-}
+} */
 
 .memberItem:nth-child(2n) {
     background-color: var(--background1);

@@ -9,6 +9,7 @@ import "./globals.css";
 import { config } from '@fortawesome/fontawesome-svg-core'
 import '@fortawesome/fontawesome-svg-core/styles.css'
 import { UserProvider } from "./context/UserContext";
+import { UIProvider } from "./context/UIContext";
 import { InterceptorSetup } from '@/app/components/InterceptorSetup';
 import { cookies } from "next/headers";
 import jwt from 'jsonwebtoken';
@@ -41,13 +42,13 @@ export default async function RootLayout({
 
   const cookieStore = await cookies();
   const accessToken = cookieStore.get('accessToken')?.value;
-  
+
   let isStaff = false;
 
   if (accessToken) {
     try {
       const decoded = jwt.decode(accessToken);
-      
+
       if (typeof decoded === 'object' && decoded !== null && 'is_staff' in decoded) {
         isStaff = Boolean(decoded.is_staff);
         console.log('isStaff: ', isStaff)
@@ -60,14 +61,16 @@ export default async function RootLayout({
   return (
     <html lang="en" className={poppins.variable}>
       <body>
-          <AppRouterCacheProvider>
-            <ThemeProvider theme={theme}>
+        <AppRouterCacheProvider>
+          <ThemeProvider theme={theme}>
+            <UIProvider>
               <UserProvider initialIsStaff={isStaff}>
                 <InterceptorSetup />
                 {children}
               </UserProvider>
-            </ThemeProvider>
-          </AppRouterCacheProvider>
+            </UIProvider>
+          </ThemeProvider>
+        </AppRouterCacheProvider>
       </body>
     </html>
   );

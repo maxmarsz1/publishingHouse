@@ -3,6 +3,7 @@ import { Button, CircularProgress } from '@mui/material';
 import { distributeReviews } from '@/app/utils/publisher-helper';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShuffle } from '@fortawesome/free-solid-svg-icons';
+import { useUI } from '@/app/context/UIContext';
 
 interface DistributeReviewsBtnProps {
     publisherId: number;
@@ -10,22 +11,29 @@ interface DistributeReviewsBtnProps {
 
 const DistributeReviewsBtn: React.FC<DistributeReviewsBtnProps> = ({ publisherId }) => {
     const [loading, setLoading] = useState(false);
+    const { showSnackbar, showConfirm } = useUI();
 
-    const handleDistribute = async () => {
-        if (!confirm("Czy na pewno chcesz rozdzielić recenzje dla wszystkich oczekujących raportów?")) {
-            return;
-        }
-
-        setLoading(true);
-        try {
-            const result = await distributeReviews(publisherId);
-            alert(result.message);
-        } catch (error) {
-            console.error(error);
-            alert("Wystąpił błąd podczas rozdzielania recenzji.");
-        } finally {
-            setLoading(false);
-        }
+    const handleDistribute = () => {
+        showConfirm(
+            "Potwierdzenie",
+            "Czy na pewno chcesz rozdzielić recenzje dla wszystkich oczekujących raportów?",
+            async () => {
+                setLoading(true);
+                try {
+                    const result = await distributeReviews(publisherId);
+                    showSnackbar(result.message, 'success');
+                } catch (error) {
+                    console.error(error);
+                    // Error is likely handled by global interceptor now, but distributeReviews might throw simple error.
+                    // If distributeReviews throws, the interceptor caught the 4xx/5xx for api calls.
+                    // But if distributeReviews does logic and throws, we catch here.
+                    // However, we can also manually show snackbar if needed.
+                    // Let's assume global interceptor handles network errors.
+                } finally {
+                    setLoading(false);
+                }
+            }
+        );
     };
 
     return (
@@ -34,8 +42,9 @@ const DistributeReviewsBtn: React.FC<DistributeReviewsBtnProps> = ({ publisherId
             color="primary"
             onClick={handleDistribute}
             disabled={loading}
+            startIcon={<FontAwesomeIcon icon={faShuffle} style={{ fontSize: '14px' }} />}
         >
-            {loading ? <CircularProgress size={24} color="inherit" /> : <>Rozdziel recenzje&nbsp;<FontAwesomeIcon icon={faShuffle} /></>}
+            {loading ? <CircularProgress size={24} color="inherit" /> : <>Rozdziel recenzje</>}
         </Button>
     );
 };

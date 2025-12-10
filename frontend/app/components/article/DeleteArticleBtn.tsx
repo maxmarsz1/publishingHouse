@@ -4,37 +4,37 @@ import { deleteArticle } from '@/app/utils/article-helper';
 import { Button } from '@mui/material';
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation';
-import ConfirmationDialog from '../general/ConfirmationDialog';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { useUI } from '@/app/context/UIContext';
 
-const DeleteArticleBtn = ({articleId}: {articleId: number}) => {
-    const [showModal, setShowModal] = useState(false);
+const DeleteArticleBtn = ({ articleId }: { articleId: number }) => {
     const router = useRouter();
+    const { showConfirm, showSnackbar } = useUI();
 
-    async function handleConfirm(){
-        try{
-            await deleteArticle(articleId);
-            router.push("/myspace/magazines");
-        }
-        catch(error){
-            console.error("Error deleting article:", error);
-        }
-        finally{
-            setShowModal(false);
-        }
+    function handleDelete() {
+        showConfirm(
+            "Jesteś pewien?",
+            "Ta akcja jest nieodwracalna",
+            async () => {
+                try {
+                    await deleteArticle(articleId);
+                    showSnackbar("Artykuł usunięty pomyślnie", "success");
+                    router.push("/myspace/magazines");
+                }
+                catch (error) {
+                    console.error("Error deleting article:", error);
+                }
+            }
+        );
     }
 
-  return (
-    <>
-        <Button color='error' onClick={() => setShowModal(true)}  variant='contained'>
+    return (
+        <Button color='error' onClick={handleDelete} variant='contained'>
             Usuń&nbsp;
-            <FontAwesomeIcon icon={faXmark}/>
+            <FontAwesomeIcon icon={faXmark} />
         </Button>
-
-        <ConfirmationDialog open={showModal} title="Jesteś pewien?" message='Ta akcja jest nieodwracalna' onCancel={() => setShowModal(false)} onConfirm={handleConfirm} />
-    </>
-  )
+    )
 }
 
 export default DeleteArticleBtn

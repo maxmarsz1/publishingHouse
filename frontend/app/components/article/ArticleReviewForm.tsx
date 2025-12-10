@@ -7,7 +7,8 @@ import { useRouter } from 'next/navigation';
 
 import styles from './ArticleReviewForm.module.css'
 import apiClient from '@/app/utils/api-client';
-import { reviewCriteriaDisplay } from '@/app/types/types';
+import { ReviewDecision, ReviewDecisionDisplay, reviewCriteriaDisplay } from '@/app/types/types';
+import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 
 const StyledRating = styled(Rating)({
   '& .MuiRating-iconEmpty': {
@@ -21,6 +22,7 @@ interface ArticleReviewFormProps {
 
 const ArticleReviewForm: React.FC<ArticleReviewFormProps> = ({ articleId }) => {
   const [comment, setComment] = useState("");
+  const [decision, setDecision] = useState<ReviewDecision | null>(null);
   const [grade, setGrade] = useState<number | null>(2.5);
   const [criteriaGrades, setCriteriaGrades] = useState<Record<string, number>>(
     Object.keys(reviewCriteriaDisplay).reduce((acc, key) => ({ ...acc, [key]: 2.5 }), {})
@@ -43,6 +45,7 @@ const ArticleReviewForm: React.FC<ArticleReviewFormProps> = ({ articleId }) => {
       try {
         await apiClient.post(`/raport/${articleId}/create-review/`, {
           comment,
+          decision,
           ...criteriaGrades
         });
         console.log("Review created successfully");
@@ -58,9 +61,11 @@ const ArticleReviewForm: React.FC<ArticleReviewFormProps> = ({ articleId }) => {
       }
 
     } else {
-      console.log("Brak oceny");
+      console.log("Brak ocen lub decyzji");
     }
   }
+
+  const isFormValid = comment.split(" ").length >= 100 && grade !== null && decision !== null;
 
 
 
@@ -116,15 +121,43 @@ const ArticleReviewForm: React.FC<ArticleReviewFormProps> = ({ articleId }) => {
         <Typography variant="h6" style={{ marginLeft: '10px' }}>{grade?.toFixed(2)}</Typography>
       </div>
 
-      <Button
-        variant="contained"
-        color="primary"
-        className={styles.submitBtn}
-        onClick={handleSubmit}
-        style={{ marginTop: '20px', marginBottom: '20px' }}
-      >
-        Wyślij
-      </Button>
+      <div className={styles.actions}>
+        <FormControl fullWidth className={styles.decisionSelect}>
+          <InputLabel id="decision-label" sx={{ color: 'var(--text)', '&.Mui-focused': { color: 'var(--text)' } }}>Decyzja</InputLabel>
+          <Select
+            labelId="decision-label"
+            id="decision"
+            value={decision || ''}
+            label="Decyzja"
+            onChange={(e: SelectChangeEvent<ReviewDecision>) => setDecision(e.target.value as ReviewDecision)}
+            sx={{
+              color: 'var(--text)',
+              '.MuiOutlinedInput-notchedOutline': { borderColor: 'var(--text)' },
+              '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'var(--text)' },
+              '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: 'var(--text)' },
+              '.MuiSvgIcon-root': { color: 'var(--text)' }
+            }}
+          >
+            {Object.values(ReviewDecision).map((value) => (
+              <MenuItem key={value} value={value}>
+                {ReviewDecisionDisplay[value]}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
+        <Button
+          variant="contained"
+          color="primary"
+          className={styles.submitBtn}
+          onClick={handleSubmit}
+          disabled={!isFormValid}
+        >
+          Wyślij
+        </Button>
+      </div>
+
+
     </form>
   )
 }
