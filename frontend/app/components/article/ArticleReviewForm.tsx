@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { styled } from '@mui/material/styles';
 import { Button, TextField, Rating, Typography } from "@mui/material";
 import { useRouter } from 'next/navigation';
@@ -9,6 +9,7 @@ import styles from './ArticleReviewForm.module.css'
 import apiClient from '@/app/utils/api-client';
 import { ReviewDecision, ReviewDecisionDisplay, reviewCriteriaDisplay } from '@/app/types/types';
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import { updateUserContext } from '@/app/utils/user-context-helper';
 
 const StyledRating = styled(Rating)({
   '& .MuiRating-iconEmpty': {
@@ -24,11 +25,17 @@ const ArticleReviewForm: React.FC<ArticleReviewFormProps> = ({ articleId }) => {
   const [comment, setComment] = useState("");
   const [decision, setDecision] = useState<ReviewDecision | null>(null);
   const [grade, setGrade] = useState<number | null>(2.5);
+  const [customGrade, setCustomGrade] = useState<string>("");
+  const [isStaff, setIsStaff] = useState(false);
   const [criteriaGrades, setCriteriaGrades] = useState<Record<string, number>>(
     Object.keys(reviewCriteriaDisplay).reduce((acc, key) => ({ ...acc, [key]: 2.5 }), {})
   );
   const [errors, setErrors] = useState<Record<string, string[]>>({});
   const router = useRouter();
+
+  useEffect(() => {
+    updateUserContext(setIsStaff);
+  }, []);
 
   const handleCriteriaChange = (key: string, value: number | null) => {
     const newGrades = { ...criteriaGrades, [key]: value || 0 };
@@ -43,11 +50,17 @@ const ArticleReviewForm: React.FC<ArticleReviewFormProps> = ({ articleId }) => {
     setErrors({});
     if (grade) {
       try {
-        await apiClient.post(`/raport/${articleId}/create-review/`, {
+        const payload: any = {
           comment,
           decision,
           ...criteriaGrades
-        });
+        };
+
+        if (isStaff && customGrade) {
+          payload.custom_grade = parseFloat(customGrade);
+        }
+
+        await apiClient.post(`/raport/${articleId}/create-review/`, payload);
         console.log("Review created successfully");
         router.push(`/myspace/articles/${articleId}`);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -120,6 +133,21 @@ const ArticleReviewForm: React.FC<ArticleReviewFormProps> = ({ articleId }) => {
         />
         <Typography variant="h6" style={{ marginLeft: '10px' }}>{grade?.toFixed(2)}</Typography>
       </div>
+
+      {isStaff && (
+        <div style={{ marginTop: '1rem' }}>
+          <TextField
+            id="custom-grade"
+            label="Ocena Redakcji (opcjonalne)"
+            type="number"
+            value={customGrade}
+            onChange={(e) => setCustomGrade(e.target.value)}
+            inputProps={{ step: "0.1", min: "0", max: "5" }}
+            fullWidth
+            className={styles.inputField}
+          />
+        </div>
+      )}
 
       <div className={styles.actions}>
         <FormControl fullWidth className={styles.decisionSelect}>

@@ -172,3 +172,20 @@ export async function approveReview(reviewId: number): Promise<void> {
     throw error;
   }
 }
+
+export async function submitRevision(articleId: number, file: File): Promise<void> {
+  try {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    await apiClient.post(`/raport/${articleId}/submit-revision/`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    console.log("Revision submitted successfully");
+  } catch (error) {
+    console.error("Error submitting revision:", error);
+    throw error;
+  }
+}

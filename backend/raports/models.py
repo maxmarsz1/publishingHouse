@@ -6,11 +6,11 @@ from publishers.models import Publisher
 
 class Raport(models.Model):
     class RaportStatus(models.TextChoices):
-        SENT = 'sent', 'Sent'
         PENDING = 'pending', 'Pending'
         APPROVED = 'approved', 'Approved'
         PUBLISHED = 'published', 'Published'
         REJECTED = 'rejected', 'Rejected'
+        WAITING_FOR_REVISION = 'waiting_for_revision', 'Waiting for Revision'
 
 
     class RaportType(models.TextChoices):
@@ -62,9 +62,9 @@ class Raport(models.Model):
     )
     publisher = models.ForeignKey(Publisher, on_delete=models.CASCADE, related_name='raports')
     status = models.CharField(
-        max_length=10,
+        max_length=20,
         choices=RaportStatus.choices,
-        default=RaportStatus.SENT
+        default=RaportStatus.PENDING
     )
     raport_type = models.CharField(
         max_length=30,
@@ -111,6 +111,7 @@ class RaportReview(models.Model):
     review_date = models.DateTimeField(null=True, blank=True)
     comment = models.TextField(blank=True, null=True)
     grade = models.FloatField(null=True, blank=True, help_text='Grade from 0 to 5')
+    custom_grade = models.FloatField(null=True, blank=True, help_text='Admin defined grade')
     
     content_consistency = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(5)], null=True, blank=True)
     goal_formulation = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(5)], null=True, blank=True)

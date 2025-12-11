@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCheck, faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons'
+import { faCheck, faChevronDown, faChevronUp, faStar } from '@fortawesome/free-solid-svg-icons'
 
 import { Review, ReviewStatus, ReviewStatusDisplay, reviewCriteriaDisplay, ReviewDecisionDisplay } from '@/app/types/types'
 import { approveReview } from '@/app/utils/article-helper'
@@ -69,7 +69,8 @@ const ArticleReviewsTable = ({ isAuthor, reviews, onReviewApproved }: Props) => 
                       {review.reviewer?.first_name} {review.reviewer?.last_name}
                     </td>
                   }
-                  <td className={styles.status}>{ReviewStatusDisplay[review.status]}</td>
+                  <td className={styles.status}>
+                    {ReviewStatusDisplay[review.status]} {review.is_admin_review && <FontAwesomeIcon icon={faStar} className={styles.adminStar} title="Recenzja edytora" style={{ color: "gold", marginLeft: "5px" }} />}</td>
                   <td className={styles.decision}>
                     {review.decision ? ReviewDecisionDisplay[review.decision] : "-"}
                   </td>

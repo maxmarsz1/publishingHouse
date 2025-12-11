@@ -1,25 +1,25 @@
 'use client'
 
-import { Article, ReviewStatus, Status } from '@/app/types/types';
-import { faDownload, faEdit, faStar } from '@fortawesome/free-solid-svg-icons';
+import { Article, ReviewStatus, ArticleStatus } from '@/app/types/types';
+import { faDownload, faEdit, faStar, faUpload } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button } from '@mui/material';
 import Link from 'next/link';
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import DeleteArticleBtn from './DeleteArticleBtn';
 import styles from './ArticleActions.module.css';
 import { downloadArticle } from '@/app/utils/article-helper';
 import { UserContext } from '@/app/context/UserContext';
 
 interface ArticleActionsProps {
-    article: Article;
-    reviewStatus: ReviewStatus | null;
+  article: Article;
+  reviewStatus: ReviewStatus | null;
 }
 
-const ArticleActions = ({article, reviewStatus}: ArticleActionsProps) => {
+const ArticleActions = ({ article, reviewStatus }: ArticleActionsProps) => {
   const { isStaff } = useContext(UserContext);
-  
-  async function handleDownload(){
+
+  async function handleDownload() {
     try {
       const response = await downloadArticle(article.id);
       const blob = new Blob([response], { type: 'application/pdf' });
@@ -40,27 +40,27 @@ const ArticleActions = ({article, reviewStatus}: ArticleActionsProps) => {
 
   return (
     <div className={styles.container}>
-        {(article.isAuthor || isStaff || (reviewStatus && reviewStatus == ReviewStatus.Pending)) &&
-          <Button className={styles.downloadBtn} variant='contained' onClick={handleDownload}>
-            Pobierz artykuł&nbsp;
-            <FontAwesomeIcon icon={faDownload} />  
-          </Button>
-        }
-        {reviewStatus && reviewStatus == ReviewStatus.Pending &&
-          <Button className={styles.reviewBtn} variant='outlined' component={Link} href={`/myspace/articles/${article.id}/review`}>
-            Recenzuj&nbsp;
-            <FontAwesomeIcon icon={faStar}/>
-          </Button>
-        }
-        {article.isAuthor && (article.status == Status.Sent || article.status == Status.Pending) &&
-          <Button className={styles.reviewBtn} variant='outlined' component={Link} href={`/myspace/articles/${article.id}/edit`}>
-            Edytuj&nbsp;
-            <FontAwesomeIcon icon={faEdit}/>  
-          </Button>
-        }
-        {(article.isAuthor || isStaff) &&
-          <DeleteArticleBtn articleId={article.id}/>
-        }
+      {(article.isAuthor || isStaff || (reviewStatus && reviewStatus == ReviewStatus.Pending)) &&
+        <Button className={styles.downloadBtn} variant='contained' onClick={handleDownload}>
+          Pobierz artykuł&nbsp;
+          <FontAwesomeIcon icon={faDownload} />
+        </Button>
+      }
+      {(reviewStatus && reviewStatus == ReviewStatus.Pending) || (isStaff && article.status === ArticleStatus.Pending) ? (
+        <Button className={styles.reviewBtn} variant='outlined' component={Link} href={`/myspace/articles/${article.id}/review`}>
+          Recenzuj&nbsp;
+          <FontAwesomeIcon icon={faStar} />
+        </Button>
+      ) : null}
+      {article.isAuthor && article.status == ArticleStatus.WaitingForRevision &&
+        <Button className={styles.reviewBtn} variant='outlined' component={Link} href={`/myspace/articles/${article.id}/edit`}>
+          Prześlij poprawkę&nbsp;
+          <FontAwesomeIcon icon={faUpload} />
+        </Button>
+      }
+      {(article.isAuthor || isStaff) &&
+        <DeleteArticleBtn articleId={article.id} />
+      }
     </div>
   )
 }

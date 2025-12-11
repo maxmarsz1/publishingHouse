@@ -29,7 +29,7 @@ export interface Article {
     articleType: ArticleType,
     articleCategory: ITArticleCategory,
     author: User,
-    status: Status,
+    status: ArticleStatus,
     keywords: string,
     comment: string,
     createdAt: string,
@@ -63,6 +63,7 @@ export interface Review {
     review_date: string,
     status: ReviewStatus,
     grade: number,
+    custom_grade?: number,
     content_consistency?: number,
     goal_formulation?: number,
     structure_correctness?: number,
@@ -72,7 +73,8 @@ export interface Review {
     literature_selection?: number,
     conclusions_correctness?: number,
     goal_achievement?: number,
-    language_correctness?: number,
+    language_correctness?: number;
+    is_admin_review?: boolean;
 }
 
 export enum ReviewStatus {
@@ -105,12 +107,12 @@ export const ReviewDecisionDisplay: Record<ReviewDecision, string> = {
     [ReviewDecision.Reject]: "Odrzucenie",
 }
 
-export enum Status {
-    Sent = "sent",
+export enum ArticleStatus {
     Pending = "pending",
     Approved = "approved",
     Published = "published",
     Rejected = "rejected",
+    WaitingForRevision = "waiting_for_revision",
 }
 
 export enum ArticleType {

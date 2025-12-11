@@ -115,12 +115,10 @@
     padding: 16px;
     border-radius: 8px;
     margin: 8px 10px 16px 10px;
-    /* Adjusted margins to look good when expanded */
     display: flex;
     flex-direction: column;
     gap: 16px;
     min-height: 0;
-    /* Important for grid transition */
 }
 
 .approveButton {

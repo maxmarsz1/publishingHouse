@@ -1,31 +1,31 @@
-import { Status } from "../types/types";
+import { ArticleStatus } from "../types/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBan, faCheckCircle, faHourglass, faInfoCircle, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import { faBan, faCheckCircle, faHourglass, faInfoCircle, faEdit } from "@fortawesome/free-solid-svg-icons";
 
 
-const statusDisplayTextMap: { [key in Status]: string } = {
-    [Status.Sent]: "Wysłany",
-    [Status.Pending]: "Oczekuje na recenzje",
-    [Status.Approved]: "Zaakceptowany",
-    [Status.Published]: "Opublikowany",
-    [Status.Rejected]: "Odrzucony",
+const statusDisplayTextMap: { [key in ArticleStatus]: string } = {
+    [ArticleStatus.Pending]: "Oczekuje na recenzje",
+    [ArticleStatus.Approved]: "Zaakceptowany",
+    [ArticleStatus.Published]: "Opublikowany",
+    [ArticleStatus.Rejected]: "Odrzucony",
+    [ArticleStatus.WaitingForRevision]: "Oczekuje na poprawki",
 };
 
-export const getStatusDisplayText = (status: Status): string => {
+export const getStatusDisplayText = (status: ArticleStatus): string => {
     return statusDisplayTextMap[status] || "Nieznany";
 };
 
-export const getStatusIcon = (status: Status) => {
+export const getStatusIcon = (status: ArticleStatus) => {
     switch (status) {
-        case Status.Sent:
-            return <FontAwesomeIcon icon={ faPaperPlane } />;
-        case Status.Pending:
-            return <FontAwesomeIcon icon={ faHourglass } />;
-        case Status.Approved:
-            return <FontAwesomeIcon icon={ faCheckCircle } />;
-        case Status.Rejected:
-            return <FontAwesomeIcon icon={ faBan } />;
+        case ArticleStatus.Pending:
+            return <FontAwesomeIcon icon={faHourglass} />;
+        case ArticleStatus.Approved:
+            return <FontAwesomeIcon icon={faCheckCircle} />;
+        case ArticleStatus.Rejected:
+            return <FontAwesomeIcon icon={faBan} />;
+        case ArticleStatus.WaitingForRevision:
+            return <FontAwesomeIcon icon={faEdit} />;
         default:
-            return <FontAwesomeIcon icon={ faInfoCircle } />;
+            return <FontAwesomeIcon icon={faInfoCircle} />;
     }
 };

@@ -43,11 +43,16 @@ class RaportListSerializer(serializers.ModelSerializer):
 class AnonymizedDetailedReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = RaportReview
-        fields = ['id', 'grade', 'review_date', 'status', 'comment', 'decision',
+        fields = ['id', 'grade', 'custom_grade', 'review_date', 'status', 'comment', 'decision',
                   'content_consistency', 'goal_formulation', 'structure_correctness',
                   'terminology_relevance', 'graphic_design', 'aesthetics',
                   'literature_selection', 'conclusions_correctness', 'goal_achievement',
-                  'language_correctness']
+                  'language_correctness', 'is_admin_review']
+    
+    is_admin_review = serializers.SerializerMethodField()
+
+    def get_is_admin_review(self, obj):
+        return obj.reviewer.is_staff
 
 class ReviewerSerializer(serializers.ModelSerializer):
     class Meta:
@@ -59,7 +64,7 @@ class RaportReviewSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = RaportReview
-        fields = ['id', 'raport', 'reviewer', 'comment', 'status', 'review_date', 'grade', 'decision',
+        fields = ['id', 'raport', 'reviewer', 'comment', 'status', 'review_date', 'grade', 'custom_grade', 'decision',
                   'content_consistency', 'goal_formulation', 'structure_correctness', 
                   'terminology_relevance', 'graphic_design', 'aesthetics', 
                   'literature_selection', 'conclusions_correctness', 'goal_achievement', 
@@ -154,7 +159,7 @@ class CreateReviewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = RaportReview
-        fields = ['raport_id', 'comment', 'decision', 'content_consistency', 'goal_formulation', 
+        fields = ['raport_id', 'comment', 'decision', 'grade', 'custom_grade', 'content_consistency', 'goal_formulation', 
                   'structure_correctness', 'terminology_relevance', 'graphic_design', 
                   'aesthetics', 'literature_selection', 'conclusions_correctness', 
                   'goal_achievement', 'language_correctness']
@@ -188,7 +193,7 @@ class CreateReviewSerializer(serializers.ModelSerializer):
         except Raport.DoesNotExist:
             raise serializers.ValidationError({"raport_id": "Raport nie istnieje"})
 
-        if user not in raport.reviewers.all():
+        if not user.is_staff and user not in raport.reviewers.all():
             raise serializers.ValidationError({"error": "Użytkownik nie jest recenzentem tego raportu"})
 
         if raport.status in [Raport.RaportStatus.APPROVED, Raport.RaportStatus.PUBLISHED, Raport.RaportStatus.REJECTED]:
@@ -206,6 +211,9 @@ class CreateReviewSerializer(serializers.ModelSerializer):
         review.comment = validated_data.get('comment')
         review.decision = validated_data.get('decision')
         
+        if user.is_staff and 'custom_grade' in validated_data:
+             review.custom_grade = validated_data.get('custom_grade')
+
         review.content_consistency = validated_data.get('content_consistency')
         review.goal_formulation = validated_data.get('goal_formulation')
         review.structure_correctness = validated_data.get('structure_correctness')
@@ -219,6 +227,19 @@ class CreateReviewSerializer(serializers.ModelSerializer):
         
         review.review_date = timezone.now()
         review.status = "submitted"
+        if user.is_staff:
+            review.status = "approved"
+
         review.save()
+
+        if user.is_staff and review.decision:
+            if review.decision == RaportReview.ReviewDecision.ACCEPT:
+                raport.status = Raport.RaportStatus.APPROVED
+            elif review.decision == RaportReview.ReviewDecision.REJECT:
+                raport.status = Raport.RaportStatus.REJECTED
+            elif review.decision in [RaportReview.ReviewDecision.MINOR_REVISION, RaportReview.ReviewDecision.MAJOR_REVISION]:
+                raport.status = Raport.RaportStatus.WAITING_FOR_REVISION
+            raport.save()
+
 
         return review

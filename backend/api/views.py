@@ -341,7 +341,40 @@ class UserViews:
 
                 serializer = NewOrUpdateRaportSerializer(raport, data=request.data, partial=True)
                 if serializer.is_valid():
-                    serializer.save()
+                    # Check status BEFORE saving, but use saved instance for further updates
+                    was_waiting_for_revision = raport.status == Raport.RaportStatus.WAITING_FOR_REVISION
+                    
+                    updated_raport = serializer.save()
+                    
+                    if was_waiting_for_revision:
+                        updated_raport.status = Raport.RaportStatus.PENDING
+                        updated_raport.save()
+                        
+                        reviews = updated_raport.raport_reviews.all()
+                        for review in reviews:
+                            if review.reviewer.is_staff:
+                                review.delete()
+                            else:
+                                review.comment = None
+                                review.grade = None
+                                review.decision = None
+                                review.review_date = None
+                                
+                                # Clear all score fields
+                                review.content_consistency = None
+                                review.goal_formulation = None
+                                review.structure_correctness = None
+                                review.terminology_relevance = None
+                                review.graphic_design = None
+                                review.aesthetics = None
+                                review.literature_selection = None
+                                review.conclusions_correctness = None
+                                review.goal_achievement = None
+                                review.language_correctness = None
+                                
+                                review.status = RaportReview.RaportReviewStatus.PENDING
+                                review.save()
+                        
                     return Response(serializer.data, status=status.HTTP_200_OK)
                 else:
                     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -612,8 +645,7 @@ class UserViews:
 
             except Exception as e:
                 return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
-    
+
     class RegistrationView(APIView):
         permission_classes = [AllowAny]
         

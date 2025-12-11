@@ -18,12 +18,6 @@
     padding: 6px 32px !important;
 }
 
-.uploadButton {
-    width: 100%;
-    margin-bottom: 1rem !important;
-    padding: 6px 32px !important;
-}
-
 .formContainer {
     margin-bottom: 2rem;
 }
@@ -39,4 +33,29 @@
 
 .checkboxLabel :global(.MuiFormLabel-root) {
     color: var(--text) !important;
+}
+
+.fileUploadContainer {
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+    margin-bottom: 1rem;
+    background-color: var(--background1);
+
+    &:hover {
+        border-color: var(--primary);
+    }
+}
+
+.fileUploadContainer label {
+    cursor: pointer;
+    padding: 2rem;
+    display: block;
+}
+
+.uploadButton {
+    font-weight: 300 !important;
+    color: var(--text);
+    cursor: pointer;
 }
