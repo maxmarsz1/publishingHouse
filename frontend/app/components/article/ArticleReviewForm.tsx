@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { styled } from '@mui/material/styles';
-import { Button, TextField, Rating, Typography } from "@mui/material";
+import { Button, TextField, Rating, Typography, Tooltip } from "@mui/material";
 import { useRouter } from 'next/navigation';
 
 import styles from './ArticleReviewForm.module.css'
@@ -10,6 +10,8 @@ import apiClient from '@/app/utils/api-client';
 import { ReviewDecision, ReviewDecisionDisplay, reviewCriteriaDisplay } from '@/app/types/types';
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import { updateUserContext } from '@/app/utils/user-context-helper';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 
 const StyledRating = styled(Rating)({
   '& .MuiRating-iconEmpty': {
@@ -25,7 +27,7 @@ const ArticleReviewForm: React.FC<ArticleReviewFormProps> = ({ articleId }) => {
   const [comment, setComment] = useState("");
   const [decision, setDecision] = useState<ReviewDecision | null>(null);
   const [grade, setGrade] = useState<number | null>(2.5);
-  const [customGrade, setCustomGrade] = useState<string>("");
+  const [customGrade, setCustomGrade] = useState<number | null>(null);
   const [isStaff, setIsStaff] = useState(false);
   const [criteriaGrades, setCriteriaGrades] = useState<Record<string, number>>(
     Object.keys(reviewCriteriaDisplay).reduce((acc, key) => ({ ...acc, [key]: 2.5 }), {})
@@ -43,7 +45,8 @@ const ArticleReviewForm: React.FC<ArticleReviewFormProps> = ({ articleId }) => {
 
     const values = Object.values(newGrades);
     const avg = values.reduce((a, b) => a + b, 0) / values.length;
-    setGrade(avg);
+    const roundedAvg = Math.round(avg * 2) / 2;
+    setGrade(roundedAvg);
   };
 
   async function handleSubmit() {
@@ -57,7 +60,7 @@ const ArticleReviewForm: React.FC<ArticleReviewFormProps> = ({ articleId }) => {
         };
 
         if (isStaff && customGrade) {
-          payload.custom_grade = parseFloat(customGrade);
+          payload.custom_grade = customGrade;
         }
 
         await apiClient.post(`/raport/${articleId}/create-review/`, payload);
@@ -134,22 +137,29 @@ const ArticleReviewForm: React.FC<ArticleReviewFormProps> = ({ articleId }) => {
         <Typography variant="h6" style={{ marginLeft: '10px' }}>{grade?.toFixed(2)}</Typography>
       </div>
 
-      {isStaff && (
-        <div style={{ marginTop: '1rem' }}>
-          <TextField
-            id="custom-grade"
-            label="Ocena Redakcji (opcjonalne)"
-            type="number"
-            value={customGrade}
-            onChange={(e) => setCustomGrade(e.target.value)}
-            inputProps={{ step: "0.1", min: "0", max: "5" }}
-            fullWidth
-            className={styles.inputField}
-          />
-        </div>
-      )}
+
 
       <div className={styles.actions}>
+        {isStaff && (
+          <div className={styles.customGrade}>
+            <Typography component="legend">
+              <span style={{ marginRight: '5px' }}>
+                <Tooltip title="Jeśli ustawiona, zastąpi ocenę końcową liczoną ze średniej wszystkich recenzji">
+                  <FontAwesomeIcon icon={faQuestionCircle} />
+                </Tooltip>
+              </span>
+              Ocena Redakcji (opcjonalne)
+            </Typography>
+            <StyledRating
+              name="custom-grade"
+              value={customGrade}
+              onChange={(_, newValue) => { setCustomGrade(newValue); console.log(customGrade) }}
+              precision={0.5}
+            />
+            <Button onClick={() => setCustomGrade(null)}>Resetuj</Button>
+          </div>
+        )}
+
         <FormControl fullWidth className={styles.decisionSelect}>
           <InputLabel id="decision-label" sx={{ color: 'var(--text)', '&.Mui-focused': { color: 'var(--text)' } }}>Decyzja</InputLabel>
           <Select

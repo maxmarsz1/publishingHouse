@@ -61,7 +61,8 @@ const ArticleTable = ({ title, articles, showPublisher = false }: ArticlesTableP
                                             if (validReviews.length > 0) {
                                                 const sum = validReviews.reduce((acc, r) => acc + (r.grade || 0), 0);
                                                 const avg = sum / validReviews.length;
-                                                return avg.toFixed(2);
+                                                const roundedAvg = Math.round(avg * 2) / 2;
+                                                return roundedAvg.toFixed(2);
                                             }
                                         }
                                         return article.grade ? article.grade.toFixed(2) : "-";

@@ -3,10 +3,6 @@
     flex-direction: column;
 }
 
-.submitBtn {
-    margin-left: 1rem !important;
-}
-
 .inputField {
     margin-bottom: 1rem !important;
 }
@@ -31,10 +27,21 @@
     display: flex;
     justify-content: flex-end;
     align-items: stretch;
+    gap: 1rem;
     margin-top: 20px;
     margin-bottom: 20px;
 }
 
 .decisionSelect {
     max-width: 200px;
+}
+
+.customGrade {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    justify-content: start;
+    background-color: var(--background1);
+    padding: 0 10px;
+    border-radius: 5px;
 }
