@@ -62,7 +62,7 @@ const ArticleReviewsTable = ({ isAuthor, reviews, onReviewApproved }: Props) => 
               reviewerName = review.reviewer?.first_name + " " + review.reviewer?.last_name;
             }
             else if (review.is_admin_review) {
-              reviewerName = "Edytor";
+              reviewerName = "Edytor czasopisma";
             }
             return (
               <React.Fragment key={index}>
@@ -80,7 +80,7 @@ const ArticleReviewsTable = ({ isAuthor, reviews, onReviewApproved }: Props) => 
                   <td className={styles.decision}>
                     {review.decision ? ReviewDecisionDisplay[review.decision] : "-"}
                   </td>
-                  <td className={styles.grade}>{((review.custom_grade ?? review.grade) === undefined || (review.custom_grade ?? review.grade) === null ? "Brak" : (review.custom_grade ?? review.grade)?.toFixed(2))}</td>
+                  <td className={styles.grade}>{((review.custom_grade ?? review.grade) === undefined || (review.custom_grade ?? review.grade) === null ? "-" : (Math.round((review.custom_grade ?? review.grade)! * 2) / 2).toFixed(2))}</td>
                   {isStaff &&
                     <td>
                       {review.status === ReviewStatus.Sumbitted &&
@@ -98,22 +98,22 @@ const ArticleReviewsTable = ({ isAuthor, reviews, onReviewApproved }: Props) => 
                   }
                 </tr>
                 <tr>
-                  <td colSpan={isAuthor ? 6 : 4} className={styles.expandedRowContainer}>
+                  <td colSpan={isAuthor ? 4 : 6} className={styles.expandedRowContainer}>
                     <div className={`${styles.expandableContent} ${isExpanded ? styles.expanded : ''}`}>
                       <div className={styles.overflowHidden}>
                         <div className={styles.expandedContent}>
-                          <div className={styles.commentSection}>
-                            <strong>Komentarz:</strong>
-                            <p>{!review.comment ? "Brak" : review.comment}</p>
-                          </div>
-                          <div className={styles.criteriaGrid}>
+                          <div className={styles.detailsGrid}>
+                            <div className={styles.label}>Komentarz</div>
+                            <div className={styles.value}>
+                              {!review.comment ? "-" : review.comment}
+                            </div>
                             {Object.entries(reviewCriteriaDisplay).map(([key, label]) => {
                               // eslint-disable-next-line @typescript-eslint/no-explicit-any
                               const value = (review as any)[key];
                               return (
                                 <React.Fragment key={key}>
-                                  <div className={styles.criteriaLabel}>{label}</div>
-                                  <div className={styles.criteriaValue}>{value ?? '-'}</div>
+                                  <div className={styles.label}>{label}</div>
+                                  <div className={styles.value}>{value ?? '-'}</div>
                                 </React.Fragment>
                               )
                             })}

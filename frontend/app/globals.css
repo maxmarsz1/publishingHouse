@@ -3,6 +3,7 @@
   --textSecondary: #CCC5B9;
   --background: #403D39;
   --background1: #252422;
+  --background2: #1f1f1c;
   --primary: #EB5E28;
 }
 
@@ -30,11 +31,11 @@ body {
   flex-direction: column;
 }
 
-.no-scroll{
+.no-scroll {
   overflow: hidden;
 }
 
-main{
+main {
   flex: 1;
 }
 
@@ -49,11 +50,11 @@ a {
   text-decoration: none;
 }
 
-a:hover{
+a:hover {
   text-decoration: underline;
 }
 
-h1{
+h1 {
   margin-bottom: 16px;
 }
 

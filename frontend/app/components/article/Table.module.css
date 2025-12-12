@@ -13,6 +13,14 @@
     background-color: var(--background1);
 }
 
+.table tbody tr:nth-child(2n) {
+    background-color: var(--background2);
+}
+
+.table tbody tr td {
+    border-bottom: 1px solid var(--background);
+}
+
 .table {
     border-spacing: 0;
     width: 100%;
@@ -47,41 +55,6 @@
     width: 15%;
 }
 
-
-
-.commentSection {
-    padding-bottom: 16px;
-    border-bottom: 1px solid var(--border);
-}
-
-.commentSection strong {
-    display: block;
-    margin-bottom: 8px;
-    color: var(--text-secondary);
-}
-
-.commentSection p {
-    margin: 0;
-    white-space: pre-wrap;
-}
-
-.criteriaGrid {
-    display: grid;
-    grid-template-columns: auto auto;
-    gap: 8px 16px;
-    width: fit-content;
-}
-
-.criteriaLabel {
-    font-weight: bold;
-    color: var(--text-secondary);
-}
-
-.criteriaValue {
-    text-align: right;
-    font-variant-numeric: tabular-nums;
-}
-
 .expandButton {
     background: none;
     border: none;
@@ -93,7 +66,7 @@
 
 .expandedRowContainer {
     padding: 0 !important;
-    border-bottom: none !important;
+    /* border-bottom: none !important; */
 }
 
 .expandableContent {
@@ -112,9 +85,7 @@
 
 .expandedContent {
     background-color: var(--background2);
-    padding: 16px;
     border-radius: 8px;
-    margin: 8px 10px 16px 10px;
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -125,4 +96,34 @@
     min-width: 0 !important;
     width: 32px;
     height: 24px;
+}
+
+.detailsGrid {
+    margin: 0;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    background-color: var(--background1);
+    border-radius: 8px;
+    overflow: hidden;
+    width: 100%;
+}
+
+.label {
+    padding: 12px 16px;
+    font-weight: 600;
+    border-bottom: 1px solid var(--background);
+    border-right: 1px solid var(--background);
+    background-color: rgba(0, 0, 0, 0.1);
+    white-space: nowrap;
+}
+
+.value {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--background);
+    white-space: pre-wrap;
+}
+
+.detailsGrid>div:nth-last-child(1),
+.detailsGrid>div:nth-last-child(2) {
+    border-bottom: none;
 }

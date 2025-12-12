@@ -7,55 +7,55 @@ interface Props {
     reviews: Review[];
 }
 
-const ReviewsTable = ({reviews}: Props) => {
+const ReviewsTable = ({ reviews }: Props) => {
     const showReviewersAndGrades = reviews.some(review => review.reviewer);
 
-  return (
-    <div className={styles.tableWrapper}>
-        <h2>Twoje recenzje</h2>
-        <table className={styles.table}>
-            <thead>
-                <tr>
-                    <th>Raport</th>
-                    {showReviewersAndGrades &&
-                    <th>Użytkownik</th>
-                    }
-                    <th>Status recenzji</th>
-                    {showReviewersAndGrades &&
-                    <th>Ocena</th>
-                    }
-                </tr>
-            </thead>
-            <tbody>
-                {reviews.map((review, index) => (
-                    <tr key={index}>
-                        <td className={styles.title}>
-                            <a href={`/myspace/articles/${review.raport?.id}`}>{review.raport?.title}</a>
-                        </td>
+    return (
+        <div className={styles.tableWrapper}>
+            <h2>Twoje recenzje</h2>
+            <table className={styles.table}>
+                <thead>
+                    <tr>
+                        <th>Raport</th>
                         {showReviewersAndGrades &&
-                        <td className={styles.user}>
-                            {review.reviewer?.first_name} {review.reviewer?.last_name} ({review.reviewer?.username})
-                        </td>
+                            <th>Użytkownik</th>
                         }
-                        <td className={styles.status}>{ReviewStatusDisplay[review.status]}</td>
-                        
+                        <th>Status recenzji</th>
                         {showReviewersAndGrades &&
-                        <td className={styles.grade}>{(review.grade == 0 ? "-" : review.grade)}</td>
+                            <th>Ocena</th>
                         }
                     </tr>
-                ))}
-                {reviews.length == 0 &&
-                <tr>
-                    <td>Brak recenzji</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-  )
+                </thead>
+                <tbody>
+                    {reviews.map((review, index) => (
+                        <tr key={index}>
+                            <td className={styles.title}>
+                                <a href={`/myspace/articles/${review.raport?.id}`}>{review.raport?.title}</a>
+                            </td>
+                            {showReviewersAndGrades &&
+                                <td className={styles.user}>
+                                    {review.reviewer?.first_name} {review.reviewer?.last_name} ({review.reviewer?.username})
+                                </td>
+                            }
+                            <td className={styles.status}>{ReviewStatusDisplay[review.status]}</td>
+
+                            {showReviewersAndGrades &&
+                                <td className={styles.grade}>{(review.grade == 0 ? "-" : (Math.round(review.grade * 2) / 2).toFixed(2))}</td>
+                            }
+                        </tr>
+                    ))}
+                    {reviews.length == 0 &&
+                        <tr>
+                            <td>Brak recenzji</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    )
 }
 
 export default ReviewsTable

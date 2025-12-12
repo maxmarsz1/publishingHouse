@@ -64,7 +64,7 @@ const ArticleReviewerInfo = ({ review, reviewStatus, setReviewStatus }: ArticleR
 
           <div className={styles.label}>Ocena Średnia</div>
           <div className={styles.value}>
-            {review.grade != null ? review.grade.toFixed(2) : "-"}
+            {review.grade != null ? (Math.round(review.grade * 2) / 2).toFixed(2) : "-"}
           </div>
 
           <div className={styles.label}>Data recenzji</div>
