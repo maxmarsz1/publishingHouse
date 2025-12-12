@@ -6,6 +6,7 @@ import { Review, ReviewStatus, ReviewStatusDisplay, reviewCriteriaDisplay, Revie
 import { approveReview } from '@/app/utils/article-helper'
 import styles from './Table.module.css'
 import { Button } from '@mui/material'
+import { useUser } from '@/app/context/UserContext'
 
 interface Props {
   isAuthor: boolean | undefined;
@@ -14,8 +15,8 @@ interface Props {
 }
 
 const ArticleReviewsTable = ({ isAuthor, reviews, onReviewApproved }: Props) => {
-  const showReviewer = typeof isAuthor === undefined || !isAuthor;
   const [expandedRows, setExpandedRows] = useState<number[]>([]);
+  const { isStaff } = useUser();
 
   const handleApprove = async (e: React.MouseEvent, reviewId: number) => {
     e.stopPropagation();
@@ -44,18 +45,25 @@ const ArticleReviewsTable = ({ isAuthor, reviews, onReviewApproved }: Props) => 
         <thead>
           <tr>
             <th style={{ width: '40px' }}></th>
-            {showReviewer &&
-              <th>Recenzent</th>
+            <th>Recenzent</th>
+            {!isAuthor &&
+              <th>Status</th>
             }
-            <th>Status</th>
             <th>Decyzja</th>
             <th>Ocena</th>
-            {showReviewer && <th>Akcje</th>}
+            {isStaff && <th>Akcje</th>}
           </tr>
         </thead>
         <tbody>
           {reviews.map((review, index) => {
             const isExpanded = expandedRows.includes(index);
+            let reviewerName = "Anonimowy";
+            if (!isAuthor) {
+              reviewerName = review.reviewer?.first_name + " " + review.reviewer?.last_name;
+            }
+            else if (review.is_admin_review) {
+              reviewerName = "Edytor";
+            }
             return (
               <React.Fragment key={index}>
                 <tr onClick={() => toggleRow(index)} style={{ cursor: 'pointer' }}>
@@ -64,18 +72,16 @@ const ArticleReviewsTable = ({ isAuthor, reviews, onReviewApproved }: Props) => 
                       <FontAwesomeIcon icon={isExpanded ? faChevronUp : faChevronDown} />
                     </button>
                   </td>
-                  {showReviewer &&
-                    <td className={styles.user}>
-                      {review.reviewer?.first_name} {review.reviewer?.last_name}
-                    </td>
-                  }
-                  <td className={styles.status}>
-                    {ReviewStatusDisplay[review.status]} {review.is_admin_review && <FontAwesomeIcon icon={faStar} className={styles.adminStar} title="Recenzja edytora" style={{ color: "gold", marginLeft: "5px" }} />}</td>
+                  <td className={styles.user}>
+                    {reviewerName} {review.is_admin_review && <FontAwesomeIcon icon={faStar} className={styles.adminStar} title="Recenzja edytora" style={{ color: "gold", marginLeft: "5px" }} />}
+                  </td>
+                  {!isAuthor && <td className={styles.status}>
+                    {ReviewStatusDisplay[review.status]} </td>}
                   <td className={styles.decision}>
                     {review.decision ? ReviewDecisionDisplay[review.decision] : "-"}
                   </td>
-                  <td className={styles.grade}>{(!review.grade ? "Brak" : review.grade.toFixed(2))}</td>
-                  {showReviewer &&
+                  <td className={styles.grade}>{((review.custom_grade ?? review.grade) === undefined || (review.custom_grade ?? review.grade) === null ? "Brak" : (review.custom_grade ?? review.grade)?.toFixed(2))}</td>
+                  {isStaff &&
                     <td>
                       {review.status === ReviewStatus.Sumbitted &&
                         <Button
@@ -92,7 +98,7 @@ const ArticleReviewsTable = ({ isAuthor, reviews, onReviewApproved }: Props) => 
                   }
                 </tr>
                 <tr>
-                  <td colSpan={showReviewer ? 6 : 4} className={styles.expandedRowContainer}>
+                  <td colSpan={isAuthor ? 6 : 4} className={styles.expandedRowContainer}>
                     <div className={`${styles.expandableContent} ${isExpanded ? styles.expanded : ''}`}>
                       <div className={styles.overflowHidden}>
                         <div className={styles.expandedContent}>
@@ -123,7 +129,7 @@ const ArticleReviewsTable = ({ isAuthor, reviews, onReviewApproved }: Props) => 
           {reviews.length == 0 &&
             <tr>
               <td style={{ width: '40px' }}></td>
-              <td colSpan={showReviewer ? 5 : 3}>Brak recenzji</td>
+              <td colSpan={isAuthor ? 6 : 4}>Brak recenzji</td>
             </tr>
           }
         </tbody>

@@ -43,8 +43,8 @@ export function UserProvider({ children, initialIsStaff }: UserProviderProps) {
     } catch (error) {
       console.error("Wylogowanie nie powiodło się", error);
     } finally {
-      setIsStaff(false);
       router.push('/auth/login');
+      setIsStaff(false);
     }
   }, [router]);
 

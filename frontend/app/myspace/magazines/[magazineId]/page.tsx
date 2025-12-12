@@ -144,7 +144,7 @@ const PublisherViewClient = () => {
         />}
       </div>
 
-      {adminArticles && <ArticleTable title="Wszystkie raporty" articles={adminArticles} admin />}
+      {adminArticles && <ArticleTable title="Wszystkie raporty" articles={adminArticles} />}
       {regularUserArticles && (
         <>
           <ArticleTable title="Twoje raporty" articles={regularUserArticles.authored_articles} />

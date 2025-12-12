@@ -83,7 +83,7 @@ const ManagementModal = ({
                 </IconButton>
             </DialogTitle>
             <DialogContent>
-                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                <Box sx={{ borderBottom: 1, borderColor: 'var(--primary)' }}>
                     <Tabs value={value} onChange={handleChange} aria-label="management tabs">
                         <Tab label="Termin oddania" sx={{ color: 'var(--text)' }} />
                         <Tab label="Członkowie" sx={{ color: 'var(--text)' }} />

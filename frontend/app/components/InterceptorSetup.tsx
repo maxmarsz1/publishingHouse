@@ -13,7 +13,16 @@ export const InterceptorSetup = () => {
         const interceptor = apiClient.interceptors.response.use(
             (response) => response,
             (error) => {
-                const message = error.response?.data?.error || error.response?.data?.detail || "Wystąpił nieoczekiwany błąd.";
+                let message = "Wystąpił nieoczekiwany błąd.";
+
+                if (!error.response || error.code === "ERR_NETWORK") {
+                    message = "Serwer jest niedostępny. Spróbuj ponownie później.";
+                } else if (error.response.status >= 500) {
+                    message = `Błąd serwera (${error.response.status}). Spróbuj ponownie później.`;
+                } else {
+                    message = error.response?.data?.error || error.response?.data?.detail || message;
+                }
+
                 // Avoid showing error for 401 as it might be handled by AuthInterceptor (redirect to login)
                 // But typically 401 means session expired.
                 if (error.response?.status !== 401) {
