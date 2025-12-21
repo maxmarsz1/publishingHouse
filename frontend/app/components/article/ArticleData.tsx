@@ -62,13 +62,15 @@ const ArticleData = ({ article }: Props) => {
         {getArticleCategoryDisplayText(article.articleCategory)}
       </div>
 
-      <div className={styles.keywords}>
-        <div className={styles.keywordsList}>
-          {keywords.map((keyword, index) => (
-            <span key={index}>{keyword}</span>
-          ))}
+      {article.keywords &&
+        <div className={styles.keywords}>
+          <div className={styles.keywordsList}>
+            {keywords.map((keyword, index) => (
+              <span key={index}>{keyword}</span>
+            ))}
+          </div>
         </div>
-      </div>
+      }
     </>
   );
 };

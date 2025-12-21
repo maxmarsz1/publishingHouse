@@ -170,3 +170,10 @@ export const reviewCriteriaDisplay: Record<string, string> = {
     goal_achievement: 'Osiągnięcie celu pracy',
     language_correctness: 'Stylistyka i poprawność językowa'
 };
+
+export interface AppSettings {
+    abstract_min_words: number;
+    abstract_max_words: number;
+    review_min_words: number;
+    review_max_words: number;
+}

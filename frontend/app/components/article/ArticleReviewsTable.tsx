@@ -107,7 +107,7 @@ const ArticleReviewsTable = ({ isAuthor, reviews, onReviewApproved }: Props) => 
                             <div className={styles.value}>
                               {!review.comment ? "-" : review.comment}
                             </div>
-                            {Object.entries(reviewCriteriaDisplay).map(([key, label]) => {
+                            {!review.is_admin_review && Object.entries(reviewCriteriaDisplay).map(([key, label]) => {
                               // eslint-disable-next-line @typescript-eslint/no-explicit-any
                               const value = (review as any)[key];
                               return (
@@ -129,7 +129,7 @@ const ArticleReviewsTable = ({ isAuthor, reviews, onReviewApproved }: Props) => 
           {reviews.length == 0 &&
             <tr>
               <td style={{ width: '40px' }}></td>
-              <td colSpan={isAuthor ? 6 : 4}>Brak recenzji</td>
+              <td colSpan={isAuthor ? 6 : 5}>Brak recenzji</td>
             </tr>
           }
         </tbody>

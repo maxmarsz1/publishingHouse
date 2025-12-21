@@ -15,40 +15,53 @@ const ArticleTable = ({ title, articles, showPublisher = false }: ArticlesTableP
     console.log(articles)
     const isStaff = useContext(UserContext).isStaff
 
+
+    // Title: 2fr, Publisher: 1fr, User: 1fr, Status: 1fr, Grade: 0.5fr
+    let gridTemplateColumns = "2fr 1fr"; // Default for basic user
+    if (showPublisher) {
+        gridTemplateColumns = "2fr 1fr 1fr"; // With publisher
+    }
+
+    if (isStaff) {
+        gridTemplateColumns = "2fr 1fr 1fr 0.5fr"; // base admin
+        if (showPublisher) {
+            gridTemplateColumns = "2fr 1fr 1fr 1fr 0.5fr";
+        }
+    }
+
+
     return (
         <div className={styles.tableWrapper}>
             <h2>{title}</h2>
-            <table className={styles.table}>
-                <thead>
-                    <tr>
-                        <th>Tytul</th>
-                        {showPublisher &&
-                            <th>Czasopismo</th>
-                        }
-                        {isStaff &&
-                            <th>Użytkownik</th>
-                        }
-                        <th>Status</th>
-                        {isStaff &&
-                            <th>Ocena</th>
-                        }
-                    </tr>
-                </thead>
-                <tbody>
+            <div className={styles.gridTable}>
+                <div className={styles.gridHeader} style={{ gridTemplateColumns }}>
+                    <div className={styles.gridCell}>Tytul</div>
+                    {showPublisher &&
+                        <div className={styles.gridCell}>Czasopismo</div>
+                    }
+                    {isStaff &&
+                        <div className={styles.gridCell}>Użytkownik</div>
+                    }
+                    <div className={styles.gridCell}>Status</div>
+                    {isStaff &&
+                        <div className={styles.gridCell}>Ocena</div>
+                    }
+                </div>
+                <div>
                     {articles.map((article, index) => (
-                        <tr key={index}>
-                            <td className={styles.title}>
+                        <div className={styles.gridRow} style={{ gridTemplateColumns }} key={index}>
+                            <div className={styles.gridCell}>
                                 <Link href={`/myspace/articles/${article.id}`}>{article.title}</Link>
-                            </td>
+                            </div>
                             {showPublisher &&
-                                <td className={styles.publisher}>{article.publisher.name}</td>
+                                <div className={styles.gridCell}>{article.publisher.name}</div>
                             }
                             {isStaff &&
-                                <td className={styles.user}>{article.author.first_name} {article.author.last_name} ({article.author.username})</td>
+                                <div className={styles.gridCell}>{article.author.first_name} {article.author.last_name} ({article.author.username})</div>
                             }
-                            <td className={styles.status}>{getStatusDisplayText(article.status)}</td>
+                            <div className={styles.gridCell}>{getStatusDisplayText(article.status)}</div>
                             {isStaff &&
-                                <td className={styles.grade}>
+                                <div className={styles.gridCell}>
                                     {(() => {
                                         if (article.reviews && article.reviews.length > 0) {
                                             const adminReview = article.reviews.find(r => r.custom_grade);
@@ -67,25 +80,17 @@ const ArticleTable = ({ title, articles, showPublisher = false }: ArticlesTableP
                                         }
                                         return article.grade ? article.grade.toFixed(2) : "-";
                                     })()}
-                                </td>
+                                </div>
                             }
-                        </tr>
+                        </div>
                     ))}
                     {articles.length == 0 &&
-                        <tr>
-                            <td>Brak raportów</td>
-                            <td></td>
-                            <td></td>
-                            {showPublisher &&
-                                <td></td>
-                            }
-                            {isStaff &&
-                                <td></td>
-                            }
-                        </tr>
+                        <div className={styles.gridRow} style={{ gridTemplateColumns: '1fr' }}>
+                            <div className={styles.gridCell}>Brak raportów</div>
+                        </div>
                     }
-                </tbody>
-            </table>
+                </div>
+            </div>
         </div>
     )
 }

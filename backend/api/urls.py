@@ -8,6 +8,7 @@ from django.conf import settings
 
 
 from .views import AdminViews, UserViews
+from raports.views_settings import AppSettingsView
 
 router = DefaultRouter()
 router.register(r'raports', AdminViews.RaportViewSet)
@@ -43,6 +44,8 @@ urlpatterns = [
     path('auth/login/', UserViews.CustomTokenObtainPairView.as_view(), name='login'),
     path('auth/refresh/', UserViews.CustomTokenRefreshView.as_view(), name='token_refresh'),
     path('auth/logout/', UserViews.LogoutView.as_view(), name='logout'),
+    
+    path('settings/', AppSettingsView.as_view(), name='app-settings'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

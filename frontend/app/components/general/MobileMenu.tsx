@@ -11,7 +11,7 @@ import { useUser } from '@/app/context/UserContext'
 const MobileMenu = () => {
     const [isOpen, setIsOpen] = useState(false);
     const router = useRouter();
-    const { logoutUser } = useUser();
+    const { logoutUser, isStaff } = useUser();
 
     useEffect(() => {
         const html = document.documentElement;
@@ -42,8 +42,13 @@ const MobileMenu = () => {
             </div>
             <div className={`${styles.menu} ${isOpen ? styles.open : ''}`}>
                 <Link className={styles.mobileLink} href="/myspace/magazines" onClick={handleLinkClick}>Czasopisma</Link>
-                <Link className={styles.mobileLink} href="/myspace/articles" onClick={handleLinkClick}>Twoje Raporty</Link>
+                {!isStaff &&
+                    <Link className={styles.mobileLink} href="/myspace/articles" onClick={handleLinkClick}>Twoje Raporty</Link>
+                }
                 <Link className={styles.mobileLink} href="/myspace/account" onClick={handleLinkClick}>Konto</Link>
+                {isStaff &&
+                    <Link className={styles.mobileLink} href="/myspace/settings" onClick={handleLinkClick}>Ustawienia</Link>
+                }
                 <a className={styles.mobileLink} onClick={logoutUser}>Wyloguj się</a>
                 <FontAwesomeIcon icon={faXmark} className={styles.closeIcon} onClick={() => setIsOpen(!isOpen)} />
             </div>

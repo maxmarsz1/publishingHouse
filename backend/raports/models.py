@@ -160,3 +160,24 @@ class RaportReview(models.Model):
             self.grade = None
         
         super().save(*args, **kwargs)
+
+
+class AppSettings(models.Model):
+    abstract_min_words = models.IntegerField(default=150)
+    abstract_max_words = models.IntegerField(default=250)
+    review_min_words = models.IntegerField(default=50)
+    review_max_words = models.IntegerField(default=500)
+
+    class Meta:
+        verbose_name = "Application Settings"
+        verbose_name_plural = "Application Settings"
+
+    def save(self, *args, **kwargs):
+        if not self.pk and AppSettings.objects.exists():
+            return AppSettings.objects.first()
+        return super().save(*args, **kwargs)
+
+    @classmethod
+    def load(cls):
+        obj, created = cls.objects.get_or_create(pk=1)
+        return obj

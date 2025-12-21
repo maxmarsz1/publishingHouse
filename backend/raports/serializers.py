@@ -26,6 +26,22 @@ class NewOrUpdateRaportSerializer(serializers.ModelSerializer):
             'publisher': {'read_only': True}
         }
 
+    def validate_abstract(self, value):
+        from .models import AppSettings
+        try:
+            settings = AppSettings.load()
+            min_words = settings.abstract_min_words
+            max_words = settings.abstract_max_words
+        except:
+             # Fallback if DB not ready or migration issue
+            min_words = 150
+            max_words = 250
+            
+        word_count = len(value.split())
+        if word_count < min_words or word_count > max_words:
+            raise serializers.ValidationError(f"Abstrakt musi mieć od {min_words} do {max_words} słów.")
+        return value
+
 class RaportListSerializer(serializers.ModelSerializer):
     publisher = serializers.SerializerMethodField()
 
@@ -68,7 +84,12 @@ class RaportReviewSerializer(serializers.ModelSerializer):
                   'content_consistency', 'goal_formulation', 'structure_correctness', 
                   'terminology_relevance', 'graphic_design', 'aesthetics', 
                   'literature_selection', 'conclusions_correctness', 'goal_achievement', 
-                  'language_correctness']
+                  'language_correctness', 'is_admin_review']
+    
+    is_admin_review = serializers.SerializerMethodField()
+
+    def get_is_admin_review(self, obj):
+        return obj.reviewer.is_staff
 
 class RaportReviewReviewerSerializer(serializers.ModelSerializer):
     raport = serializers.SerializerMethodField()
@@ -155,7 +176,7 @@ class AdminRaportSerializer(serializers.ModelSerializer):
 
 class CreateReviewSerializer(serializers.ModelSerializer):
     raport_id = serializers.IntegerField(write_only=True)
-    comment = serializers.CharField(required=True)
+    comment = serializers.CharField(required=False, allow_blank=True)
 
     class Meta:
         model = RaportReview
@@ -164,29 +185,60 @@ class CreateReviewSerializer(serializers.ModelSerializer):
                   'aesthetics', 'literature_selection', 'conclusions_correctness', 
                   'goal_achievement', 'language_correctness']
         extra_kwargs = {
-            'content_consistency': {'required': True, 'allow_null': False},
-            'goal_formulation': {'required': True, 'allow_null': False},
-            'structure_correctness': {'required': True, 'allow_null': False},
-            'terminology_relevance': {'required': True, 'allow_null': False},
-            'graphic_design': {'required': True, 'allow_null': False},
-            'aesthetics': {'required': True, 'allow_null': False},
-            'literature_selection': {'required': True, 'allow_null': False},
-            'conclusions_correctness': {'required': True, 'allow_null': False},
-            'goal_achievement': {'required': True, 'allow_null': False},
-            'language_correctness': {'required': True, 'allow_null': False},
+            'content_consistency': {'required': False, 'allow_null': True},
+            'goal_formulation': {'required': False, 'allow_null': True},
+            'structure_correctness': {'required': False, 'allow_null': True},
+            'terminology_relevance': {'required': False, 'allow_null': True},
+            'graphic_design': {'required': False, 'allow_null': True},
+            'aesthetics': {'required': False, 'allow_null': True},
+            'literature_selection': {'required': False, 'allow_null': True},
+            'conclusions_correctness': {'required': False, 'allow_null': True},
+            'goal_achievement': {'required': False, 'allow_null': True},
+            'language_correctness': {'required': False, 'allow_null': True},
             'decision': {'required': True, 'allow_null': False},
         }
 
     def validate_comment(self, value):
+        request = self.context.get('request')
+        user = request.user
+        
+        # Admin can have empty or short comments
+        if user.is_staff:
+            return value
+
+        from .models import AppSettings
+        try:
+            settings = AppSettings.load()
+            min_words = settings.review_min_words
+            max_words = settings.review_max_words
+        except:
+            min_words = 100
+            max_words = 1000
+
         word_count = len(value.split())
-        if word_count < 100 or word_count > 1000:
-            raise serializers.ValidationError(f"Komentarz musi mieć od 100 do 1000 słów.")
+        if word_count < min_words or word_count > max_words:
+            raise serializers.ValidationError(f"Komentarz musi mieć od {min_words} do {max_words} słów.")
         return value
 
     def validate(self, data):
         request = self.context.get('request')
         user = request.user
         raport_id = data.get('raport_id')
+
+        # For non-admin, enforce criteria are present
+        if not user.is_staff:
+            required_criteria = [
+                'content_consistency', 'goal_formulation', 'structure_correctness',
+                'terminology_relevance', 'graphic_design', 'aesthetics',
+                'literature_selection', 'conclusions_correctness',
+                'goal_achievement', 'language_correctness'
+            ]
+            errors = {}
+            for field in required_criteria:
+                if data.get(field) is None:
+                    errors[field] = "To pole jest wymagane."
+            if errors:
+                raise serializers.ValidationError(errors)
 
         try:
             raport = Raport.objects.get(id=raport_id)

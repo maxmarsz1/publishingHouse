@@ -12,6 +12,7 @@ import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@m
 import { updateUserContext } from '@/app/utils/user-context-helper';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
+import { AppSettings } from '@/app/types/types';
 
 const StyledRating = styled(Rating)({
   '& .MuiRating-iconEmpty': {
@@ -33,10 +34,14 @@ const ArticleReviewForm: React.FC<ArticleReviewFormProps> = ({ articleId }) => {
     Object.keys(reviewCriteriaDisplay).reduce((acc, key) => ({ ...acc, [key]: 2.5 }), {})
   );
   const [errors, setErrors] = useState<Record<string, string[]>>({});
+  const [limits, setLimits] = useState<AppSettings | null>(null);
   const router = useRouter();
 
   useEffect(() => {
     updateUserContext(setIsStaff);
+    apiClient.get('/settings/')
+      .then(res => setLimits(res.data))
+      .catch(err => console.error(err));
   }, []);
 
   const handleCriteriaChange = (key: string, value: number | null) => {
@@ -81,8 +86,14 @@ const ArticleReviewForm: React.FC<ArticleReviewFormProps> = ({ articleId }) => {
     }
   }
 
-  const isFormValid = comment.split(" ").length >= 100 && grade !== null && decision !== null;
+  const currentWordCount = comment.trim().split(/\s+/).filter(w => w.length > 0).length;
+  const minWords = limits ? limits.review_min_words : 100; // fallback if limits not loaded
+  const maxWords = limits ? limits.review_max_words : 1000;
 
+  const isCommentValid = isStaff ? true : (currentWordCount >= minWords && currentWordCount <= maxWords);
+  const isGradeValid = isStaff ? true : (grade !== null);
+
+  const isFormValid = isCommentValid && isGradeValid && decision !== null;
 
 
   return (
@@ -100,44 +111,47 @@ const ArticleReviewForm: React.FC<ArticleReviewFormProps> = ({ articleId }) => {
 
       <TextField
         id="comment"
-        label="Komentarz (100-1000 słów)"
+        label={limits ? `Komentarz (${limits.review_min_words} - ${limits.review_max_words} słów)` : "Komentarz (ładowanie limitów...)"}
+        helperText={errors.comment ? errors.comment.join(', ') : `Liczba słów: ${currentWordCount}`}
         value={comment}
         multiline
         rows={5}
-        required
+        required={!isStaff}
         onChange={(e) => setComment(e.target.value)}
         fullWidth
         className={styles.inputField}
-        error={!!errors.comment}
-        helperText={errors.comment ? errors.comment.join(', ') : ""}
+        error={!!errors.comment || (!isStaff && currentWordCount > 0 && (currentWordCount < minWords || currentWordCount > maxWords))}
+        slotProps={{ formHelperText: { sx: { color: 'white' } } }}
       />
 
-      <div className={styles.criteria}>
-        {Object.entries(reviewCriteriaDisplay).map(([key, label]) => (
-          <div key={key} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Typography component="legend">{label as string}</Typography>
-            <StyledRating
-              name={key}
-              value={criteriaGrades[key]}
-              onChange={(_, newValue) => handleCriteriaChange(key, newValue)}
-              precision={0.5}
-            />
+      {!isStaff &&
+        <>
+          <div className={styles.criteria}>
+            {Object.entries(reviewCriteriaDisplay).map(([key, label]) => (
+              <div key={key} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <Typography component="legend">{label as string}</Typography>
+                <StyledRating
+                  name={key}
+                  value={criteriaGrades[key]}
+                  onChange={(_, newValue) => handleCriteriaChange(key, newValue)}
+                  precision={0.5}
+                />
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
 
-      <div className={styles.finalGrade}>
-        <Typography component="legend" style={{ fontWeight: 'bold' }}>Ocena końcowa</Typography>
-        <StyledRating
-          name="half-rating"
-          value={grade}
-          readOnly
-          precision={0.1}
-        />
-        <Typography variant="h6" style={{ marginLeft: '10px' }}>{grade?.toFixed(2)}</Typography>
-      </div>
-
-
+          <div className={styles.finalGrade}>
+            <Typography component="legend" style={{ fontWeight: 'bold' }}>Ocena końcowa</Typography>
+            <StyledRating
+              name="half-rating"
+              value={grade}
+              readOnly
+              precision={0.1}
+            />
+            <Typography variant="h6" style={{ marginLeft: '10px' }}>{grade?.toFixed(2)}</Typography>
+          </div>
+        </>
+      }
 
       <div className={styles.actions}>
         {isStaff && (

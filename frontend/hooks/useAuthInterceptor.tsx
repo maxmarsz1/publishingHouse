@@ -1,9 +1,8 @@
 'use client';
 
-import { useEffect, useCallback } from 'react';
+import { useEffect } from 'react';
 import { useUser } from '@/app/context/UserContext';
 import axios from 'axios';
-import { useRouter } from 'next/navigation';
 import apiClient from '@/app/utils/api-client';
 
 const setupInterceptors = (revalidate: () => Promise<void>, logout: () => void) => {
@@ -32,8 +31,8 @@ const setupInterceptors = (revalidate: () => Promise<void>, logout: () => void) 
           isRefreshing = true;
           try {
             await refreshAccessToken();
-            
-            await revalidate(); 
+
+            await revalidate();
 
             pendingRequests.forEach((cb) => cb());
             pendingRequests = [];

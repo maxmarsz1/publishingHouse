@@ -23,6 +23,9 @@ const Navbar = () => {
             <Link className={styles.desktopLink} href="/myspace/articles">Twoje Raporty</Link>
           }
           <Link className={styles.desktopLink} href="/myspace/account">Konto</Link>
+          {isStaff &&
+            <Link className={styles.desktopLink} href="/myspace/settings">Ustawienia</Link>
+          }
         </div>
         <a
           className={styles.logoutLink}

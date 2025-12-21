@@ -1,3 +1,4 @@
+import './polyfills';
 import type { Metadata } from "next";
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 import { Roboto, Poppins } from 'next/font/google';

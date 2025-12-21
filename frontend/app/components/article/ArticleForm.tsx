@@ -3,7 +3,8 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button, TextField, MenuItem, Radio, RadioGroup, FormControlLabel, FormControl, FormLabel, Checkbox, Box, Typography } from "@mui/material";
-import { Article, ArticleType, ITArticleCategory } from "@/app/types/types";
+import { Article, ArticleType, ITArticleCategory, AppSettings } from "@/app/types/types";
+import apiClient from "@/app/utils/api-client";
 import { getArticleTypeDisplayText, getArticleCategoryDisplayText } from "@/app/utils/article-display-helper";
 import { createArticle, updateArticle } from "@/app/utils/article-helper";
 import styles from "./ArticleForm.module.css";
@@ -35,8 +36,15 @@ const NewArticle = ({ publisherId, article }: NewRaportProps) => {
   const [selfAuthored, setSelfAuthored] = useState(false);
   const [question1, setQuestion1] = useState("");
   const [question2, setQuestion2] = useState("");
+  const [limits, setLimits] = useState<AppSettings | null>(null);
 
   const router = useRouter();
+
+  useEffect(() => {
+    apiClient.get('/settings/')
+      .then(res => setLimits(res.data))
+      .catch(err => console.error("Failed to fetch settings", err));
+  }, []);
 
   useEffect(() => {
     if (article) {
@@ -88,8 +96,11 @@ const NewArticle = ({ publisherId, article }: NewRaportProps) => {
     const isSelfAuthoredValid = !isNewArticle || selfAuthored;
     const isFileValid = uploadedFile || article?.file;
 
-    if (!title || !abstract || !isFileValid || !isQuestion1Valid || !isQuestion2Valid || !isSelfAuthoredValid) {
-      console.log("Proszę uzupełnić wszystkie wymagane pola.");
+    const abstractWordCount = abstract.trim().split(/\s+/).filter(w => w.length > 0).length;
+    const isAbstractValid = !limits || (abstractWordCount >= limits.abstract_min_words && abstractWordCount <= limits.abstract_max_words);
+
+    if (!title || !abstract || !isFileValid || !isQuestion1Valid || !isQuestion2Valid || !isSelfAuthoredValid || !isAbstractValid) {
+      console.log("Proszę uzupełnić wszystkie wymagane pola zgodnie z limitami.");
       return;
     }
 
@@ -144,6 +155,7 @@ const NewArticle = ({ publisherId, article }: NewRaportProps) => {
       <TextField
         id="abstract"
         label="Abstrakt"
+        helperText={limits ? `Wymagana liczba słów: ${limits.abstract_min_words} - ${limits.abstract_max_words}. Obecnie: ${abstract.trim().split(/\s+/).filter(w => w.length > 0).length}` : "Ładowanie wymagań..."}
         multiline
         rows={5}
         value={abstract}
@@ -151,6 +163,7 @@ const NewArticle = ({ publisherId, article }: NewRaportProps) => {
         fullWidth
         required
         className={styles.inputField}
+        slotProps={{ formHelperText: { sx: { color: 'white' } } }}
       />
 
       <TextField
@@ -259,7 +272,8 @@ const NewArticle = ({ publisherId, article }: NewRaportProps) => {
           !title ||
           !abstract ||
           (!uploadedFile && !article?.file) ||
-          (!article && (!selfAuthored || !question1 || !question2))
+          (!article && (!selfAuthored || !question1 || !question2)) ||
+          (!!limits && (abstract.trim().split(/\s+/).filter(w => w.length > 0).length < limits.abstract_min_words || abstract.trim().split(/\s+/).filter(w => w.length > 0).length > limits.abstract_max_words))
         }
       >
         {article ? "Zapisz zmiany" : "Utwórz raport"}
