@@ -1,18 +1,21 @@
-.nameContainer{
+.nameContainer {
     margin-bottom: 8px;
     display: flex;
     gap: 16px;
     align-items: center;
     max-width: 50%;
 }
-.nameContainer h1{
+
+.nameContainer h1 {
     margin-bottom: 0;
 }
-.input input{
+
+.input input {
     height: 49px !important;
     padding: 0;
 }
-.buttonContainer{
+
+.buttonContainer {
     display: flex;
     gap: 8px;
 }

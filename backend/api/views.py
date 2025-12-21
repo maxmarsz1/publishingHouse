@@ -215,11 +215,13 @@ class AdminViews:
                         used_reports.add(member_reports[0].id)
                 
                 n = len(pairs)
-                if n < 3:
+                if n < 2:
                      # Fallback or error if not enough participants for circular shift without self-review issues (though n=2 works with swap)
                      # But n=15 is expected.
                      if n == 0:
-                         return Response({"message": "Brak par użytkownik-raport do rozdziału."}, status=status.HTTP_200_OK)
+                          return Response({"message": "Brak użytkowników do rozdziału."}, status=status.HTTP_200_OK)
+                     else:
+                          return Response({"message": f"Zbyt mało uczestników do rozdziału recenzji."}, status=status.HTTP_200_OK)
                 
                 random.shuffle(pairs)
                 

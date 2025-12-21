@@ -16,14 +16,14 @@ interface AppSettings {
 
 const numberInputSx = {
     '& input[type=number]': {
-        '-moz-appearance': 'textfield',
+        'MozAppearance': 'textfield',
     },
     '& input[type=number]::-webkit-outer-spin-button': {
-        '-webkit-appearance': 'none',
+        'WebkitAppearance': 'none',
         margin: 0,
     },
     '& input[type=number]::-webkit-inner-spin-button': {
-        '-webkit-appearance': 'none',
+        'WebkitAppearance': 'none',
         margin: 0,
     },
 };
@@ -83,7 +83,7 @@ const SettingsPage = () => {
 
     return (
         <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
-            <Paper sx={{ p: 4, backgroundColor: 'var(--background)', color: 'var(--text)' }}>
+            <Paper sx={{ p: 4, backgroundColor: 'var(--background)', color: 'var(--text)' }} elevation={5}>
                 <Typography variant="h4" gutterBottom>
                     Ustawienia Aplikacji
                 </Typography>

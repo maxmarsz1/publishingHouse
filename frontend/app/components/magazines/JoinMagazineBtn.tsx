@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import { Button } from '@mui/material'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome' 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 
 import styles from './Btn.module.css'
@@ -11,25 +11,22 @@ import { Publisher } from '@/app/types/types'
 
 
 
-const JoinMagazineBtn = ({setPublishersState}: {setPublishersState: React.Dispatch<React.SetStateAction<Publisher[]>>}) => {
+const JoinMagazineBtn = ({ setPublishersState }: { setPublishersState: React.Dispatch<React.SetStateAction<Publisher[]>> }) => {
     const [showModal, setShowModal] = useState(false);
 
-    function handleClick(){
+    function handleClick() {
         setShowModal(!showModal);
     }
 
-  return (
-    <>
-        <Button className={styles.joinBtn} variant='contained' onClick={handleClick}>
-            Dołącz do czasopisma
-            <FontAwesomeIcon icon={faPlus}/>
-        </Button>
-        {showModal && (
-            <JoinMagazineModal setShowModal={setShowModal} setPublishersState={setPublishersState}/>
-        )}
-        
-    </>
-  )
+    return (
+        <>
+            <Button className={styles.joinBtn} variant='contained' onClick={handleClick} startIcon={<FontAwesomeIcon icon={faPlus} />}>Dołącz do czasopisma</Button>
+            {showModal && (
+                <JoinMagazineModal setShowModal={setShowModal} setPublishersState={setPublishersState} />
+            )}
+
+        </>
+    )
 }
 
 export default JoinMagazineBtn

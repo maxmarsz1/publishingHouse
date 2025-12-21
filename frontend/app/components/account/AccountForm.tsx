@@ -20,12 +20,12 @@ const AccountForm = ({ userData }: Props) => {
   const [password, setPassword] = useState("");
   const [password1, setPassword1] = useState("");
   const [editing, setEditing] = useState(false);
-  
-  const initialValues = {
+
+  const [savedData, setSavedData] = useState({
     firstName: userData.first_name,
     lastName: userData.last_name,
     email: userData.email,
-  };
+  });
 
   async function handleSave() {
     if (!firstName || !lastName || !email) {
@@ -40,6 +40,13 @@ const AccountForm = ({ userData }: Props) => {
         email: email,
       });
       console.log("Account data updated successfully:", response);
+
+      setSavedData({
+        firstName,
+        lastName,
+        email,
+      });
+      setEditing(false);
     } catch (error) {
       console.error("Error updating account data:", error);
     }
@@ -67,9 +74,9 @@ const AccountForm = ({ userData }: Props) => {
   }
 
   function handleCancel() {
-    setFirstName(initialValues.firstName);
-    setLastName(initialValues.lastName);
-    setEmail(initialValues.email);
+    setFirstName(savedData.firstName);
+    setLastName(savedData.lastName);
+    setEmail(savedData.email);
     setEditing(false);
   }
 
