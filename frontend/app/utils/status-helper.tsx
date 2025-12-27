@@ -1,29 +1,29 @@
-import { ArticleStatus } from "../types/types";
+import { PaperStatus } from "../types/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBan, faCheckCircle, faHourglass, faInfoCircle, faEdit } from "@fortawesome/free-solid-svg-icons";
 
 
-const statusDisplayTextMap: { [key in ArticleStatus]: string } = {
-    [ArticleStatus.Pending]: "Oczekuje na recenzje",
-    [ArticleStatus.Approved]: "Zaakceptowany",
-    [ArticleStatus.Published]: "Opublikowany",
-    [ArticleStatus.Rejected]: "Odrzucony",
-    [ArticleStatus.WaitingForRevision]: "Oczekuje na poprawki",
+const statusDisplayTextMap: { [key in PaperStatus]: string } = {
+    [PaperStatus.Pending]: "Oczekuje na recenzje",
+    [PaperStatus.Approved]: "Zaakceptowany",
+    [PaperStatus.Published]: "Opublikowany",
+    [PaperStatus.Rejected]: "Odrzucony",
+    [PaperStatus.WaitingForRevision]: "Oczekuje na poprawki",
 };
 
-export const getStatusDisplayText = (status: ArticleStatus): string => {
+export const getPaperStatusDisplayText = (status: PaperStatus): string => {
     return statusDisplayTextMap[status] || "Nieznany";
 };
 
-export const getStatusIcon = (status: ArticleStatus) => {
+export const getPaperStatusIcon = (status: PaperStatus) => {
     switch (status) {
-        case ArticleStatus.Pending:
+        case PaperStatus.Pending:
             return <FontAwesomeIcon icon={faHourglass} />;
-        case ArticleStatus.Approved:
+        case PaperStatus.Approved:
             return <FontAwesomeIcon icon={faCheckCircle} />;
-        case ArticleStatus.Rejected:
+        case PaperStatus.Rejected:
             return <FontAwesomeIcon icon={faBan} />;
-        case ArticleStatus.WaitingForRevision:
+        case PaperStatus.WaitingForRevision:
             return <FontAwesomeIcon icon={faEdit} />;
         default:
             return <FontAwesomeIcon icon={faInfoCircle} />;

@@ -1,0 +1,183 @@
+from django.db import models
+from django.core.validators import MinValueValidator, MaxValueValidator
+from users.models import User
+from magazines.models import Magazine
+
+
+class Paper(models.Model):
+    class PaperStatus(models.TextChoices):
+        PENDING = 'pending', 'Pending'
+        APPROVED = 'approved', 'Approved'
+        PUBLISHED = 'published', 'Published'
+        REJECTED = 'rejected', 'Rejected'
+        WAITING_FOR_REVISION = 'waiting_for_revision', 'Waiting for Revision'
+
+
+    class PaperType(models.TextChoices):
+        ORIGINAL_RESEARCH = "original_research", "Artykuł oryginalny"
+        REVIEW_ARTICLE = "review_article", "Artykuł przeglądowy"
+        SYSTEMATIC_REVIEW = "systematic_review", "Przegląd systematyczny"
+        META_ANALYSIS = "meta_analysis", "Metaanaliza"
+        CASE_REPORT = "case_report", "Raport przypadku / Studium przypadku"
+        SHORT_COMMUNICATION = "short_communication", "Krótki komunikat / Krótki raport"
+        METHOD_ARTICLE = "method_article", "Artykuł metodologiczny"
+        COMMENTARY = "commentary", "Komentarz / Opinia / List do redakcji"
+        THEORETICAL_PAPER = "theoretical_paper", "Artykuł teoretyczny"
+        CLINICAL_TRIAL_REPORT = "clinical_trial_report", "Raport z badania klinicznego"
+        SOFTWARE_TOOL_ARTICLE = "software_tool_article", "Artykuł oprogramowania"
+        TECHNICAL_REPORT = "technical_report", "Raport techniczny"
+        OTHER = "other", "Inny"
+
+
+    class ITPaperCategory(models.TextChoices):
+        ARTIFICIAL_INTELLIGENCE = "artificial_intelligence", "Sztuczna Inteligencja (AI)"
+        MACHINE_LEARNING = "machine_learning", "Uczenie Maszynowe (ML)"
+        DATA_SCIENCE = "data_science", "Data Science / Analiza Danych"
+        CYBERSECURITY = "cybersecurity", "Cyberbezpieczeństwo"
+        CLOUD_COMPUTING = "cloud_computing", "Przetwarzanie w Chmurze (Cloud Computing)"
+        WEB_DEVELOPMENT = "web_development", "Tworzenie Aplikacji Webowych"
+        MOBILE_DEVELOPMENT = "mobile_development", "Tworzenie Aplikacji Mobilnych"
+        GAME_DEVELOPMENT = "game_development", "Tworzenie Gier"
+        DEVOPS = "devops", "DevOps"
+        NETWORKING = "networking", "Sieci Komputerowe"
+        DATABASES = "databases", "Bazy Danych"
+        OPERATING_SYSTEMS = "operating_systems", "Systemy Operacyjne"
+        SOFTWARE_ENGINEERING = "software_engineering", "Inżynieria Oprogramowania"
+        COMPUTER_GRAPHICS = "computer_graphics", "Grafika Komputerowa"
+        ROBOTICS = "robotics", "Robotyka"
+        INTERNET_OF_THINGS = "internet_of_things", "Internet Rzeczy (IoT)"
+        BLOCKCHAIN = "blockchain", "Blockchain / Kryptowaluty"
+        QUANTUM_COMPUTING = "quantum_computing", "Obliczenia Kwantowe"
+        HUMAN_COMPUTER_INTERACTION = "human_computer_interaction", "Interakcja Człowiek-Komputer (HCI)"
+        OTHER = "other", "Inne"
+
+
+    title = models.CharField(max_length=255)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='authored_papers')
+    reviewers = models.ManyToManyField(
+        User,
+        through='PaperReview',
+        related_name='reviewed_papers',
+        blank=True
+    )
+    magazine = models.ForeignKey('magazines.Magazine', on_delete=models.CASCADE, related_name='papers')
+    status = models.CharField(
+        max_length=20,
+        choices=PaperStatus.choices,
+        default=PaperStatus.PENDING
+    )
+    paper_type = models.CharField(
+        max_length=30,
+        choices=PaperType.choices,
+        default=PaperType.ORIGINAL_RESEARCH
+    )
+    category = models.CharField(
+        max_length=30,
+        choices=ITPaperCategory.choices,
+        default=ITPaperCategory.ARTIFICIAL_INTELLIGENCE
+    )
+    abstract = models.TextField()
+    file = models.FileField(upload_to='papers/files/')
+    keywords = models.CharField(max_length=255, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    comment = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.title} by {self.author.username} - {self.get_status_display()}"
+
+    class Meta:
+        verbose_name = 'Paper'
+        verbose_name_plural = 'Papers'
+        ordering = ['-created_at']
+
+
+class PaperReview(models.Model):
+    class PaperReviewStatus(models.TextChoices):
+        PENDING = 'pending', 'Pending Review'
+        SUBMITTED = 'submitted', 'Submitted Review'
+        APPROVED = 'approved', 'Approved'
+        INVITE_SENT = 'invited', 'Reviewer Invited'
+        INVITE_REJECTED = 'invite_rejected', 'Invite rejected'
+
+    class ReviewDecision(models.TextChoices):
+        ACCEPT = 'accept', 'Accept'
+        MINOR_REVISION = 'minor_revision', 'Minor Revision'
+        MAJOR_REVISION = 'major_revision', 'Major Revision'
+        REJECT = 'reject', 'Reject'
+
+
+    paper = models.ForeignKey(Paper, on_delete=models.CASCADE, related_name='reviews')
+    reviewer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_reviews')
+    review_date = models.DateTimeField(null=True, blank=True)
+    comment = models.TextField(blank=True, null=True)
+    grade = models.FloatField(null=True, blank=True, help_text='Grade from 0 to 5')
+    custom_grade = models.FloatField(null=True, blank=True, help_text='Admin defined grade')
+    
+    content_consistency = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(5)], null=True, blank=True)
+    goal_formulation = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(5)], null=True, blank=True)
+    structure_correctness = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(5)], null=True, blank=True)
+    terminology_relevance = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(5)], null=True, blank=True)
+    graphic_design = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(5)], null=True, blank=True)
+    aesthetics = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(5)], null=True, blank=True)
+    literature_selection = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(5)], null=True, blank=True)
+    conclusions_correctness = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(5)], null=True, blank=True)
+    goal_achievement = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(5)], null=True, blank=True)
+    language_correctness = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(5)], null=True, blank=True)
+
+    status = models.CharField(
+        max_length=20,
+        choices=PaperReviewStatus.choices,
+        default=PaperReviewStatus.INVITE_SENT
+    )
+
+    decision = models.CharField(
+        max_length=20,
+        choices=ReviewDecision.choices,
+        null=True,
+        blank=True
+    )
+
+    class Meta:
+        unique_together = ('paper', 'reviewer')
+        verbose_name = 'Paper Review'
+        verbose_name_plural = 'Paper Reviews'
+
+    def __str__(self):
+        return f"{self.reviewer.username} reviewing {self.paper.title} ({self.get_status_display()})"
+
+    def save(self, *args, **kwargs):
+        fields = [
+            self.content_consistency, self.goal_formulation, self.structure_correctness,
+            self.terminology_relevance, self.graphic_design, self.aesthetics,
+            self.literature_selection, self.conclusions_correctness, self.goal_achievement,
+            self.language_correctness
+        ]
+        valid_scores = [field for field in fields if field is not None]
+        
+        if valid_scores:
+            self.grade = sum(valid_scores) / len(valid_scores)
+        else:
+            self.grade = None
+        
+        super().save(*args, **kwargs)
+
+
+class AppSettings(models.Model):
+    abstract_min_words = models.IntegerField(default=150)
+    abstract_max_words = models.IntegerField(default=250)
+    review_min_words = models.IntegerField(default=50)
+    review_max_words = models.IntegerField(default=500)
+
+    class Meta:
+        verbose_name = "Application Settings"
+        verbose_name_plural = "Application Settings"
+
+    def save(self, *args, **kwargs):
+        if not self.pk and AppSettings.objects.exists():
+            return AppSettings.objects.first()
+        return super().save(*args, **kwargs)
+
+    @classmethod
+    def load(cls):
+        obj, created = cls.objects.get_or_create(pk=1)
+        return obj

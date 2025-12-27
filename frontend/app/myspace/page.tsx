@@ -1,9 +1,9 @@
 import React from 'react'
-import Publishers from './magazines/page'
+import Magazines from './magazines/page'
 
 const MySpace = () => {
   return (
-    <Publishers/>
+    <Magazines />
   )
 }
 

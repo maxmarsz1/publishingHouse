@@ -1,6 +1,6 @@
 'use client';
 
-import { deletePublisher } from '@/app/utils/publisher-helper';
+import { deleteMagazine } from '@/app/utils/magazine-helper';
 import { Button } from '@mui/material';
 import React from 'react'
 import { useRouter } from 'next/navigation';
@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useUI } from '@/app/context/UIContext';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
-const SettingsTab = ({ publisherId }: { publisherId: number }) => {
+const SettingsTab = ({ magazineId }: { magazineId: number }) => {
     const router = useRouter();
     const { showConfirm, showSnackbar } = useUI();
 
@@ -18,7 +18,7 @@ const SettingsTab = ({ publisherId }: { publisherId: number }) => {
             "Ta akcja jest nieodwracalna. Usunięcie czasopisma spowoduje usunięcie wszystkich powiązanych danych.",
             async () => {
                 try {
-                    await deletePublisher(publisherId);
+                    await deleteMagazine(magazineId);
                     showSnackbar("Czasopismo usunięte pomyślnie", "success")
                     router.push("/myspace/magazines");
                 }

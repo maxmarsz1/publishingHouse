@@ -1,7 +1,7 @@
 import React from "react";
-import { Publisher, User } from "@/app/types/types";
+import { Magazine, User } from "@/app/types/types";
 import styles from "../Modal.module.css";
-import { deletePublisherMember, getPublisherMembers } from "@/app/utils/publisher-helper";
+import { deleteMagazineMember, getMagazineMembers } from "@/app/utils/magazine-helper";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { useUI } from "@/app/context/UIContext";
@@ -9,11 +9,11 @@ import { IconButton, CircularProgress } from "@mui/material";
 import { useState, useEffect } from "react";
 
 const MembersTab = ({
-    publisher,
+    magazine,
     members,
     setMembers,
 }: {
-    publisher: Publisher;
+    magazine: Magazine;
     members: User[] | null;
     setMembers: React.Dispatch<React.SetStateAction<User[] | null>>;
 }) => {
@@ -22,10 +22,10 @@ const MembersTab = ({
 
     useEffect(() => {
         const fetchMembers = async () => {
-            if (publisher.id && (!members || members.length === 0)) {
+            if (magazine.id && (!members || members.length === 0)) {
                 setLoading(true);
                 try {
-                    const fetchedMembers = await getPublisherMembers(publisher.id);
+                    const fetchedMembers = await getMagazineMembers(magazine.id);
                     setMembers(fetchedMembers);
                 } catch (error) {
                     console.error("Failed to load members", error);
@@ -36,23 +36,23 @@ const MembersTab = ({
         };
 
         fetchMembers();
-    }, [publisher.id, members, setMembers]);
+    }, [magazine.id, members, setMembers]);
 
     function handleDeleteClick(user_id: number, username: string) {
         showConfirm(
             "Jesteś pewien?",
             `Czy na pewno chcesz usunąć użytkownika ${username} z czasopisma?`,
             async () => {
-                if (!publisher.id) return;
+                if (!magazine.id) return;
 
                 try {
-                    await deletePublisherMember(publisher.id, user_id);
+                    await deleteMagazineMember(magazine.id, user_id);
                     setMembers((prevMembers) =>
                         prevMembers ? prevMembers.filter((member) => member.id !== user_id) : null
                     );
                     showSnackbar("Użytkownik usunięty pomyślnie", "success");
                 } catch (error) {
-                    console.error("Error deleting publisher member:", error);
+                    console.error("Error deleting magazine member:", error);
                 }
             }
         );

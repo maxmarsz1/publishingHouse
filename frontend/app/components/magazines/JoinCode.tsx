@@ -1,26 +1,26 @@
 'use client'
 
-import { Publisher } from '@/app/types/types'
+import { Magazine } from '@/app/types/types'
 import styles from './JoinCode.module.css'
 import React, { useState } from 'react'
 import { Button } from '@mui/material'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faRotate } from '@fortawesome/free-solid-svg-icons'
-import { generateNewJoinCode } from '@/app/utils/publisher-helper'
+import { generateNewJoinCode } from '@/app/utils/magazine-helper'
 import { useUI } from '@/app/context/UIContext'
 
-const JoinCode = ({ publisher }: { publisher: Publisher }) => {
-    const [joinCode, setJoinCode] = useState(publisher.joinCode ? publisher.joinCode : "Brak");
+const JoinCode = ({ magazine }: { magazine: Magazine }) => {
+    const [joinCode, setJoinCode] = useState(magazine.joinCode ? magazine.joinCode : "Brak");
     const [loading, setLoading] = useState(false);
     const { showSnackbar } = useUI();
 
     async function handleSubmit() {
-        if (!publisher.id || loading) {
+        if (!magazine.id || loading) {
             return;
         }
         setLoading(true);
         try {
-            const newJoinCode = await generateNewJoinCode(publisher.id);
+            const newJoinCode = await generateNewJoinCode(magazine.id);
             setJoinCode((newJoinCode));
             showSnackbar("Nowy kod dołączenia wygenerowany", "success");
         }

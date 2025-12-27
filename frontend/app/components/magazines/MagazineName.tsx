@@ -5,20 +5,20 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 
 import styles from "./MagazineName.module.css";
-import { updatePublisher } from "@/app/utils/publisher-helper";
+import { updateMagazine } from "@/app/utils/magazine-helper";
 import { UserContext } from "@/app/context/UserContext";
 
 const MagazineName = ({
-  publisherId,
-  publisherName,
+  magazineId,
+  magazineName,
 }: {
-  publisherId: number;
-  publisherName: string;
+  magazineId: number;
+  magazineName: string;
 }) => {
   const { isStaff } = useContext(UserContext);
   const [isEditing, setIsEditing] = useState(false);
-  const [name, setName] = useState(publisherName);
-  const [nameInput, setNameInput] = useState(publisherName);
+  const [name, setName] = useState(magazineName);
+  const [nameInput, setNameInput] = useState(magazineName);
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNameInput(event.target.value);
@@ -30,12 +30,12 @@ const MagazineName = ({
       return;
     }
     try {
-      updatePublisher({ id: publisherId, name: nameInput });
+      updateMagazine({ id: magazineId, name: nameInput });
       setIsEditing(false);
       setName(nameInput);
       console.log("Updated name:", name);
     } catch (error) {
-      console.error("Error updating publisher name:", error);
+      console.error("Error updating magazine name:", error);
     }
   };
 

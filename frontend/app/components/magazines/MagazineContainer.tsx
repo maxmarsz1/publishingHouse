@@ -1,25 +1,25 @@
 'use client'
 
 import React, { useContext, useState } from 'react'
-import { Publisher } from '../../types/types'
+import { Magazine } from '../../types/types'
 import MagazineCard from './MagazineCard'
 import styles from './MagazineContainer.module.css'
 import JoinMagazineBtn from './JoinMagazineBtn'
 import NewMagazineBtn from './NewMagazineBtn'
 import { UserContext } from '@/app/context/UserContext'
 
-const MagazineContainer = ({ publishers }: { publishers: Publisher[] }) => {
+const MagazineContainer = ({ magazines }: { magazines: Magazine[] }) => {
   const { isStaff } = useContext(UserContext);
-  const [publishersState, setPublishersState] = useState<Publisher[]>(publishers);
+  const [magazinesState, setMagazinesState] = useState<Magazine[]>(magazines);
   const headerText = isStaff ? "Wszystkie czasopisma" : "Twoje czasopisma"
   return (
     <>
       <h1>{headerText}</h1>
       <div className={styles.publishersContainer}>
-        {isStaff ? <NewMagazineBtn setPublishersState={setPublishersState} /> : <JoinMagazineBtn setPublishersState={setPublishersState} />}
+        {isStaff ? <NewMagazineBtn setMagazinesState={setMagazinesState} /> : <JoinMagazineBtn setMagazinesState={setMagazinesState} />}
 
-        {publishersState.map((publisher) => (
-          <MagazineCard key={publisher.id} publisher={publisher} />
+        {magazinesState.map((magazine) => (
+          <MagazineCard key={magazine.id} magazine={magazine} />
         ))}
       </div>
     </>

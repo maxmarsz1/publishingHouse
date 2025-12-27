@@ -1,4 +1,4 @@
-export interface Publisher {
+export interface Magazine {
     id: number;
     name: string;
     description?: string;
@@ -7,8 +7,8 @@ export interface Publisher {
     members?: User[];
 }
 
-export interface UserArticles {
-    authored_articles: Article[],
+export interface UserPapers {
+    authored_papers: Paper[],
     user_reviews: Review[]
 }
 
@@ -18,23 +18,23 @@ export interface User {
     first_name: string,
     last_name: string,
     email?: string,
-    articles?: Article[],
-    articlesToReview?: Article[]
+    papers?: Paper[],
+    papersToReview?: Paper[]
 }
 
-export interface Article {
+export interface Paper {
     id: number,
     title: string,
     abstract: string,
-    articleType: ArticleType,
-    articleCategory: ITArticleCategory,
+    paperType: PaperType,
+    paperCategory: ITPaperCategory,
     author: User,
-    status: ArticleStatus,
+    status: PaperStatus,
     keywords: string,
     comment: string,
     createdAt: string,
     grade?: number,
-    publisher: Publisher,
+    magazine: Magazine,
     toReview?: boolean,
     review?: Review,
     isAuthor?: boolean,
@@ -43,20 +43,20 @@ export interface Article {
     file?: File,
 }
 
-export interface NewArticle {
+export interface NewPaper {
     title: string,
     abstract: string,
-    articleType: ArticleType,
-    articleCategory: ITArticleCategory,
+    paperType: PaperType,
+    paperCategory: ITPaperCategory,
     comment: string,
     keywords: string,
     file: File,
-    publisherId: number
+    magazineId: number
 }
 
 export interface Review {
     id: number,
-    raport?: Article,
+    paper?: Paper,
     reviewer?: User,
     comment: string,
     decision?: ReviewDecision,
@@ -107,7 +107,7 @@ export const ReviewDecisionDisplay: Record<ReviewDecision, string> = {
     [ReviewDecision.Reject]: "Odrzucenie",
 }
 
-export enum ArticleStatus {
+export enum PaperStatus {
     Pending = "pending",
     Approved = "approved",
     Published = "published",
@@ -115,7 +115,7 @@ export enum ArticleStatus {
     WaitingForRevision = "waiting_for_revision",
 }
 
-export enum ArticleType {
+export enum PaperType {
     OriginalResearch = "original_research", // Artykuł oryginalny
     ReviewArticle = "review_article", // Artykuł przeglądowy
     SystematicReview = "systematic_review", // Przegląd systematyczny
@@ -133,7 +133,7 @@ export enum ArticleType {
 
 
 
-export enum ITArticleCategory {
+export enum ITPaperCategory {
     ArtificialIntelligence = "artificial_intelligence", // Sztuczna Inteligencja (AI)
     MachineLearning = "machine_learning", // Uczenie Maszynowe (ML)
     DataScience = "data_science", // Data Science / Analiza Danych

@@ -1,26 +1,26 @@
 import React, { useState } from 'react';
 import { Button, CircularProgress } from '@mui/material';
-import { distributeReviews } from '@/app/utils/publisher-helper';
+import { distributeReviews } from '@/app/utils/magazine-helper';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShuffle } from '@fortawesome/free-solid-svg-icons';
 import { useUI } from '@/app/context/UIContext';
 
 interface DistributeReviewsBtnProps {
-    publisherId: number;
+    magazineId: number;
 }
 
-const DistributeReviewsBtn: React.FC<DistributeReviewsBtnProps> = ({ publisherId }) => {
+const DistributeReviewsBtn: React.FC<DistributeReviewsBtnProps> = ({ magazineId }) => {
     const [loading, setLoading] = useState(false);
     const { showSnackbar, showConfirm } = useUI();
 
     const handleDistribute = () => {
         showConfirm(
             "Potwierdzenie",
-            "Czy na pewno chcesz rozdzielić recenzje dla wszystkich oczekujących raportów?",
+            "Czy na pewno chcesz rozdzielić recenzje dla wszystkich oczekujących prac?",
             async () => {
                 setLoading(true);
                 try {
-                    const result = await distributeReviews(publisherId);
+                    const result = await distributeReviews(magazineId);
                     showSnackbar(result.message, 'success');
                 } catch (error) {
                     console.error(error);

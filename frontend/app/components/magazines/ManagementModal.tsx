@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { Dialog, DialogContent, DialogTitle, Tab, Tabs, Box, IconButton } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
-import { Publisher, User } from "@/app/types/types";
+import { Magazine, User } from "@/app/types/types";
 import DueDateTab from "./tabs/DueDateTab";
 import MembersTab from "./tabs/MembersTab";
 import SettingsTab from "./tabs/SettingsTab";
@@ -38,14 +38,14 @@ function CustomTabPanel(props: TabPanelProps) {
 const ManagementModal = ({
     open,
     onClose,
-    publisher,
+    magazine,
     onDueDateUpdate,
     members,
     setMembers,
 }: {
     open: boolean;
     onClose: () => void;
-    publisher: Publisher;
+    magazine: Magazine;
     onDueDateUpdate: (newDueDate: string) => void;
     members: User[] | null;
     setMembers: React.Dispatch<React.SetStateAction<User[] | null>>;
@@ -91,13 +91,13 @@ const ManagementModal = ({
                     </Tabs>
                 </Box>
                 <CustomTabPanel value={value} index={0}>
-                    <DueDateTab publisher={publisher} onDueDateUpdate={onDueDateUpdate} />
+                    <DueDateTab magazine={magazine} onDueDateUpdate={onDueDateUpdate} />
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={1}>
-                    <MembersTab publisher={publisher} members={members} setMembers={setMembers} />
+                    <MembersTab magazine={magazine} members={members} setMembers={setMembers} />
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={2}>
-                    {publisher.id && <SettingsTab publisherId={publisher.id} />}
+                    {magazine.id && <SettingsTab magazineId={magazine.id} />}
                 </CustomTabPanel>
             </DialogContent>
         </Dialog>

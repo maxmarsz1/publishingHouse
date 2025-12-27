@@ -3,33 +3,33 @@ import React, { useState } from "react";
 import styles from "./Modal.module.css";
 import Backdrop from "../general/Backdrop";
 import { Button, TextField } from "@mui/material";
-import { Publisher } from "@/app/types/types";
-import { joinPublisher } from "@/app/utils/publisher-helper";
+import { Magazine } from "@/app/types/types";
+import { joinMagazine } from "@/app/utils/magazine-helper";
 
 const JoinMagazineModal = ({
   setShowModal,
-  setPublishersState,
+  setMagazinesState,
 }: {
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
-  setPublishersState: React.Dispatch<React.SetStateAction<Publisher[]>>;
+  setMagazinesState: React.Dispatch<React.SetStateAction<Magazine[]>>;
 }) => {
   const [joinCode, setJoinCode] = useState("");
   function cancel() {
     setShowModal(false);
   }
 
-  async function handleSubmit(){
-    if(!joinCode.trim()){
+  async function handleSubmit() {
+    if (!joinCode.trim()) {
       return;
     }
     try {
-      const joinedPublisher = await joinPublisher(joinCode);
-      console.log("Joined publisher: ", joinedPublisher.name);
-      setPublishersState((prevPublishers => [...prevPublishers, joinedPublisher]));
+      const joinedMagazine = await joinMagazine(joinCode);
+      console.log("Joined magazine: ", joinedMagazine.name);
+      setMagazinesState((prevMagazines => [...prevMagazines, joinedMagazine]));
       setShowModal(false);
     }
-    catch(error){
-      console.error("Error joining publisher:", error);
+    catch (error) {
+      console.error("Error joining magazine:", error);
     }
   }
 

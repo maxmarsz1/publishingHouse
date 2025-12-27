@@ -2,18 +2,18 @@
 
 import React, { useEffect, useState } from 'react'
 import MagazineContainer from "../../components/magazines/MagazineContainer"
-import { getPublishers } from '@/app/utils/publisher-helper'
-import { Publisher } from '@/app/types/types';
+import { getMagazines } from '@/app/utils/magazine-helper'
+import { Magazine } from '@/app/types/types';
 
 
-export default function Publishers() {
-  const [publishers, setPublishers] = useState<Publisher[] | null>(null);
+export default function Magazines() {
+  const [magazines, setMagazines] = useState<Magazine[] | null>(null);
 
   useEffect(() => {
-    getPublishers().then(setPublishers).catch(console.error);
+    getMagazines().then(setMagazines).catch(console.error);
   }, []);
 
-  if (!publishers) return <p>Ładowanie...</p>;
+  if (!magazines) return <p>Ładowanie...</p>;
 
-  return <MagazineContainer publishers={publishers} />;
+  return <MagazineContainer magazines={magazines} />;
 }

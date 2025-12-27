@@ -1,5 +1,5 @@
 import React from "react";
-import { Publisher, User } from "@/app/types/types";
+import { Magazine, User } from "@/app/types/types";
 import styles from "./AdminActions.module.css";
 import JoinCode from "./JoinCode";
 import DistributeReviewsBtn from "./DistributeReviewsBtn";
@@ -7,12 +7,12 @@ import AcceptAllReviewsBtn from "./AcceptAllReviewsBtn";
 import ManageBtn from "./ManageBtn";
 
 const AdminActions = ({
-  publisher,
+  magazine,
   onDueDateUpdate,
   members,
   setMembers,
 }: {
-  publisher: Publisher;
+  magazine: Magazine;
   onDueDateUpdate: (newDueDate: string) => void;
   members: User[] | null;
   setMembers: React.Dispatch<React.SetStateAction<User[] | null>>;
@@ -21,15 +21,15 @@ const AdminActions = ({
     <div className={styles.container}>
       <div className={styles.left}>
         <ManageBtn
-          publisher={publisher}
+          magazine={magazine}
           onDueDateUpdate={onDueDateUpdate}
           members={members}
           setMembers={setMembers}
         />
-        <DistributeReviewsBtn publisherId={publisher.id} />
-        <AcceptAllReviewsBtn publisherId={publisher.id} />
+        <DistributeReviewsBtn magazineId={magazine.id} />
+        <AcceptAllReviewsBtn magazineId={magazine.id} />
       </div>
-      <JoinCode publisher={publisher} />
+      <JoinCode magazine={magazine} />
     </div>
   );
 };

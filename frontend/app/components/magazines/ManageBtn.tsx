@@ -5,15 +5,15 @@ import { Button } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGear } from "@fortawesome/free-solid-svg-icons";
 import ManagementModal from "./ManagementModal";
-import { Publisher, User } from "@/app/types/types";
+import { Magazine, User } from "@/app/types/types";
 
 const ManageBtn = ({
-    publisher,
+    magazine,
     onDueDateUpdate,
     members,
     setMembers,
 }: {
-    publisher: Publisher;
+    magazine: Magazine;
     onDueDateUpdate: (newDueDate: string) => void;
     members: User[] | null;
     setMembers: React.Dispatch<React.SetStateAction<User[] | null>>;
@@ -36,7 +36,7 @@ const ManageBtn = ({
                 <ManagementModal
                     open={open}
                     onClose={handleClose}
-                    publisher={publisher}
+                    magazine={magazine}
                     onDueDateUpdate={onDueDateUpdate}
                     members={members}
                     setMembers={setMembers}

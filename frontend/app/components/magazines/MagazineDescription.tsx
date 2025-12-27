@@ -3,20 +3,20 @@ import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencilAlt } from '@fortawesome/free-solid-svg-icons';
-import { updatePublisher } from '@/app/utils/publisher-helper';
+import { updateMagazine } from '@/app/utils/magazine-helper';
 import { UserContext } from '@/app/context/UserContext';
 
 const MagazineDescription = ({
-  publisherDescription,
-  publisherId
+  magazineDescription,
+  magazineId
 }: {
-  publisherDescription: string | undefined;
-  publisherId: number;
+  magazineDescription: string | undefined;
+  magazineId: number;
 }) => {
   const { isStaff } = useContext(UserContext);
   const [isEditing, setIsEditing] = useState(false);
-  const [description, setDescription] = useState(publisherDescription || '');
-  const [descriptionInput, setDescriptionInput] = useState(publisherDescription || '');
+  const [description, setDescription] = useState(magazineDescription || '');
+  const [descriptionInput, setDescriptionInput] = useState(magazineDescription || '');
 
   const handleDescriptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDescriptionInput(event.target.value);
@@ -24,12 +24,12 @@ const MagazineDescription = ({
 
   const handleSave = async () => {
     try {
-      await updatePublisher({ id: publisherId, description: descriptionInput });
+      await updateMagazine({ id: magazineId, description: descriptionInput });
       setDescription(descriptionInput);
       setIsEditing(false);
       console.log('Updated description:', descriptionInput);
     } catch (error) {
-      console.error('Error updating publisher description:', error);
+      console.error('Error updating magazine description:', error);
     }
   };
 
@@ -69,7 +69,7 @@ const MagazineDescription = ({
       ) : (
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <p
-            style={{whiteSpace: 'pre-wrap' }}
+            style={{ whiteSpace: 'pre-wrap' }}
           >
             {description || 'Brak opisu'}
           </p>

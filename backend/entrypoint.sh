@@ -19,8 +19,8 @@ python manage.py setup_users
 # Load fixtures
 echo "Loading boilerplate data fixtures..."
 python manage.py loaddata fixtures/users_data.json
-python manage.py loaddata fixtures/publishers_data.json
-python manage.py loaddata fixtures/raports_data.json
+python manage.py loaddata fixtures/magazines_data.json
+python manage.py loaddata fixtures/papers_data.json
 
 # Start the application server
 echo "Starting Django server..."

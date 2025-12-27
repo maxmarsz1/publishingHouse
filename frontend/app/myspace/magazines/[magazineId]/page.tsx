@@ -7,28 +7,28 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClock, faInfoCircle, faPlus } from '@fortawesome/free-solid-svg-icons';
 import Link from 'next/link';
 
-import { getPublisherData } from '@/app/utils/publisher-helper';
-import { getAdminPublisherArticles, getUserPublisherArticles } from '@/app/utils/article-helper';
+import { getMagazineData } from '@/app/utils/magazine-helper';
+import { getAdminMagazinePapers, getUserMagazinePapers } from '@/app/utils/paper-helper';
 
 import AdminActions from '@/app/components/magazines/AdminActions';
-import ArticleTable from '@/app/components/article/ArticleTable';
-import ReviewsTable from '@/app/components/article/ReviewsTable';
+import PaperTable from '@/app/components/paper/PaperTable';
+import ReviewsTable from '@/app/components/paper/ReviewsTable';
 import MagazineName from '@/app/components/magazines/MagazineName';
 import MagazineDescription from '@/app/components/magazines/MagazineDescription';
 import styles from './page.module.css';
 
-import { Publisher, Article, UserArticles, User } from '@/app/types/types';
+import { Magazine, Paper, UserPapers, User } from '@/app/types/types';
 import { UserContext } from '@/app/context/UserContext';
 
-const PublisherViewClient = () => {
+const MagazineViewClient = () => {
   const params = useParams();
   const magazineId = params?.magazineId;
   const idAsNumber = +magazineId!;
   const { isStaff } = useContext(UserContext);
 
-  const [publisher, setPublisher] = useState<Publisher | null>(null);
-  const [adminArticles, setAdminArticles] = useState<Article[] | null>(null);
-  const [regularUserArticles, setRegularUserArticles] = useState<UserArticles | null>(null);
+  const [magazine, setMagazine] = useState<Magazine | null>(null);
+  const [adminPapers, setAdminPapers] = useState<Paper[] | null>(null);
+  const [regularUserPapers, setRegularUserPapers] = useState<UserPapers | null>(null);
   const [dueDate, setDueDate] = useState<Date | null>(null);
   const [dueDateReadable, setDueDateReadable] = useState<string>('----------');
   const [members, setMembers] = useState<User[] | null>(null);
@@ -37,17 +37,17 @@ const PublisherViewClient = () => {
 
   useEffect(() => {
     if (isNaN(idAsNumber) || idAsNumber <= 0) {
-      setError(`Invalid publisher ID: ${magazineId}`);
+      setError(`Invalid magazine ID: ${magazineId}`);
       setLoading(false);
       return;
     }
 
     async function loadData() {
       try {
-        const pub = await getPublisherData(idAsNumber);
-        setPublisher(pub);
+        const mag = await getMagazineData(idAsNumber);
+        setMagazine(mag);
 
-        const due = pub.dueDate ? new Date(pub.dueDate) : null;
+        const due = mag.dueDate ? new Date(mag.dueDate) : null;
         setDueDate(due);
         setDueDateReadable(
           due
@@ -62,11 +62,11 @@ const PublisherViewClient = () => {
         );
 
         if (isStaff) {
-          const admin = await getAdminPublisherArticles(idAsNumber);
-          setAdminArticles(admin);
+          const admin = await getAdminMagazinePapers(idAsNumber);
+          setAdminPapers(admin);
         } else {
-          const userArticles = await getUserPublisherArticles(idAsNumber);
-          setRegularUserArticles(userArticles);
+          const userPapers = await getUserMagazinePapers(idAsNumber);
+          setRegularUserPapers(userPapers);
         }
       } catch (err) {
         console.error(err);
@@ -77,7 +77,7 @@ const PublisherViewClient = () => {
     }
 
     loadData();
-  }, [idAsNumber, magazineId]);
+  }, [idAsNumber, magazineId, isStaff]);
 
   const updateDueDate = (newDueDate: string) => {
     const updatedDate = new Date(newDueDate);
@@ -95,7 +95,7 @@ const PublisherViewClient = () => {
 
   if (loading) return <p>Ładowanie...</p>;
   if (error) return <p>{error}</p>;
-  if (!publisher) return <p>Wystąpił problem z wczytaniem danych.</p>;
+  if (!magazine) return <p>Wystąpił problem z wczytaniem danych.</p>;
 
   const pastDue = dueDate ? new Date() > dueDate : false;
 
@@ -103,8 +103,8 @@ const PublisherViewClient = () => {
     <>
       <div>
         <div className={styles.topContainer}>
-          <MagazineName publisherName={publisher.name} publisherId={publisher.id} />
-          <MagazineDescription publisherDescription={publisher.description} publisherId={publisher.id} />
+          <MagazineName magazineName={magazine.name} magazineId={magazine.id} />
+          <MagazineDescription magazineDescription={magazine.description} magazineId={magazine.id} />
           <p className={styles.dueDateContainer}>
             <span>
               <FontAwesomeIcon icon={faClock} />&nbsp;Termin przesłania:{' '}
@@ -115,44 +115,44 @@ const PublisherViewClient = () => {
 
         {!pastDue && !isStaff && (
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-            <span style={{ cursor: regularUserArticles?.authored_articles.length !== 0 ? 'not-allowed' : 'pointer' }}>
+            <span style={{ cursor: regularUserPapers?.authored_papers.length !== 0 ? 'not-allowed' : 'pointer' }}>
               <Button
                 style={{ gap: '8px' }}
                 variant="contained"
-                href={`/myspace/magazines/${publisher.id}/new-article`}
+                href={`/myspace/magazines/${magazine.id}/new-paper`}
                 component={Link}
-                disabled={regularUserArticles?.authored_articles.length !== 0}
+                disabled={regularUserPapers?.authored_papers.length !== 0}
               >
-                Przeslij raport
+                Prześlij artykuł
                 <FontAwesomeIcon icon={faPlus} />
               </Button>
             </span>
-            {regularUserArticles?.authored_articles.length !== 0 && (
+            {regularUserPapers?.authored_papers.length !== 0 && (
               <span style={{ color: 'red', fontSize: '12px' }}>
                 <FontAwesomeIcon icon={faInfoCircle} />&nbsp;
-                Możesz przesłać tylko jeden raport w ramach tego czasopisma.
+                Możesz przesłać tylko jeden artykuł w ramach tego czasopisma.
               </span>
             )}
           </div>
         )}
 
         {isStaff && <AdminActions
-          publisher={publisher}
+          magazine={magazine}
           onDueDateUpdate={updateDueDate}
           members={members}
           setMembers={setMembers}
         />}
       </div>
 
-      {adminArticles && <ArticleTable title="Wszystkie raporty" articles={adminArticles} />}
-      {regularUserArticles && (
+      {adminPapers && <PaperTable title="Wszystkie artykuły" papers={adminPapers} />}
+      {regularUserPapers && (
         <>
-          <ArticleTable title="Twoje raporty" articles={regularUserArticles.authored_articles} />
-          <ReviewsTable reviews={regularUserArticles.user_reviews} />
+          <PaperTable title="Twoje artykuły" papers={regularUserPapers.authored_papers} />
+          <ReviewsTable reviews={regularUserPapers.user_reviews} />
         </>
       )}
     </>
   );
 };
 
-export default PublisherViewClient;
+export default MagazineViewClient;

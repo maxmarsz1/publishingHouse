@@ -7,10 +7,10 @@ import styles from "./AdminActions.module.css";
 import { useUI } from "@/app/context/UIContext";
 
 interface AcceptAllReviewsBtnProps {
-    publisherId: number;
+    magazineId: number;
 }
 
-const AcceptAllReviewsBtn: React.FC<AcceptAllReviewsBtnProps> = ({ publisherId }) => {
+const AcceptAllReviewsBtn: React.FC<AcceptAllReviewsBtnProps> = ({ magazineId }) => {
     const [loading, setLoading] = useState(false);
     const { showConfirm, showSnackbar } = useUI();
 
@@ -21,7 +21,7 @@ const AcceptAllReviewsBtn: React.FC<AcceptAllReviewsBtnProps> = ({ publisherId }
             async () => {
                 setLoading(true);
                 try {
-                    const response = await apiClient.post(`/publisher/${publisherId}/accept-all-reviews/`);
+                    const response = await apiClient.post(`/magazine/${magazineId}/accept-all-reviews/`);
                     showSnackbar(response.data.message, "success");
                 } catch (error: any) {
                     console.error("Error accepting reviews:", error);
