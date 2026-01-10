@@ -139,7 +139,7 @@ const NewPaper = ({ magazineId, paper }: NewPaperProps) => {
         id="title"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
-        label="Pełen tytuł"
+        label="Tytuł"
         variant="outlined"
         fullWidth
         required
@@ -192,7 +192,7 @@ const NewPaper = ({ magazineId, paper }: NewPaperProps) => {
 
       <TextField
         id="comment"
-        label="Komentarz"
+        label="Komentarz do Edytora"
         multiline
         rows={3}
         value={comment}
@@ -203,7 +203,7 @@ const NewPaper = ({ magazineId, paper }: NewPaperProps) => {
 
       <TextField
         id="keywords"
-        label="Słowa kluczowe"
+        label="Słowa kluczowe (oddzielone przecinkami)"
         value={keywords}
         onChange={(e) => setKeywords(e.target.value)}
         fullWidth
@@ -243,7 +243,7 @@ const NewPaper = ({ magazineId, paper }: NewPaperProps) => {
           </FormControl>
 
           <FormControl component="fieldset" style={{ marginBottom: '1rem', display: 'block' }}>
-            <FormLabel component="legend" className={styles.checkboxLabel} required>Prosimy o potwierdzenie, że manuskrypt jest przesyłany wyłącznie do tego czasopisma i nie został opublikowany w prasie ani przesłany gdzie indziej.</FormLabel>
+            <FormLabel component="legend" className={styles.checkboxLabel} required>Manuskrypt został zgłoszony wyłącznie do tego czasopisma i nie był wcześniej opublikowany</FormLabel>
             <RadioGroup row aria-label="question2" name="question2" value={question2} onChange={(e) => setQuestion2(e.target.value)}>
               <FormControlLabel className={styles.checkboxLabel} value="yes" control={<Radio />} label="Tak" />
               <FormControlLabel className={styles.checkboxLabel} value="no" control={<Radio />} label="Nie" />
@@ -251,7 +251,7 @@ const NewPaper = ({ magazineId, paper }: NewPaperProps) => {
           </FormControl>
 
           <FormControl component="fieldset" style={{ marginBottom: '1rem', display: 'block' }}>
-            <FormControlLabel className={styles.checkboxLabel} required control={<Checkbox checked={selfAuthored} onChange={(e) => setSelfAuthored(e.target.checked)} />} label="Oświadczam, że przekładana praca została napisana przeze mnie samodzielnie." />
+            <FormControlLabel className={styles.checkboxLabel} required control={<Checkbox checked={selfAuthored} onChange={(e) => setSelfAuthored(e.target.checked)} />} label="Oświadczam, że przekładana praca została napisana przeze mnie samodzielnie" />
           </FormControl>
         </>
       }

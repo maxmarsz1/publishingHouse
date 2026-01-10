@@ -77,7 +77,7 @@ class Paper(models.Model):
         default=ITPaperCategory.ARTIFICIAL_INTELLIGENCE
     )
     abstract = models.TextField()
-    file = models.FileField(upload_to='papers/files/')
+    file = models.FileField(upload_to='papers/')
     keywords = models.CharField(max_length=255, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     comment = models.TextField(blank=True, null=True)

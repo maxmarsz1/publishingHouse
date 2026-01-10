@@ -69,7 +69,7 @@ const PaperReviewsTable = ({ isAuthor, reviews, onReviewApproved }: Props) => {
             }
             <th>Decyzja</th>
             <th>Ocena</th>
-            {(isStaff || isAuthor) && <th>Akcje</th>}
+            {isStaff && <th>Akcje</th>}
           </tr>
         </thead>
         <tbody>
@@ -99,7 +99,7 @@ const PaperReviewsTable = ({ isAuthor, reviews, onReviewApproved }: Props) => {
                     {review.decision ? ReviewDecisionDisplay[review.decision] : "-"}
                   </td>
                   <td className={styles.grade}>{((review.custom_grade ?? review.grade) === undefined || (review.custom_grade ?? review.grade) === null ? "-" : (Math.round((review.custom_grade ?? review.grade)! * 2) / 2).toFixed(2))}</td>
-                  {(isStaff || isAuthor) &&
+                  {isStaff &&
                     <td>
                       {isStaff && review.status === ReviewStatus.Sumbitted &&
                         <Button
@@ -113,7 +113,7 @@ const PaperReviewsTable = ({ isAuthor, reviews, onReviewApproved }: Props) => {
                           <FontAwesomeIcon icon={faCheck} />
                         </Button>
                       }
-                      {(review.status === ReviewStatus.Sumbitted || review.status === ReviewStatus.Approved) &&
+                      {(isStaff && (review.status === ReviewStatus.Sumbitted || review.status === ReviewStatus.Approved)) &&
                         <Button
                           variant="contained"
                           color="secondary"
@@ -164,6 +164,35 @@ const PaperReviewsTable = ({ isAuthor, reviews, onReviewApproved }: Props) => {
               <td colSpan={isAuthor ? 6 : 5}>Brak recenzji</td>
             </tr>
           }
+          {reviews.length > 0 && (() => {
+            const adminReview = reviews.find(r => r.custom_grade);
+            let finalGradeValue = 0;
+            let hasGrade = false;
+
+            if (adminReview && adminReview.custom_grade) {
+              finalGradeValue = adminReview.custom_grade;
+              hasGrade = true;
+            } else {
+              const validReviews = reviews.filter(r => r.grade);
+              if (validReviews.length > 0) {
+                const sum = validReviews.reduce((acc, r) => acc + (r.grade || 0), 0);
+                finalGradeValue = sum / validReviews.length;
+                hasGrade = true;
+              }
+            }
+            const finalGradeDisplay = hasGrade ? (Math.round(finalGradeValue * 2) / 2).toFixed(2) : "-";
+
+            return (
+              <tr style={{ borderTop: "2px solid var(--border)" }}>
+                <td></td>
+                <td></td>
+                {!isAuthor && <td></td>}
+                <td style={{ fontWeight: 'bold', textAlign: 'right' }}>Ocena końcowa:</td>
+                <td style={{ fontWeight: 'bold' }} className={styles.grade}>{finalGradeDisplay}</td>
+                {isStaff && <td></td>}
+              </tr>
+            )
+          })()}
         </tbody>
       </table>
     </div>

@@ -624,5 +624,256 @@
       "created_at": "2025-02-05T12:00:00Z",
       "comment": null
     }
+  },
+  {
+    "model": "papers.paper",
+    "pk": 51,
+    "fields": {
+      "title": "Optymalizacja sieci neuronowych",
+      "author": 2,
+      "reviewers": [],
+      "magazine": 1,
+      "status": "pending",
+      "paper_type": "original_research",
+      "category": "artificial_intelligence",
+      "abstract": "Zastosowanie nowych technik optymalizacji w głębokich sieciach neuronowych.",
+      "file": "papers/files/sample.pdf",
+      "keywords": "sieci neuronowe, optymalizacja, deep learning",
+      "created_at": "2025-02-10T10:00:00Z",
+      "comment": null
+    }
+  },
+  {
+    "model": "papers.paper",
+    "pk": 52,
+    "fields": {
+      "title": "Nowe trendy w UI/UX",
+      "author": 5,
+      "reviewers": [],
+      "magazine": 2,
+      "status": "pending",
+      "paper_type": "review_article",
+      "category": "web_development",
+      "abstract": "Przegląd najnowszych trendów w projektowaniu interfejsów użytkownika.",
+      "file": "papers/files/sample.pdf",
+      "keywords": "ui, ux, design, web",
+      "created_at": "2025-02-11T11:00:00Z",
+      "comment": null
+    }
+  },
+  {
+    "model": "papers.paper",
+    "pk": 53,
+    "fields": {
+      "title": "Telemedycyna w praktyce",
+      "author": 7,
+      "reviewers": [],
+      "magazine": 3,
+      "status": "pending",
+      "paper_type": "case_report",
+      "category": "other",
+      "abstract": "Studium przypadku wdrożenia systemu telemedycznego w szpitalu powiatowym.",
+      "file": "papers/files/sample.pdf",
+      "keywords": "telemedycyna, zdrowie, it",
+      "created_at": "2025-02-12T12:00:00Z",
+      "comment": null
+    }
+  },
+  {
+    "model": "papers.paper",
+    "pk": 54,
+    "fields": {
+      "title": "Kryptowaluty a inflacja",
+      "author": 9,
+      "reviewers": [],
+      "magazine": 4,
+      "status": "pending",
+      "paper_type": "theoretical_paper",
+      "category": "blockchain",
+      "abstract": "Analiza wpływu kryptowalut na wskaźniki inflacji w gospodarkach rozwijających się.",
+      "file": "papers/files/sample.pdf",
+      "keywords": "kryptowaluty, ekonomia, inflacja",
+      "created_at": "2025-02-13T13:00:00Z",
+      "comment": null
+    }
+  },
+  {
+    "model": "papers.paper",
+    "pk": 55,
+    "fields": {
+      "title": "Minimalizm w architekturze",
+      "author": 10,
+      "reviewers": [],
+      "magazine": 5,
+      "status": "pending",
+      "paper_type": "review_article",
+      "category": "other",
+      "abstract": "Wpływ minimalizmu na współczesne trendy architektoniczne.",
+      "file": "papers/files/sample.pdf",
+      "keywords": "architektura, minimalizm, design",
+      "created_at": "2025-02-14T14:00:00Z",
+      "comment": null
+    }
+  },
+  {
+    "model": "papers.paperreview",
+    "pk": 20,
+    "fields": {
+      "paper": 51,
+      "reviewer": 3,
+      "review_date": "2025-02-15T10:00:00Z",
+      "comment": "Bardzo dobra praca, solidne badania.",
+      "status": "submitted",
+      "grade": 4.5,
+      "content_consistency": 5.0,
+      "goal_formulation": 4.0,
+      "structure_correctness": 5.0,
+      "terminology_relevance": 4.0,
+      "graphic_design": 4.0,
+      "aesthetics": 5.0,
+      "literature_selection": 4.0,
+      "conclusions_correctness": 5.0,
+      "goal_achievement": 4.0,
+      "language_correctness": 5.0,
+      "decision": "accept"
+    }
+  },
+  {
+    "model": "papers.paperreview",
+    "pk": 21,
+    "fields": {
+      "paper": 52,
+      "reviewer": 4,
+      "review_date": "2025-02-16T11:00:00Z",
+      "comment": "Wyczerpujący przegląd, świetne przykłady.",
+      "status": "submitted",
+      "grade": 5.0,
+      "content_consistency": 5.0,
+      "goal_formulation": 5.0,
+      "structure_correctness": 5.0,
+      "terminology_relevance": 5.0,
+      "graphic_design": 5.0,
+      "aesthetics": 5.0,
+      "literature_selection": 5.0,
+      "conclusions_correctness": 5.0,
+      "goal_achievement": 5.0,
+      "language_correctness": 5.0,
+      "decision": "accept"
+    }
+  },
+  {
+    "model": "papers.paperreview",
+    "pk": 22,
+    "fields": {
+      "paper": 53,
+      "reviewer": 6,
+      "review_date": null,
+      "comment": null,
+      "status": "invited",
+      "grade": null,
+      "content_consistency": null,
+      "goal_formulation": null,
+      "structure_correctness": null,
+      "terminology_relevance": null,
+      "graphic_design": null,
+      "aesthetics": null,
+      "literature_selection": null,
+      "conclusions_correctness": null,
+      "goal_achievement": null,
+      "language_correctness": null
+    }
+  },
+  {
+    "model": "papers.paperreview",
+    "pk": 23,
+    "fields": {
+      "paper": 54,
+      "reviewer": 8,
+      "review_date": "2025-02-17T12:00:00Z",
+      "comment": "Ciekawe wnioski, ale metodologia wymaga dopracowania.",
+      "status": "submitted",
+      "grade": 3.5,
+      "content_consistency": 3.0,
+      "goal_formulation": 4.0,
+      "structure_correctness": 3.0,
+      "terminology_relevance": 4.0,
+      "graphic_design": 3.0,
+      "aesthetics": 4.0,
+      "literature_selection": 3.0,
+      "conclusions_correctness": 4.0,
+      "goal_achievement": 4.0,
+      "language_correctness": 3.0,
+      "decision": "minor_revision"
+    }
+  },
+  {
+    "model": "papers.paperreview",
+    "pk": 24,
+    "fields": {
+      "paper": 55,
+      "reviewer": 2,
+      "review_date": null,
+      "comment": null,
+      "status": "invited",
+      "grade": null,
+      "content_consistency": null,
+      "goal_formulation": null,
+      "structure_correctness": null,
+      "terminology_relevance": null,
+      "graphic_design": null,
+      "aesthetics": null,
+      "literature_selection": null,
+      "conclusions_correctness": null,
+      "goal_achievement": null,
+      "language_correctness": null
+    }
+  },
+  {
+    "model": "papers.paperreview",
+    "pk": 25,
+    "fields": {
+      "paper": 51,
+      "reviewer": 1,
+      "review_date": "2025-02-18T10:00:00Z",
+      "comment": "Ocena administracyjna.",
+      "status": "submitted",
+      "grade": null,
+      "custom_grade": 4.0,
+      "content_consistency": null,
+      "goal_formulation": null,
+      "structure_correctness": null,
+      "terminology_relevance": null,
+      "graphic_design": null,
+      "aesthetics": null,
+      "literature_selection": null,
+      "conclusions_correctness": null,
+      "goal_achievement": null,
+      "language_correctness": null,
+      "decision": "accept"
+    }
+  },
+  {
+    "model": "papers.paperreview",
+    "pk": 26,
+    "fields": {
+      "paper": 53,
+      "reviewer": 1,
+      "review_date": "2025-02-18T12:00:00Z",
+      "comment": "Zatwierdzam bez uwag.",
+      "status": "submitted",
+      "grade": null,
+      "custom_grade": 5.0,
+      "content_consistency": null,
+      "goal_formulation": null,
+      "structure_correctness": null,
+      "terminology_relevance": null,
+      "graphic_design": null,
+      "aesthetics": null,
+      "literature_selection": null,
+      "conclusions_correctness": null,
+      "goal_achievement": null,
+      "language_correctness": null,
+      "decision": "accept"
+    }
   }
 ]

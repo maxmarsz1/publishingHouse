@@ -1,21 +1,35 @@
 import React, { useState } from "react";
 
 import styles from "./Modal.module.css";
-import Backdrop from "../general/Backdrop";
-import { Button, TextField } from "@mui/material";
+import {
+  Button,
+  TextField,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from "@mui/material";
 import { Magazine } from "@/app/types/types";
 import { joinMagazine } from "@/app/utils/magazine-helper";
 
 const JoinMagazineModal = ({
-  setShowModal,
+  open,
+  handleClose,
   setMagazinesState,
 }: {
-  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+  open: boolean;
+  handleClose: () => void;
   setMagazinesState: React.Dispatch<React.SetStateAction<Magazine[]>>;
 }) => {
   const [joinCode, setJoinCode] = useState("");
-  function cancel() {
-    setShowModal(false);
+
+  function resetForm() {
+    setJoinCode("");
+  }
+
+  function handleCancel() {
+    resetForm();
+    handleClose();
   }
 
   async function handleSubmit() {
@@ -25,31 +39,46 @@ const JoinMagazineModal = ({
     try {
       const joinedMagazine = await joinMagazine(joinCode);
       console.log("Joined magazine: ", joinedMagazine.name);
-      setMagazinesState((prevMagazines => [...prevMagazines, joinedMagazine]));
-      setShowModal(false);
-    }
-    catch (error) {
+      setMagazinesState((prevMagazines) => [...prevMagazines, joinedMagazine]);
+      resetForm();
+      handleClose();
+    } catch (error) {
       console.error("Error joining magazine:", error);
     }
   }
 
   return (
-    <>
-      <Backdrop />
-      <div className={styles.modal}>
-        <h2>Dołącz do czasopisma</h2>
+    <Dialog
+      open={open}
+      onClose={handleCancel}
+      PaperProps={{
+        sx: {
+          backgroundColor: "var(--background)",
+          backgroundImage: "none",
+        },
+      }}
+    >
+      <DialogTitle sx={{ color: "var(--text)" }}>Dołącz do czasopisma</DialogTitle>
+      <DialogContent>
         <div className={styles.input}>
-          <span>Kod: </span>
-          <TextField variant="standard" value={joinCode} onChange={(e) => setJoinCode(e.target.value)} style={{ width: "100%" }} />
+          <TextField
+            autoFocus
+            margin="dense"
+            variant="standard"
+            label="Kod dołączenia"
+            value={joinCode}
+            onChange={(e) => setJoinCode(e.target.value)}
+            fullWidth
+          />
         </div>
-        <div className={styles.buttons}>
-          <Button variant="outlined" onClick={cancel}>
-            Anuluj
-          </Button>
-          <Button variant="contained" onClick={handleSubmit}>Dołącz</Button>
-        </div>
-      </div>
-    </>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleCancel}>Anuluj</Button>
+        <Button onClick={handleSubmit} variant="contained">
+          Dołącz
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 };
 

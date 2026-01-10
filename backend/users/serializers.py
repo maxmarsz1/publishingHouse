@@ -34,7 +34,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     default_error_messages = {
-        'no_active_account': 'Nie znaleziono aktywnego konta z podanymi danymi.'
+        'no_active_account': 'Login lub hasło nieprawidłowe.'
     }
 
     @classmethod

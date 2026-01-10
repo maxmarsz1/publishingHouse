@@ -43,7 +43,7 @@ const MobileMenu = () => {
             <div className={`${styles.menu} ${isOpen ? styles.open : ''}`}>
                 <Link className={styles.mobileLink} href="/myspace/magazines" onClick={handleLinkClick}>Czasopisma</Link>
                 {!isStaff &&
-                    <Link className={styles.mobileLink} href="/myspace/articles" onClick={handleLinkClick}>Twoje Raporty</Link>
+                    <Link className={styles.mobileLink} href="/myspace/papers" onClick={handleLinkClick}>Twoje Raporty</Link>
                 }
                 <Link className={styles.mobileLink} href="/myspace/account" onClick={handleLinkClick}>Konto</Link>
                 {isStaff &&

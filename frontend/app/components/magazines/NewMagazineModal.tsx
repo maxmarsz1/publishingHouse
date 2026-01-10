@@ -1,26 +1,39 @@
-"use client";
-
 import React, { useState } from "react";
-import Backdrop from "../general/Backdrop";
-import { Button, TextField } from "@mui/material";
+import {
+  Button,
+  TextField,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from "@mui/material";
 
 import styles from "./Modal.module.css";
 import { createMagazine } from "@/app/utils/magazine-helper";
 import { Magazine } from "@/app/types/types";
 
 const NewMagazineModal = ({
-  setShowModal,
+  open,
+  handleClose,
   setMagazinesState,
 }: {
-  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+  open: boolean;
+  handleClose: () => void;
   setMagazinesState: React.Dispatch<React.SetStateAction<Magazine[]>>;
 }) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [error, setError] = useState<string | null>(null);
 
-  function cancel() {
-    setShowModal(false);
+  function resetForm() {
+    setName("");
+    setDescription("");
+    setError(null);
+  }
+
+  function handleCancel() {
+    resetForm();
+    handleClose();
   }
 
   async function handleSubmit() {
@@ -38,7 +51,8 @@ const NewMagazineModal = ({
         response,
         ...prevMagazines,
       ]);
-      setShowModal(false);
+      resetForm();
+      handleClose();
     } catch (error) {
       if (error instanceof Error) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -59,37 +73,48 @@ const NewMagazineModal = ({
   }
 
   return (
-    <>
-      <Backdrop />
-      <div className={styles.modal}>
-        <h2>Stwórz nowe czasopismo</h2>
+    <Dialog
+      open={open}
+      onClose={handleCancel}
+      PaperProps={{
+        sx: {
+          backgroundColor: "var(--background)",
+          backgroundImage: "none", // To remove default MUI gradient in dark mode if needed
+        },
+      }}
+    >
+      <DialogTitle sx={{ color: "var(--text)" }}>Stwórz nowe czasopismo</DialogTitle>
+      <DialogContent>
         {error && <p className={styles.error}>{error}</p>}
         <TextField
+          autoFocus
+          margin="dense"
           variant="standard"
           label="Nazwa"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          style={{ width: "100%", marginBottom: '16px' }}
+          fullWidth
+          style={{ marginBottom: "16px" }}
         />
         <TextField
           multiline
           maxRows={4}
+          margin="dense"
           variant="standard"
           label="Opis"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          style={{ width: "100%", marginBottom: '32px' }}
+          fullWidth
+          style={{ marginBottom: "32px" }}
         />
-        <div className={styles.buttons}>
-          <Button variant="outlined" onClick={cancel}>
-            Anuluj
-          </Button>
-          <Button variant="contained" onClick={handleSubmit}>
-            Stwórz
-          </Button>
-        </div>
-      </div>
-    </>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleCancel}>Anuluj</Button>
+        <Button onClick={handleSubmit} variant="contained">
+          Stwórz
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 };
 

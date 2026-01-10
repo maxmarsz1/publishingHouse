@@ -21,9 +21,7 @@ const NewMagazineBtn = ({ setMagazinesState }: { setMagazinesState: React.Dispat
     return (
         <>
             <Button className={styles.joinBtn} variant='contained' onClick={handleClick} startIcon={<FontAwesomeIcon icon={faPlus} />}>Nowe czasopismo</Button>
-            {showModal && (
-                <NewMagazineModal setShowModal={setShowModal} setMagazinesState={setMagazinesState} />
-            )}
+            <NewMagazineModal open={showModal} handleClose={() => setShowModal(false)} setMagazinesState={setMagazinesState} />
 
         </>
     )

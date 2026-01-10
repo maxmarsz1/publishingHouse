@@ -114,10 +114,11 @@ const MagazineViewClient = () => {
         </div>
 
         {!pastDue && !isStaff && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <div className={styles.newPaperContainer}>
             <span style={{ cursor: regularUserPapers?.authored_papers.length !== 0 ? 'not-allowed' : 'pointer' }}>
               <Button
                 style={{ gap: '8px' }}
+                className={styles.newPaperButton}
                 variant="contained"
                 href={`/myspace/magazines/${magazine.id}/new-paper`}
                 component={Link}

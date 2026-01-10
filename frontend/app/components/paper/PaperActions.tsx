@@ -58,7 +58,7 @@ const PaperActions = ({ paper, reviewStatus }: PaperActionsProps) => {
           <FontAwesomeIcon icon={faUpload} />
         </Button>
       }
-      {(paper.isAuthor || isStaff) &&
+      {isStaff &&
         <DeletePaperBtn paperId={paper.id} />
       }
     </div>

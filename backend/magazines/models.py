@@ -36,14 +36,8 @@ class Magazine(models.Model):
 
 
 class MagazineMembership(models.Model):
-    class MemberRole(models.TextChoices):
-        MEMBER = "member", "Member"
-        ADMIN = "admin", "Admin"
-
-
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='magazine_memberships')
     magazine = models.ForeignKey(Magazine, on_delete=models.CASCADE, related_name='memberships')
-    role = models.CharField(max_length=50, choices=MemberRole.choices, default=MemberRole.MEMBER)
     date_joined = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -52,4 +46,4 @@ class MagazineMembership(models.Model):
         verbose_name_plural = "Magazine Memberships"
 
     def __str__(self):
-        return f"{self.user.username} - {self.magazine.name} ({self.role})"
+        return f"{self.user.username} - {self.magazine.name}"

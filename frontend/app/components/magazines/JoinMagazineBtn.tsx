@@ -21,9 +21,7 @@ const JoinMagazineBtn = ({ setMagazinesState }: { setMagazinesState: React.Dispa
     return (
         <>
             <Button className={styles.joinBtn} variant='contained' onClick={handleClick} startIcon={<FontAwesomeIcon icon={faPlus} />}>Dołącz do czasopisma</Button>
-            {showModal && (
-                <JoinMagazineModal setShowModal={setShowModal} setMagazinesState={setMagazinesState} />
-            )}
+            <JoinMagazineModal open={showModal} handleClose={() => setShowModal(false)} setMagazinesState={setMagazinesState} />
 
         </>
     )

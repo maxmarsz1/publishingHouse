@@ -137,33 +137,19 @@ class DistributeReviewsView(APIView):
             
             pending_papers = list(Paper.objects.filter(magazine=magazine, status=Paper.PaperStatus.PENDING).select_related('author'))
             
-            memberships = MagazineMembership.objects.filter(magazine=magazine)
-            member_user_ids = memberships.values_list('user', flat=True)
-            members = list(User.objects.filter(id__in=member_user_ids))
-            
             invites_sent_count = 0
             
             pairs = []
-            used_papers = set()
             
-            for member in members:
-                # Find a pending paper by this member
-                member_papers = [
-                    p for p in pending_papers 
-                    if p.author_id == member.id 
-                    and p.id not in used_papers 
-                    and not p.reviews.exists()
-                ]
-                if member_papers:
-                    pairs.append({'member': member, 'paper': member_papers[0]})
-                    used_papers.add(member_papers[0].id)
+            for paper in pending_papers:
+                if not paper.reviews.exists():
+                    pairs.append({'member': paper.author, 'paper': paper})
             
             n = len(pairs)
-            if n < 2:
-                    if n == 0:
-                        return Response({"message": "Brak użytkowników do rozdziału."}, status=status.HTTP_200_OK)
-                    else:
-                        return Response({"message": f"Zbyt mało uczestników do rozdziału recenzji."}, status=status.HTTP_200_OK)
+            if n == 0:
+                return Response({"message": "Brak użytkowników do rozdziału."}, status=status.HTTP_200_OK)
+            if n == 1:
+                return Response({"message": "Zbyt mało uczestników do rozdziału recenzji."}, status=status.HTTP_200_OK)
             
             random.shuffle(pairs)
             
@@ -283,7 +269,7 @@ class JoinMagazineView(APIView):
                 )
         except ObjectDoesNotExist:
             return Response(
-                {"error": "nieprawidłowy kod dołączenia"},
+                {"error": "Nieprawidłowy kod dołączenia"},
                 status=status.HTTP_404_NOT_FOUND
                 )
         except Exception as e:

@@ -2,43 +2,43 @@
 
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import ArticleForm from "@/app/components/article/ArticleForm";
-import ArticleFormatting from "@/app/components/article/ArticleFormating";
-import { getArticleData } from "@/app/utils/article-helper";
-import { Article } from "@/app/types/types";
+import PaperForm from "@/app/components/paper/PaperForm";
+import PaperFormatting from "@/app/components/paper/PaperFormatting";
+import { getPaperData } from "@/app/utils/paper-helper";
+import { Paper } from "@/app/types/types";
 
 const EditArticlePage = () => {
   const params = useParams();
-  const [article, setArticle] = useState<Article | null>(null);
+  const [paper, setPaper] = useState<Paper | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const articleId = params?.articleId;
+  const paperId = params?.paperId;
 
   useEffect(() => {
     const fetchData = async () => {
-      if (!articleId) return;
+      if (!paperId) return;
 
-      const idAsNumber = Number(articleId);
+      const idAsNumber = Number(paperId);
       if (isNaN(idAsNumber) || !idAsNumber) {
-        setError(`Invalid article_id provided: ${articleId}`);
+        setError(`Invalid paper_id provided: ${paperId}`);
         setLoading(false);
         return;
       }
 
       try {
-        const data = await getArticleData(idAsNumber);
-        setArticle(data);
+        const data = await getPaperData(idAsNumber);
+        setPaper(data);
       } catch (err) {
         console.error(err);
-        setError("Failed to load article data.");
+        setError("Failed to load paper data.");
       } finally {
         setLoading(false);
       }
     };
 
     fetchData();
-  }, [articleId]);
+  }, [paperId]);
 
   if (loading) {
     return <div>Ładowanie...</div>;
@@ -48,17 +48,17 @@ const EditArticlePage = () => {
     return <div>{error}</div>;
   }
 
-  if (!article) {
+  if (!paper) {
     return <div>Artykuł nie został znaleziony.</div>;
   }
 
   return (
     <div>
       <div>
-        <h1 style={{ marginBottom: "16px", fontWeight: 400 }}>{article.title} - Edytuj raport</h1>
-        <ArticleFormatting />
+        <h1 style={{ marginBottom: "16px", fontWeight: 400 }}>{paper.title} - Edytuj raport</h1>
+        <PaperFormatting />
       </div>
-      <ArticleForm article={article} publisherId={article.publisher.id} />
+      <PaperForm paper={paper} magazineId={paper.magazine.id} />
     </div>
   );
 };

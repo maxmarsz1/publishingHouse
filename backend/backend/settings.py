@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'api',
     'users',
     'magazines',
-    'papers'
+    'papers',
+    'django_extensions'
 ]
 
 MIDDLEWARE = [

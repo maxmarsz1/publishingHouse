@@ -51,7 +51,6 @@ class ReviewPDFView(APIView):
 
     def get(self, request, pk):
         try:
-            # Register Fonts checking typical paths
             font_path = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
             font_path_bold = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
             
@@ -67,14 +66,13 @@ class ReviewPDFView(APIView):
             review = PaperReview.objects.get(id=pk)
             
             user = request.user
-            if review.status not in ['submitted', 'approved'] and not user.is_staff and user != review.reviewer:
+            if review.status not in ['submitted', 'approved'] and not user.is_staff:
                  return Response({"error": "Recenzja nie jest jeszcze dostępna."}, status=status.HTTP_403_FORBIDDEN) 
 
             buffer = BytesIO()
             doc = SimpleDocTemplate(buffer, pagesize=letter, rightMargin=50, leftMargin=50, topMargin=50, bottomMargin=50)
             
             styles = getSampleStyleSheet()
-            # Define Custom Styles with Polish support
             styleN = ParagraphStyle(
                 'NormalPolish', 
                 parent=styles['Normal'], 
@@ -101,7 +99,6 @@ class ReviewPDFView(APIView):
             
             story = []
 
-            # Helper to translate decision
             decision_map = {
                 'accept': 'Akceptacja',
                 'minor_revision': 'Drobne poprawki',
@@ -110,12 +107,9 @@ class ReviewPDFView(APIView):
             }
             decision_text = decision_map.get(review.decision, review.decision or "Brak")
 
-            # Helper to format date
             date_str = "N/A"
             if review.review_date:
                 date_str = review.review_date.strftime("%d.%m.%Y")
-
-            # Content Construction
             story.append(Paragraph(f"Recenzja Artykułu: {review.paper.title}", styleH))
             
             story.append(Paragraph(f"<b>Magazyn:</b> {review.paper.magazine.name}", styleN))
@@ -129,10 +123,8 @@ class ReviewPDFView(APIView):
             story.append(Paragraph(f"<b>Decyzja:</b> {decision_text}", styleN))
             story.append(Spacer(1, 20))
 
-            # Comment
             story.append(Paragraph("Komentarz:", styleBold))
             comment_text = review.comment or "Brak komentarza"
-            # Handle paragraphs in comment
             for para in comment_text.split('\\n'):
                 if para.strip():
                     story.append(Paragraph(para, styleN))
@@ -141,7 +133,6 @@ class ReviewPDFView(APIView):
             story.append(Spacer(1, 20))
 
             if not review.reviewer.is_staff:
-                # Criteria
                 story.append(Paragraph("Kryteria Oceny:", styleBold))
                 story.append(Spacer(1, 10))
 
@@ -166,18 +157,16 @@ class ReviewPDFView(APIView):
                     score_str = str(score) if score is not None else '-'
                     criteria_data.append([label, score_str])
 
-                # Table for Criteria
                 t = Table(criteria_data, colWidths=[300, 100])
                 t.setStyle(TableStyle([
                     ('FONTNAME', (0,0), (-1,-1), font_regular),
-                    ('FONTNAME', (0,0), (-1,0), font_bold), # Header bold
+                    ('FONTNAME', (0,0), (-1,0), font_bold),
                     ('BOTTOMPADDING', (0,0), (-1,0), 12),
                     ('GRID', (0,0), (-1,-1), 0.5, colors.grey),
                 ]))
                 story.append(t)
                 story.append(Spacer(1, 20))
 
-            # Final Grade
             final_grade = review.custom_grade if review.custom_grade is not None else review.grade
             final_grade_str = str(final_grade) if final_grade is not None else '-'
             story.append(Paragraph(f"<b>Ocena Końcowa:</b> {final_grade_str}", styleBold))

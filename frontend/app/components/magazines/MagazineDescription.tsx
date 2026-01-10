@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencilAlt } from '@fortawesome/free-solid-svg-icons';
 import { updateMagazine } from '@/app/utils/magazine-helper';
 import { UserContext } from '@/app/context/UserContext';
+import styles from '@/app/components/magazines/MagazineDescription.module.css';
 
 const MagazineDescription = ({
   magazineDescription,
@@ -41,13 +42,13 @@ const MagazineDescription = ({
   if (!isStaff) {
     return (
       <div>
-        <p style={{ whiteSpace: 'pre-wrap', marginBottom: '32px' }}>{description || 'Brak opisu'}</p>
+        <p className={styles.description}>{description || 'Brak opisu'}</p>
       </div>
     );
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+    <div className={styles.description}>
       {isEditing ? (
         <>
           <TextField

@@ -1,4 +1,4 @@
-.dueDateContainer{
+.dueDateContainer {
     margin-bottom: 1rem;
     position: absolute;
     right: 0;
@@ -7,13 +7,41 @@
     align-items: center;
     gap: 1rem;
 }
-.dueDate{
+
+.dueDate {
     color: var(--primary);
     padding: 10px 15px;
     background: var(--background1);
     border-radius: 50px;
     display: block;
 }
-.topContainer{
+
+.topContainer {
     position: relative;
+}
+
+.newPaperContainer {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+@media (max-width: 768px) {
+    .dueDateContainer {
+        position: static;
+        justify-content: space-between;
+        font-size: 12px;
+
+    }
+
+    .dueDate {}
+
+    .newPaperContainer {
+        flex-direction: column;
+        align-items: stretch
+    }
+
+    .newPaperButton {
+        width: 100%;
+    }
 }

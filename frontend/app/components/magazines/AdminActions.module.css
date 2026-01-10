@@ -1,4 +1,4 @@
-.container{
+.container {
     display: flex;
     justify-content: space-between;
     padding: 20px 0;
@@ -7,7 +7,25 @@
     border-right: 0;
     margin-top: 2rem;
 }
-.left{
+
+.left {
     display: flex;
     gap: 16px;
+}
+
+@media (max-width: 768px) {
+    .left {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .left>* {
+        flex-grow: 1;
+    }
+
+    .container {
+        flex-direction: column;
+        gap: 16px;
+        margin-top: 16px;
+    }
 }

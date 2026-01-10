@@ -20,7 +20,7 @@ const Navbar = () => {
           </Link>
           <Link className={styles.desktopLink} href="/myspace/magazines">Czasopisma</Link>
           {!isStaff &&
-            <Link className={styles.desktopLink} href="/myspace/articles">Twoje Raporty</Link>
+            <Link className={styles.desktopLink} href="/myspace/papers">Twoje Raporty</Link>
           }
           <Link className={styles.desktopLink} href="/myspace/account">Konto</Link>
           {isStaff &&
