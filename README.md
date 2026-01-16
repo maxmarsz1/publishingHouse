@@ -10,9 +10,22 @@ It uses Docker Compose to orchestrate the services (Frontend: Next.js, Backend: 
 
 ### 1. Configuration
 Create a `.env` file in the root directory if it doesn't exist (copy from example or template if available).
-Required variables:
-- `DATABASE_NAME`, `DATABASE_USERNAME`, `DATABASE_PASSWORD`, `DATABASE_HOST`, `DATABASE_PORT`
-- `DJANGO_SECRET_KEY`, `DEBUG` (overridden by compose), `DJANGO_ALLOWED_HOSTS`
+### Environment Variables (.env)
+
+| Variable | Description | Default Value (if unset) |
+| :--- | :--- | :--- |
+| `DJANGO_SECRET_KEY` | **REQUIRED** Prod Secret Key | **Must be specified** |
+| `DEBUG` | Debug mode (True/False) | `False` |
+| `DJANGO_ALLOWED_HOSTS` | Allowed hosts (comma separated) | `127.0.0.1` |
+| `CORS_ALLOWED_ORIGINS` | Allowed CORS origins | `http://localhost:3000,http://127.0.0.1:3000` |
+| `DATABASE_NAME` | Database name | `polls` |
+| `DATABASE_USERNAME` | Database user | `myuser` |
+| `DATABASE_PASSWORD` | Database password | `mypassword` |
+| `DATABASE_HOST` | Database host | `db` |
+| `DATABASE_PORT` | Database port | `5432` |
+| `LOAD_FIXTURES` | Load test data (true/false) | `false` |
+
+Ensure the `.env` file is in the root directory.
 
 ### 2. Running in Development Mode
 This is the default mode. It enables:
@@ -60,6 +73,3 @@ The `setup_users` command runs automatically on startup. You can customize the s
 
 Add these to your `.env` file or `docker-compose.prod.yml` environment section to secure your production instance.
 
-### Troubleshooting
-- **Database Connection**: Ensure the `db` service is healthy.
-- **Migrations**: Migrations are applied automatically on startup.

@@ -9,9 +9,9 @@ services:
     image: postgres:17
     container_name: db
     environment:
-      POSTGRES_DB: ${DATABASE_NAME}
-      POSTGRES_USER: ${DATABASE_USERNAME}
-      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME:-polls}
+      POSTGRES_USER: ${DATABASE_USERNAME:-myuser}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:-mypassword}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     env_file:
@@ -26,12 +26,11 @@ services:
       - .env
     environment:
       DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
-      DATABASE_ENGINE: ${DATABASE_ENGINE}
-      DATABASE_NAME: ${DATABASE_NAME}
-      DATABASE_USERNAME: ${DATABASE_USERNAME}
-      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
-      DATABASE_HOST: ${DATABASE_HOST}
-      DATABASE_PORT: ${DATABASE_PORT}
+      DATABASE_NAME: ${DATABASE_NAME:-polls}
+      DATABASE_USERNAME: ${DATABASE_USERNAME:-myuser}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD:-mypassword}
+      DATABASE_HOST: ${DATABASE_HOST:-db}
+      DATABASE_PORT: ${DATABASE_PORT:-5432}
 
 volumes:
   postgres_data:
