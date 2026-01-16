@@ -8,11 +8,13 @@ import ManageBtn from "./ManageBtn";
 
 const AdminActions = ({
   magazine,
+  onUpdateMagazine,
   onDueDateUpdate,
   members,
   setMembers,
 }: {
   magazine: Magazine;
+  onUpdateMagazine: (updatedMagazine: Magazine) => void;
   onDueDateUpdate: (newDueDate: string) => void;
   members: User[] | null;
   setMembers: React.Dispatch<React.SetStateAction<User[] | null>>;
@@ -22,6 +24,7 @@ const AdminActions = ({
       <div className={styles.left}>
         <ManageBtn
           magazine={magazine}
+          onUpdateMagazine={onUpdateMagazine}
           onDueDateUpdate={onDueDateUpdate}
           members={members}
           setMembers={setMembers}

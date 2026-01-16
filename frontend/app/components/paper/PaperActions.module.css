@@ -1,12 +1,24 @@
+.downloadBtn {
+    box-shadow: unset !important;
+}
 
-.downloadBtn{
+.reviewBtn {
     box-shadow: unset !important;
 }
-.reviewBtn{
-    box-shadow: unset !important;
-}
-.container{
+
+.container {
     display: flex;
     gap: 1rem;
     margin: 1rem 0;
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-wrap: wrap;
+        gap: .5rem;
+    }
+
+    .container>* {
+        flex-grow: 1;
+    }
 }

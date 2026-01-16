@@ -83,7 +83,7 @@ const SettingsPage = () => {
 
     return (
         <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
-            <Paper sx={{ p: 4, backgroundColor: 'var(--background)', color: 'var(--text)' }} elevation={5}>
+            <Paper sx={{ p: 4, backgroundColor: 'var(--background1)', color: 'var(--text)' }} elevation={5}>
                 <Typography variant="h4" gutterBottom>
                     Ustawienia Aplikacji
                 </Typography>
@@ -92,7 +92,7 @@ const SettingsPage = () => {
                         <Grid size={{ xs: 12 }}>
                             <Typography variant="h6">Limity słów abstraktu</Typography>
                         </Grid>
-                        <Grid size={{ xs: 6 }}>
+                        <Grid size={{ xs: 12, md: 6 }}>
                             <TextField
                                 fullWidth
                                 label="Minimalna liczba słów"
@@ -103,7 +103,7 @@ const SettingsPage = () => {
                                 sx={numberInputSx}
                             />
                         </Grid>
-                        <Grid size={{ xs: 6 }}>
+                        <Grid size={{ xs: 12, md: 6 }}>
                             <TextField
                                 fullWidth
                                 label="Maksymalna liczba słów"
@@ -118,7 +118,7 @@ const SettingsPage = () => {
                         <Grid size={{ xs: 12 }}>
                             <Typography variant="h6">Limity słów komentarza recenzji</Typography>
                         </Grid>
-                        <Grid size={{ xs: 6 }}>
+                        <Grid size={{ xs: 12, md: 6 }}>
                             <TextField
                                 fullWidth
                                 label="Minimalna liczba słów"
@@ -129,7 +129,7 @@ const SettingsPage = () => {
                                 sx={numberInputSx}
                             />
                         </Grid>
-                        <Grid size={{ xs: 6 }}>
+                        <Grid size={{ xs: 12, md: 6 }}>
                             <TextField
                                 fullWidth
                                 label="Maksymalna liczba słów"

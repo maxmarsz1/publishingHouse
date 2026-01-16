@@ -35,10 +35,10 @@ const PaperData = ({ paper }: Props) => {
         )}
       </div>
       <div className={styles.dateAuthorMagazine}>
-        <span>{createdAtString}</span>
-        {isStaff && (<><span>-</span><span>{paper.author.first_name} {paper.author.last_name}</span></>)}
+        <span>{createdAtString} </span>
+        {isStaff && (<><span>-</span><span> {paper.author.first_name} {paper.author.last_name} </span></>)}
         <span>-</span>
-        <span><Link href={`/myspace/magazines/${paper.magazine.id}`}>{paper.magazine.name}</Link></span>
+        <span><Link href={`/myspace/magazines/${paper.magazine.id}`}> {paper.magazine.name}</Link></span>
       </div>
       <div className={styles.infoLine}>
         <strong>Abstrakt: </strong>

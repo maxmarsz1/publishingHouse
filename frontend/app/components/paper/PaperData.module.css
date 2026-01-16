@@ -25,7 +25,7 @@
     font-weight: 300;
     padding: 4px 0;
     margin-bottom: 1rem;
-    display: flex;
+    /* display: flex; */
     gap: .5rem;
 }
 
@@ -56,4 +56,24 @@
     background-color: var(--background1);
     padding: .25rem 1rem;
     border-radius: 20px;
+}
+
+@media (max-width: 768px) {
+    .topContainer {
+        flex-direction: column-reverse;
+        gap: 8px;
+        align-items: start;
+    }
+
+    .status {
+        align-self: stretch;
+    }
+
+    .infoLine {
+        font-size: 14px;
+    }
+
+    .keywordsList span {
+        font-size: 12px;
+    }
 }

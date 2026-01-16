@@ -11,10 +11,8 @@ import { getMagazineData } from '@/app/utils/magazine-helper';
 import { getAdminMagazinePapers, getUserMagazinePapers } from '@/app/utils/paper-helper';
 
 import AdminActions from '@/app/components/magazines/AdminActions';
-import PaperTable from '@/app/components/paper/PaperTable';
-import ReviewsTable from '@/app/components/paper/ReviewsTable';
-import MagazineName from '@/app/components/magazines/MagazineName';
-import MagazineDescription from '@/app/components/magazines/MagazineDescription';
+import PaperList from '@/app/components/paper/PaperList';
+import ReviewList from '@/app/components/paper/ReviewList';
 import styles from './page.module.css';
 
 import { Magazine, Paper, UserPapers, User } from '@/app/types/types';
@@ -101,10 +99,14 @@ const MagazineViewClient = () => {
 
   return (
     <>
-      <div>
+      <div className={styles.container}>
         <div className={styles.topContainer}>
-          <MagazineName magazineName={magazine.name} magazineId={magazine.id} />
-          <MagazineDescription magazineDescription={magazine.description} magazineId={magazine.id} />
+          <div className={styles.nameContainer}>
+            <h1>{magazine.name}</h1>
+          </div>
+          <div className={styles.description}>
+            <p style={{ whiteSpace: 'pre-wrap' }}>{magazine.description || 'Brak opisu'}</p>
+          </div>
           <p className={styles.dueDateContainer}>
             <span>
               <FontAwesomeIcon icon={faClock} />&nbsp;Termin przesłania:{' '}
@@ -139,17 +141,18 @@ const MagazineViewClient = () => {
 
         {isStaff && <AdminActions
           magazine={magazine}
+          onUpdateMagazine={setMagazine}
           onDueDateUpdate={updateDueDate}
           members={members}
           setMembers={setMembers}
         />}
       </div>
 
-      {adminPapers && <PaperTable title="Wszystkie artykuły" papers={adminPapers} />}
+      {adminPapers && <PaperList title="Wszystkie artykuły" papers={adminPapers} />}
       {regularUserPapers && (
         <>
-          <PaperTable title="Twoje artykuły" papers={regularUserPapers.authored_papers} />
-          <ReviewsTable reviews={regularUserPapers.user_reviews} />
+          <PaperList title="Twoje artykuły" papers={regularUserPapers.authored_papers} />
+          <ReviewList reviews={regularUserPapers.user_reviews} />
         </>
       )}
     </>

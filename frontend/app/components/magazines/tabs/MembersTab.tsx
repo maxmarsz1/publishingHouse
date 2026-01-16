@@ -20,9 +20,11 @@ const MembersTab = ({
     const { showConfirm, showSnackbar } = useUI();
     const [loading, setLoading] = useState(false);
 
+    const [loaded, setLoaded] = useState(false);
+
     useEffect(() => {
         const fetchMembers = async () => {
-            if (magazine.id && (!members || members.length === 0)) {
+            if (magazine.id && !loaded && (!members || members.length === 0)) {
                 setLoading(true);
                 try {
                     const fetchedMembers = await getMagazineMembers(magazine.id);
@@ -31,12 +33,16 @@ const MembersTab = ({
                     console.error("Failed to load members", error);
                 } finally {
                     setLoading(false);
+                    setLoaded(true);
                 }
+            } else if (members && members.length > 0) {
+                setLoaded(true);
             }
         };
 
         fetchMembers();
-    }, [magazine.id, members, setMembers]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [magazine.id, setMembers]);
 
     function handleDeleteClick(user_id: number, username: string) {
         showConfirm(

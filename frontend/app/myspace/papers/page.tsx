@@ -1,10 +1,10 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import PaperTable from '@/app/components/paper/PaperTable'
+import PaperList from '@/app/components/paper/PaperList'
+import ReviewList from '@/app/components/paper/ReviewList'
 import { getUserPapers } from '@/app/utils/paper-helper'
 import { UserPapers } from '@/app/types/types'
-import ReviewsTable from '@/app/components/paper/ReviewsTable'
 
 const Papers = () => {
   const [userPapers, setUserPapers] = useState<UserPapers | null>(null)
@@ -38,12 +38,12 @@ const Papers = () => {
     <>
       <h1 style={{ marginBottom: "8px" }}>Twoje artykuły</h1>
 
-      <PaperTable
+      <PaperList
         title={"Wysłane artykuły"}
         showMagazine={true}
         papers={userPapers.authored_papers}
       />
-      <ReviewsTable reviews={userPapers.user_reviews} />
+      <ReviewList reviews={userPapers.user_reviews} />
     </>
   )
 }

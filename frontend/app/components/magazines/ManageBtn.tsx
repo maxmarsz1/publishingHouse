@@ -9,11 +9,13 @@ import { Magazine, User } from "@/app/types/types";
 
 const ManageBtn = ({
     magazine,
+    onUpdateMagazine,
     onDueDateUpdate,
     members,
     setMembers,
 }: {
     magazine: Magazine;
+    onUpdateMagazine: (updatedMagazine: Magazine) => void;
     onDueDateUpdate: (newDueDate: string) => void;
     members: User[] | null;
     setMembers: React.Dispatch<React.SetStateAction<User[] | null>>;
@@ -37,6 +39,7 @@ const ManageBtn = ({
                     open={open}
                     onClose={handleClose}
                     magazine={magazine}
+                    onUpdateMagazine={onUpdateMagazine}
                     onDueDateUpdate={onDueDateUpdate}
                     members={members}
                     setMembers={setMembers}

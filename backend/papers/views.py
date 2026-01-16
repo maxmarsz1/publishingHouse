@@ -248,7 +248,7 @@ class PaperDetailUpdateDeleteView(APIView):
                     status=status.HTTP_403_FORBIDDEN
                 )
                 
-            if paper.magazine.due_date and paper.magazine.due_date < timezone.now().date():
+            if paper.magazine.due_date and paper.magazine.due_date < timezone.now():
                 return Response(
                     {"error": "Nie można zaktualizować tego artykułu. Termin magazynu minął."},
                     status=status.HTTP_400_BAD_REQUEST
@@ -359,7 +359,7 @@ class CreatePaperView(APIView):
             if Paper.objects.filter(magazine_id=magazine.id, author=user).exists():
                 return Response({"error": "Możesz opublikować tylko jeden artykuł dla każdego magazynu."}, status=status.HTTP_400_BAD_REQUEST)
             
-            if magazine.due_date and magazine.due_date < timezone.now().date():
+            if magazine.due_date and magazine.due_date < timezone.now():
                 return Response(
                     {"error": "Nie można utworzyć artykułu. Termin magazynu minął."},
                     status=status.HTTP_400_BAD_REQUEST

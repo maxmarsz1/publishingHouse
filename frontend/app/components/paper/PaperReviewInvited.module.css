@@ -1,4 +1,4 @@
-.container{
+.container {
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -8,10 +8,23 @@
     border-radius: 20px;
     background-color: var(--background1);
 }
-.container h4{
+
+.container h4 {
     font-weight: 400;
 }
-.btns{
+
+.btns {
     display: flex;
     gap: 2rem;
+}
+
+@media (max-width: 768px) {
+    .btns>* {
+        flex-grow: 1;
+    }
+
+    .btns {
+        width: 100%;
+        gap: 8px;
+    }
 }

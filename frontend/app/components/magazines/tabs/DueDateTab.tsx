@@ -6,6 +6,8 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, { Dayjs } from 'dayjs';
+import 'dayjs/locale/pl';
+import { plPL } from '@mui/x-date-pickers/locales';
 import styles from "../Modal.module.css";
 import { updateMagazine } from "@/app/utils/magazine-helper";
 import { Magazine } from "@/app/types/types";
@@ -48,13 +50,18 @@ const DueDateTab = ({
     return (
         <div style={{ padding: '20px 0' }}>
             <div className={styles.input}>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <LocalizationProvider
+                    dateAdapter={AdapterDayjs}
+                    adapterLocale="pl"
+                    localeText={plPL.components.MuiLocalizationProvider.defaultProps.localeText}
+                >
                     <DateTimePicker
                         className={styles.datetimeInput}
-                        format="DD/MM/YYYY HH:mm"
+                        format="DD.MM.YYYY HH:mm"
                         value={date}
                         onChange={(newValue) => { setDate(newValue) }}
                         slotProps={{ textField: { fullWidth: true } }}
+                        label="Termin oddania"
                     />
                 </LocalizationProvider>
             </div>

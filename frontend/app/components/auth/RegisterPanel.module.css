@@ -46,4 +46,8 @@
     .panel>* {
         width: 80vw !important;
     }
+
+    .inputContainer {
+        grid-template-columns: repeat(1, 1fr);
+    }
 }

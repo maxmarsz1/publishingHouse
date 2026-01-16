@@ -45,3 +45,16 @@
 .infoGrid>div:nth-last-child(2) {
     border-bottom: none;
 }
+
+@media (max-width: 768px) {
+    .h2 {
+        flex-direction: column;
+        gap: 8px;
+        align-items: stretch;
+    }
+
+    .infoGrid {
+        grid-template-columns: 1fr;
+        font-size: 14px;
+    }
+}

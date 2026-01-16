@@ -9,7 +9,7 @@ import { getPaperData } from '@/app/utils/paper-helper';
 import PaperData from '@/app/components/paper/PaperData';
 import PaperReviewerInfo from '@/app/components/paper/PaperReviewerInfo';
 import PaperActions from '@/app/components/paper/PaperActions';
-import PaperReviewsTable from '@/app/components/paper/PaperReviewsTable';
+import PaperReviewsList from '@/app/components/paper/PaperReviewsList';
 
 import styles from './page.module.css';
 
@@ -55,7 +55,7 @@ const PaperViewClientMerged = () => {
       <PaperData paper={paper} />
       <PaperActions paper={paper} reviewStatus={reviewStatus} />
 
-      {paper.reviews && <PaperReviewsTable isAuthor={paper.isAuthor} reviews={paper.reviews} onReviewApproved={loadData} />}
+      {paper.reviews && <PaperReviewsList isAuthor={paper.isAuthor} reviews={paper.reviews} onReviewApproved={loadData} />}
 
       {paper.review && (
         <PaperReviewerInfo

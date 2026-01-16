@@ -1,0 +1,74 @@
+.listGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background-color: var(--background1);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.cardHeader {
+    margin-bottom: 12px;
+}
+
+.title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--primary);
+    text-decoration: none;
+    line-height: 1.4;
+}
+
+.title:hover {
+    text-decoration: underline;
+}
+
+.cardBody {
+    margin-bottom: 16px;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.infoRow {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.cardFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--border);
+    padding-top: 12px;
+}
+
+.grade {
+    font-weight: bold;
+    color: var(--text);
+}
+
+.emptyState {
+    text-align: center;
+    padding: 40px;
+    color: var(--text-secondary);
+    background-color: var(--background-secondary);
+    border-radius: 8px;
+    border: 1px dashed var(--border);
+}

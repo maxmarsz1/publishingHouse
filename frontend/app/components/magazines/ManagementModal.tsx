@@ -8,6 +8,7 @@ import { Magazine, User } from "@/app/types/types";
 import DueDateTab from "./tabs/DueDateTab";
 import MembersTab from "./tabs/MembersTab";
 import SettingsTab from "./tabs/SettingsTab";
+import InfoTab from "./tabs/InfoTab";
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -39,6 +40,7 @@ const ManagementModal = ({
     open,
     onClose,
     magazine,
+    onUpdateMagazine,
     onDueDateUpdate,
     members,
     setMembers,
@@ -46,6 +48,7 @@ const ManagementModal = ({
     open: boolean;
     onClose: () => void;
     magazine: Magazine;
+    onUpdateMagazine: (updatedMagazine: Magazine) => void;
     onDueDateUpdate: (newDueDate: string) => void;
     members: User[] | null;
     setMembers: React.Dispatch<React.SetStateAction<User[] | null>>;
@@ -84,19 +87,29 @@ const ManagementModal = ({
             </DialogTitle>
             <DialogContent>
                 <Box sx={{ borderBottom: 1, borderColor: 'var(--primary)' }}>
-                    <Tabs value={value} onChange={handleChange} aria-label="management tabs">
+                    <Tabs
+                        value={value}
+                        onChange={handleChange}
+                        aria-label="management tabs"
+                        variant="scrollable"
+                        scrollButtons="auto"
+                    >
+                        <Tab label="Dane" sx={{ color: 'var(--text)' }} />
                         <Tab label="Termin oddania" sx={{ color: 'var(--text)' }} />
                         <Tab label="Członkowie" sx={{ color: 'var(--text)' }} />
                         <Tab label="Ustawienia" sx={{ color: 'var(--text)' }} />
                     </Tabs>
                 </Box>
                 <CustomTabPanel value={value} index={0}>
-                    <DueDateTab magazine={magazine} onDueDateUpdate={onDueDateUpdate} />
+                    <InfoTab magazine={magazine} onUpdateMagazine={onUpdateMagazine} />
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={1}>
-                    <MembersTab magazine={magazine} members={members} setMembers={setMembers} />
+                    <DueDateTab magazine={magazine} onDueDateUpdate={onDueDateUpdate} />
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={2}>
+                    <MembersTab magazine={magazine} members={members} setMembers={setMembers} />
+                </CustomTabPanel>
+                <CustomTabPanel value={value} index={3}>
                     {magazine.id && <SettingsTab magazineId={magazine.id} />}
                 </CustomTabPanel>
             </DialogContent>

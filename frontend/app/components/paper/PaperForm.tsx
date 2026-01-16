@@ -166,7 +166,7 @@ const NewPaper = ({ magazineId, paper }: NewPaperProps) => {
         label="Wybierz typ artykułu"
         value={paperType}
         onChange={(e) => setPaperType(e.target.value as PaperType)}
-        className={`${styles.halfWidth} ${styles.inputField}`}
+        className={`${styles.halfWidth} ${styles.inputField} ${styles.select}`}
       >
         {Object.values(PaperType).map((type) => (
           <MenuItem key={type} value={type}>
@@ -181,7 +181,7 @@ const NewPaper = ({ magazineId, paper }: NewPaperProps) => {
         label="Wybierz kategorię artykułu"
         value={paperCategory}
         onChange={(e) => setPaperCategory(e.target.value as ITPaperCategory)}
-        className={`${styles.halfWidth} ${styles.inputField}`}
+        className={`${styles.halfWidth} ${styles.inputField} ${styles.select}`}
       >
         {paperCategoryOptions.map((option) => (
           <MenuItem key={option.value} value={option.value}>

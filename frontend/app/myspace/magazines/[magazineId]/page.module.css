@@ -45,3 +45,30 @@
         width: 100%;
     }
 }
+
+.nameContainer {
+    margin-bottom: 8px;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    max-width: 50%;
+}
+
+.nameContainer h1 {
+    margin-bottom: 0;
+}
+
+.container {
+    margin-bottom: 2rem;
+}
+
+.description {
+    white-space: pre-wrap;
+    margin-bottom: 32px;
+}
+
+@media (max-width: 768px) {
+    .description {
+        margin-bottom: 16px;
+    }
+}

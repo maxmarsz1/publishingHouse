@@ -59,3 +59,14 @@
     color: var(--text);
     cursor: pointer;
 }
+
+@media (max-width: 768px) {
+    .select.halfWidth {
+        width: 100% !important;
+        padding: 0 !important;
+    }
+
+    .submitButton {
+        width: 100% !important;
+    }
+}

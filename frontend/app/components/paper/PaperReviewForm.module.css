@@ -45,3 +45,20 @@
     padding: 0 10px;
     border-radius: 5px;
 }
+
+@media (max-width: 768px) {
+    .actions {
+        flex-wrap: wrap;
+    }
+
+    .actions>* {
+        flex-grow: 1;
+    }
+
+    .customGrade {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: 20px 0;
+    }
+}
