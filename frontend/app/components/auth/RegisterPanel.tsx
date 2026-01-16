@@ -7,9 +7,11 @@ import styles from './RegisterPanel.module.css'
 import { Button } from '@mui/material'
 import Link from 'next/link'
 import Image from 'next/image'
+import { useUI } from '@/app/context/UIContext'
 
 const RegisterPanel = () => {
     const router = useRouter();
+    const { showSnackbar } = useUI();
 
     const [username, setUsername] = useState("")
     const [firstName, setFirstName] = useState("")
@@ -47,6 +49,7 @@ const RegisterPanel = () => {
                 console.error('Rejestracja nie powiodła się!', resData);
             } else {
                 console.log('Rejestracja powiodła się!', resData);
+                showSnackbar("Rejestracja zakończona pomyślnie. Możesz się zalogować.", "success");
                 router.push('/auth/login');
             }
 

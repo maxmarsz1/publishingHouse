@@ -35,6 +35,11 @@ const MobileMenu = () => {
         setIsOpen(false);
     };
 
+    const handleLogout = () => {
+        setIsOpen(false);
+        logoutUser();
+    };
+
     return (
         <div className={styles.wrapper}>
             <div className={styles.hamburger} onClick={() => setIsOpen(!isOpen)}>
@@ -49,7 +54,7 @@ const MobileMenu = () => {
                 {isStaff &&
                     <Link className={styles.mobileLink} href="/myspace/settings" onClick={handleLinkClick}>Ustawienia</Link>
                 }
-                <a className={styles.mobileLink} onClick={logoutUser}>Wyloguj się</a>
+                <a className={styles.mobileLink} onClick={handleLogout}>Wyloguj się</a>
                 <FontAwesomeIcon icon={faXmark} className={styles.closeIcon} onClick={() => setIsOpen(!isOpen)} />
             </div>
         </div>

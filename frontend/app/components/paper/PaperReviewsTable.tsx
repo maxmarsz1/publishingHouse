@@ -7,6 +7,7 @@ import { approveReview, downloadReviewPDF } from '@/app/utils/paper-helper'
 import styles from './Table.module.css'
 import { Button } from '@mui/material'
 import { useUser } from '@/app/context/UserContext'
+import { useUI } from '@/app/context/UIContext'
 
 interface Props {
   isAuthor: boolean | undefined;
@@ -17,16 +18,19 @@ interface Props {
 const PaperReviewsTable = ({ isAuthor, reviews, onReviewApproved }: Props) => {
   const [expandedRows, setExpandedRows] = useState<number[]>([]);
   const { isStaff } = useUser();
+  const { showSnackbar } = useUI();
 
   const handleApprove = async (e: React.MouseEvent, reviewId: number) => {
     e.stopPropagation();
     try {
       await approveReview(reviewId);
+      showSnackbar("Recenzja zatwierdzona pomyślnie!", "success");
       if (onReviewApproved) {
         onReviewApproved();
       }
     } catch (error) {
       console.error("Failed to approve review", error)
+      showSnackbar("Nie udało się zatwierdzić recenzji.", "error");
     }
   }
 

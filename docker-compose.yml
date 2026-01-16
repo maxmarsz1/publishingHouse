@@ -2,19 +2,9 @@ services:
   nextjs-frontend:
     build: frontend
     container_name: nextjs-frontend
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./frontend:/app
-    environment:
-      - NODE_ENV=development
-      - WATCHPACK_POLLING=true
-      - CHOKIDAR_USEPOLLING=true
-      - WDS_SOCKET_HOST=127.0.0.1
     stdin_open: true
     tty: true
-    user: root
-    command: npm run dev
+
   db:
     image: postgres:17
     container_name: db
@@ -22,8 +12,6 @@ services:
       POSTGRES_DB: ${DATABASE_NAME}
       POSTGRES_USER: ${DATABASE_USERNAME}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
-    ports:
-      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     env_file:
@@ -32,28 +20,18 @@ services:
   django-backend:
     build: ./backend
     container_name: django-backend
-    ports:
-      - "8000:8000"
-    volumes:
-      - ./backend:/app
     depends_on:
       - db
+    env_file:
+      - .env
     environment:
-      CHOKIDAR_USEPOLLING: true
       DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
-      DEBUG: ${DEBUG}
-      DJANGO_LOGLEVEL: ${DJANGO_LOGLEVEL}
-      DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS}
       DATABASE_ENGINE: ${DATABASE_ENGINE}
       DATABASE_NAME: ${DATABASE_NAME}
       DATABASE_USERNAME: ${DATABASE_USERNAME}
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
       DATABASE_HOST: ${DATABASE_HOST}
       DATABASE_PORT: ${DATABASE_PORT}
-    env_file:
-      - .env
-    # stdin_open: true
-    # tty: true
-    command: [ "python", "manage.py", "runserver", "0.0.0.0:8000" ]
+
 volumes:
   postgres_data:

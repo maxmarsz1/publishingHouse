@@ -1,0 +1,15 @@
+services:
+  nextjs-frontend:
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+
+  django-backend:
+    ports:
+      - "8000:8000"
+    environment:
+      DEBUG: "False"
+      DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS}
+      LOAD_FIXTURES: "false"
+    command: [ "python", "manage.py", "runserver", "0.0.0.0:8000" ]

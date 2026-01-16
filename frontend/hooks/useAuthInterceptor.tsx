@@ -26,7 +26,9 @@ const setupInterceptors = (revalidate: () => Promise<void>, logout: () => void) 
 
       if (error.response?.status === 401 && !originalRequest._retry) {
         if (originalRequest.url?.includes('/auth/logout/')) {
-          return Promise.reject(error);
+          // If logout fails with 401, it means we are already logged out or token is invalid.
+          // Treat this as success to ensure client cleanup proceeds.
+          return Promise.resolve({ status: 200, data: { message: "Already logged out" } });
         }
         originalRequest._retry = true;
 

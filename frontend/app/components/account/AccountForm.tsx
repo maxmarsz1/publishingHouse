@@ -7,12 +7,14 @@ import styles from "./AccountForm.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faSave, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { updateAccountData, updatePassword } from "@/app/utils/account-helper";
+import { useUI } from "@/app/context/UIContext";
 
 interface Props {
   userData: User;
 }
 
 const AccountForm = ({ userData }: Props) => {
+  const { showSnackbar } = useUI();
   const [firstName, setFirstName] = useState(userData.first_name);
   const [lastName, setLastName] = useState(userData.last_name);
   const [email, setEmail] = useState(userData.email);
@@ -30,6 +32,7 @@ const AccountForm = ({ userData }: Props) => {
   async function handleSave() {
     if (!firstName || !lastName || !email) {
       console.log("Wypełnij wszystkie pola");
+      showSnackbar("Wypełnij wszystkie pola", "error");
       return;
     }
 
@@ -40,6 +43,7 @@ const AccountForm = ({ userData }: Props) => {
         email: email,
       });
       console.log("Account data updated successfully:", response);
+      showSnackbar("Dane konta zostały zaktualizowane", "success");
 
       setSavedData({
         firstName,
@@ -55,16 +59,19 @@ const AccountForm = ({ userData }: Props) => {
   async function handleNewPassword() {
     if (!oldpassword || !password || !password1) {
       console.log("Wypełnij wszystkie pola dotyczące hasła");
+      showSnackbar("Wypełnij wszystkie pola dotyczące hasła", "error");
       return;
     }
     if (password !== password1) {
       console.log("Nowe hasła nie są identyczne");
+      showSnackbar("Nowe hasła nie są identyczne", "error");
       return;
     }
 
     try {
       await updatePassword(oldpassword, password);
       console.log("Password updated successfully");
+      showSnackbar("Hasło zostało zmienione pomyślnie", "success");
       setOldPassword("");
       setPassword("");
       setPassword1("");

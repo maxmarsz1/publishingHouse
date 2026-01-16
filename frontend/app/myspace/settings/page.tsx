@@ -69,6 +69,12 @@ const SettingsPage = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        if (settings.abstract_min_words > settings.abstract_max_words || settings.review_min_words > settings.review_max_words) {
+            showSnackbar("Minimalna liczba słów nie może być większa od maksymalnej.", "error");
+            return;
+        }
+
         try {
             await apiClient.post('/settings/', settings);
             showSnackbar("Ustawienia zostały zapisane.", "success");

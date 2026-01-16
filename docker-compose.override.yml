@@ -1,0 +1,42 @@
+services:
+  nextjs-frontend:
+    build:
+      context: ./frontend
+      target: deps
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - WATCHPACK_POLLING=true
+      - CHOKIDAR_USEPOLLING=true
+      - WDS_SOCKET_HOST=127.0.0.1
+    user: root
+    command: npm run dev
+
+  db:
+    ports:
+      - "5432:5432"
+
+  django-backend:
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    entrypoint:
+      - sh
+      - -c
+      - |
+        sed -i 's/\r$//' /app/entrypoint.sh &&
+        chmod +x /app/entrypoint.sh &&
+        exec /app/entrypoint.sh "$@"
+      - --
+    environment:
+      CHOKIDAR_USEPOLLING: true
+      DEBUG: "True"
+      DJANGO_LOGLEVEL: "info"
+      DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS}
+      LOAD_FIXTURES: "true"
+    command: [ "python", "manage.py", "runserver", "0.0.0.0:8000" ]

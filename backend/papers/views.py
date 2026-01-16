@@ -168,7 +168,12 @@ class ReviewPDFView(APIView):
                 story.append(Spacer(1, 20))
 
             final_grade = review.custom_grade if review.custom_grade is not None else review.grade
-            final_grade_str = str(final_grade) if final_grade is not None else '-'
+            if final_grade is not None:
+                # Math.round(grade * 2) / 2 equivalent
+                final_grade_value = round(float(final_grade) * 2) / 2
+                final_grade_str = "{:.2f}".format(final_grade_value)
+            else:
+                final_grade_str = '-'
             story.append(Paragraph(f"<b>Ocena Końcowa:</b> {final_grade_str}", styleBold))
 
             doc.build(story)
@@ -316,13 +321,13 @@ class PaperDetailUpdateDeleteView(APIView):
         try:
             paper = Paper.objects.get(id=pk)
 
-            if user != paper.author and not user.is_superuser:
+            if not user.is_superuser:
                 return Response(
                     {"error": "Nie masz uprawnień do usunięcia tego artykułu."},
                     status=status.HTTP_403_FORBIDDEN
                 )
                 
-            if paper.magazine.due_date and paper.magazine.due_date < timezone.now():
+            if not user.is_superuser and paper.magazine.due_date and paper.magazine.due_date < timezone.now():
                 return Response(
                     {"error": "Nie można usunąć artykułu. Termin magazynu minął."},
                     status=status.HTTP_400_BAD_REQUEST

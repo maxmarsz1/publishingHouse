@@ -65,7 +65,7 @@ export default async function RootLayout({
         <AppRouterCacheProvider>
           <ThemeProvider theme={theme}>
             <UIProvider>
-              <UserProvider initialIsStaff={isStaff}>
+              <UserProvider initialIsStaff={isStaff} initialIsAuthenticated={!!accessToken}>
                 <InterceptorSetup />
                 {children}
               </UserProvider>

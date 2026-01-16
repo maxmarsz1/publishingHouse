@@ -7,7 +7,7 @@ import styles from './LoginPanel.module.css'
 import { Button } from '@mui/material'
 import Link from 'next/link'
 import { UserContext } from '@/app/context/UserContext'
-import { updateUserContext } from '@/app/utils/user-context-helper'
+
 
 const LoginPanel = () => {
     const router = useRouter();
@@ -16,7 +16,7 @@ const LoginPanel = () => {
     const [password, setPassword] = useState("")
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
-    const { setIsStaff } = useContext(UserContext);
+    const { revalidateUserStatus } = useContext(UserContext);
 
 
     const handleSubmit = async () => {
@@ -41,7 +41,7 @@ const LoginPanel = () => {
 
             if (res.ok) {
                 console.log('Logowanie pomyślne!', resData);
-                updateUserContext(setIsStaff);
+                await revalidateUserStatus();
                 router.push('/myspace');
             } else {
                 console.error('Błąd logowania:', resData);

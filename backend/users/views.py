@@ -171,7 +171,19 @@ class CustomTokenRefreshView(TokenRefreshView):
             samesite='None'
         )
         
+        if 'refresh' in response_data:
+            refresh_token = response_data['refresh']
+            response.set_cookie(
+                key='refreshToken',
+                value=refresh_token,
+                expires=now + refresh_lifetime,
+                secure=True,
+                httponly=True,
+                samesite='None'
+            )
+
         response.data.pop('access', None)
+        response.data.pop('refresh', None)
 
         return response
 
@@ -184,13 +196,16 @@ class UserIsStaffView(APIView):
     
 
 class LogoutView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def post(self, request):
         refresh_token = request.COOKIES.get('refreshToken')
     
         if not refresh_token:
-            return Response({"detail": "Nie znaleziono tokenu odświeżania w ciasteczkach."}, status=status.HTTP_400_BAD_REQUEST)
+            response = Response({"detail": "Nie znaleziono tokenu odświeżania w ciasteczkach."}, status=status.HTTP_400_BAD_REQUEST)
+            response.delete_cookie('accessToken')
+            response.delete_cookie('refreshToken')
+            return response
             
         try:
             token = RefreshToken(refresh_token)
@@ -203,7 +218,10 @@ class LogoutView(APIView):
             return response
             
         except TokenError:
-            return Response(
+            response = Response(
                 {"detail": "Token jest nieprawidłowy lub wygasł."},
                 status=status.HTTP_400_BAD_REQUEST
             )
+            response.delete_cookie('accessToken')
+            response.delete_cookie('refreshToken')
+            return response

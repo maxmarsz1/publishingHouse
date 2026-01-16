@@ -17,10 +17,14 @@ echo "Creating initial users..."
 python manage.py setup_users
 
 # Load fixtures
-echo "Loading boilerplate data fixtures..."
-python manage.py loaddata fixtures/users_data.json
-python manage.py loaddata fixtures/magazines_data.json
-python manage.py loaddata fixtures/papers_data.json
+if [ "$LOAD_FIXTURES" = "true" ]; then
+    echo "Loading boilerplate data fixtures..."
+    python manage.py loaddata fixtures/users_data.json
+    python manage.py loaddata fixtures/magazines_data.json
+    python manage.py loaddata fixtures/papers_data.json
+else
+    echo "Skipping fixture loading."
+fi
 
 # Start the application server
 echo "Starting Django server..."

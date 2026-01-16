@@ -22,7 +22,7 @@ const MagazineViewClient = () => {
   const params = useParams();
   const magazineId = params?.magazineId;
   const idAsNumber = +magazineId!;
-  const { isStaff } = useContext(UserContext);
+  const { isStaff, isAuthenticated } = useContext(UserContext);
 
   const [magazine, setMagazine] = useState<Magazine | null>(null);
   const [adminPapers, setAdminPapers] = useState<Paper[] | null>(null);
@@ -36,6 +36,11 @@ const MagazineViewClient = () => {
   useEffect(() => {
     if (isNaN(idAsNumber) || idAsNumber <= 0) {
       setError(`Invalid magazine ID: ${magazineId}`);
+      setLoading(false);
+      return;
+    }
+
+    if (!isAuthenticated) {
       setLoading(false);
       return;
     }
@@ -75,7 +80,7 @@ const MagazineViewClient = () => {
     }
 
     loadData();
-  }, [idAsNumber, magazineId, isStaff]);
+  }, [idAsNumber, magazineId, isStaff, isAuthenticated]);
 
   const updateDueDate = (newDueDate: string) => {
     const updatedDate = new Date(newDueDate);
@@ -115,7 +120,7 @@ const MagazineViewClient = () => {
           </p>
         </div>
 
-        {!pastDue && !isStaff && (
+        {!isStaff && (
           <div className={styles.newPaperContainer}>
             <span style={{ cursor: regularUserPapers?.authored_papers.length !== 0 ? 'not-allowed' : 'pointer' }}>
               <Button
@@ -124,7 +129,7 @@ const MagazineViewClient = () => {
                 variant="contained"
                 href={`/myspace/magazines/${magazine.id}/new-paper`}
                 component={Link}
-                disabled={regularUserPapers?.authored_papers.length !== 0}
+                disabled={regularUserPapers?.authored_papers.length !== 0 || pastDue}
               >
                 Prześlij artykuł
                 <FontAwesomeIcon icon={faPlus} />
@@ -134,6 +139,12 @@ const MagazineViewClient = () => {
               <span style={{ color: 'red', fontSize: '12px' }}>
                 <FontAwesomeIcon icon={faInfoCircle} />&nbsp;
                 Możesz przesłać tylko jeden artykuł w ramach tego czasopisma.
+              </span>
+            )}
+            {pastDue && (
+              <span style={{ color: 'red', fontSize: '12px' }}>
+                <FontAwesomeIcon icon={faInfoCircle} />&nbsp;
+                Termin przesłania artykułu minął.
               </span>
             )}
           </div>
