@@ -4,6 +4,7 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=production
+      - API_BASE_URL=${API_BASE_URL:-http://localhost:3000}
 
   django-backend:
     ports:

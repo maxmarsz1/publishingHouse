@@ -13,6 +13,7 @@ services:
       - WATCHPACK_POLLING=true
       - CHOKIDAR_USEPOLLING=true
       - WDS_SOCKET_HOST=127.0.0.1
+      - API_BASE_URL=${API_BASE_URL:-http://localhost:3000}
     user: root
     command: npm run dev
 
