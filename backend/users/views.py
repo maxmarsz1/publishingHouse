@@ -96,6 +96,11 @@ class ChangePasswordView(APIView):
 
         return Response({"message": "Hasło zmienione pomyślnie"})
 
+
+# Cookie settings
+AUTH_COOKIE_SECURE = not settings.DEBUG
+AUTH_COOKIE_SAMESITE = 'Lax'
+
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
     def post(self, request, *args, **kwargs):
@@ -112,18 +117,18 @@ class CustomTokenObtainPairView(TokenObtainPairView):
                 key='accessToken',
                 value=access_token,
                 expires=datetime.now(pytz.utc) + access_lifetime,
-                secure=True,
+                secure=AUTH_COOKIE_SECURE,
                 httponly=True,
-                samesite='None'
+                samesite=AUTH_COOKIE_SAMESITE
             )
 
             response.set_cookie(
                 key='refreshToken',
                 value=refresh_token,
                 expires=datetime.now(pytz.utc) + refresh_lifetime,
-                secure=True,
+                secure=AUTH_COOKIE_SECURE,
                 httponly=True,
-                samesite='None'
+                samesite=AUTH_COOKIE_SAMESITE
             )
             del response.data['access']
             del response.data['refresh']
@@ -166,9 +171,9 @@ class CustomTokenRefreshView(TokenRefreshView):
             key='accessToken',
             value=access_token,
             expires=now + access_lifetime,
-            secure=True,
+            secure=AUTH_COOKIE_SECURE,
             httponly=True,
-            samesite='None'
+            samesite=AUTH_COOKIE_SAMESITE
         )
         
         if 'refresh' in response_data:
@@ -177,9 +182,9 @@ class CustomTokenRefreshView(TokenRefreshView):
                 key='refreshToken',
                 value=refresh_token,
                 expires=now + refresh_lifetime,
-                secure=True,
+                secure=AUTH_COOKIE_SECURE,
                 httponly=True,
-                samesite='None'
+                samesite=AUTH_COOKIE_SAMESITE
             )
 
         response.data.pop('access', None)
@@ -196,32 +201,38 @@ class UserIsStaffView(APIView):
     
 
 class LogoutView(APIView):
+    authentication_classes = []
     permission_classes = [AllowAny]
 
     def post(self, request):
+        def clear_cookies(response):
+            cookie_options = {
+                'max_age': 0,
+                'expires': 'Thu, 01 Jan 1970 00:00:00 GMT',
+                'secure': AUTH_COOKIE_SECURE,
+                'httponly': True,
+                'samesite': AUTH_COOKIE_SAMESITE
+            }
+            response.set_cookie('accessToken', '', **cookie_options)
+            response.set_cookie('refreshToken', '', **cookie_options)
+            return response
+
         refresh_token = request.COOKIES.get('refreshToken')
     
         if not refresh_token:
             response = Response({"detail": "Nie znaleziono tokenu odświeżania w ciasteczkach."}, status=status.HTTP_400_BAD_REQUEST)
-            response.delete_cookie('accessToken')
-            response.delete_cookie('refreshToken')
-            return response
+            return clear_cookies(response)
             
         try:
             token = RefreshToken(refresh_token)
             token.blacklist()
             
             response = Response({"detail": "Wylogowano pomyślnie."}, status=status.HTTP_200_OK)
-            response.delete_cookie('accessToken')
-            response.delete_cookie('refreshToken')
-
-            return response
+            return clear_cookies(response)
             
         except TokenError:
             response = Response(
                 {"detail": "Token jest nieprawidłowy lub wygasł."},
                 status=status.HTTP_400_BAD_REQUEST
             )
-            response.delete_cookie('accessToken')
-            response.delete_cookie('refreshToken')
-            return response
+            return clear_cookies(response)

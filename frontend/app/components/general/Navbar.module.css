@@ -1,31 +1,38 @@
-.navbar{
+.navbar {
     background-color: var(--background1);
 
 }
-.navbarContainer{
+
+.navbarContainer {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 16px 0;
 }
-.leftLinks{
+
+.leftLinks {
     display: flex;
     gap: 16px;
     align-items: center;
 }
-.logoutLink{
+
+.logoutLink {
     padding: .5rem 1rem;
     border-radius: 4px;
+    cursor: pointer;
 }
-.logo{
+
+.logo {
     height: 100%;
     width: auto;
     display: block;
     border-radius: 10px;
 }
 
-@media (max-width: 991px){
-    .desktopLink, .logoutLink{
+@media (max-width: 991px) {
+
+    .desktopLink,
+    .logoutLink {
         display: none;
     }
 }

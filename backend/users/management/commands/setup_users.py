@@ -9,8 +9,10 @@ class Command(BaseCommand):
         admin_username = os.environ.get('DJANGO_SUPERUSER_USERNAME', 'admin')
         admin_email = os.environ.get('DJANGO_SUPERUSER_EMAIL', 'admin@example.com')
         admin_password = os.environ.get('DJANGO_SUPERUSER_PASSWORD', 'adminPassword')
+        admin_firstname = os.environ.get('DJANGO_SUPERUSER_FIRSTNAME', 'Edytor')
+        admin_lastname = os.environ.get('DJANGO_SUPERUSER_LASTNAME', 'czasopisma')
 
-        admin, created = User.objects.get_or_create(username=admin_username, defaults={'email': admin_email})
+        admin, created = User.objects.get_or_create(username=admin_username, defaults={'email': admin_email, 'first_name': admin_firstname, 'last_name': admin_lastname})
         admin.set_password(admin_password)
         admin.is_superuser = True
         admin.is_staff = True

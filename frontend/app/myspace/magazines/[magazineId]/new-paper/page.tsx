@@ -21,7 +21,7 @@ const NewPaperPage = () => {
 
       const idAsNumber = Number(magazineId);
       if (isNaN(idAsNumber) || !idAsNumber) {
-        setError(`Invalid magazineId provided: ${magazineId}`);
+        setError(`Nieprawidłowy identyfikator czasopisma: ${magazineId}`);
         setLoading(false);
         return;
       }
@@ -31,7 +31,7 @@ const NewPaperPage = () => {
         setMagazine(data);
       } catch (err) {
         console.error(err);
-        setError("Failed to load magazine data.");
+        setError("Wystąpił problem z wczytaniem danych czasopisma.");
       } finally {
         setLoading(false);
       }
