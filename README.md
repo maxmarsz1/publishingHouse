@@ -74,5 +74,3 @@ The `setup_users` command runs automatically on startup. You can customize the s
 - `DJANGO_SUPERUSER_LASTNAME` (default: `czasopisma`)
 
 Add these to your `.env` file or `docker-compose.prod.yml` environment section to secure your production instance.
-
-J3TQS8AP
